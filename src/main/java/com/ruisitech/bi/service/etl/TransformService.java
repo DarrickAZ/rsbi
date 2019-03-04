@@ -471,7 +471,7 @@ public class TransformService extends EtlBaseService {
         String tname;
         String col;
         String expression;
-        String col;
+        //String col;
         String refKey;
         if (aggreData) {
             for(i = 0; i < dims.size(); ++i) {
@@ -524,19 +524,19 @@ public class TransformService extends EtlBaseService {
         } else {
             List<EtlTableMetaCol> cols = this.colMapper.queryTableColumns(tableMetaId, (Integer)null, this.sysUser);
 
-            for(int i = 0; i < cols.size(); ++i) {
-                EtlTableMetaCol col = (EtlTableMetaCol)cols.get(i);
-                if (col.getExpression() != null && col.getExpression().length() > 0) {
-                    sql.append(col.getExpression());
+            for(int j = 0; j < cols.size(); ++j) {
+                EtlTableMetaCol colM = (EtlTableMetaCol)cols.get(j);
+                if (colM.getExpression() != null && colM.getExpression().length() > 0) {
+                    sql.append(colM.getExpression());
                     sql.append(" as ");
-                    sql.append(col.getColName());
+                    sql.append(colM.getColName());
                 } else {
-                    sql.append((String)tables.get(col.getIncomeTname()));
+                    sql.append((String)tables.get(colM.getIncomeTname()));
                     sql.append(".");
-                    sql.append(col.getColName());
+                    sql.append(colM.getColName());
                 }
 
-                if (i != cols.size() - 1) {
+                if (j != cols.size() - 1) {
                     sql.append(",");
                 }
             }
@@ -571,8 +571,8 @@ public class TransformService extends EtlBaseService {
             ent = (Entry)var22.next();
             List<JSONObject> joins = this.findJoinInfoById(joinInfo, (String)ent.getKey());
 
-            for(int i = 0; joins != null && i < joins.size(); ++i) {
-                JSONObject join = (JSONObject)joins.get(i);
+            for(int j = 0; joins != null && j < joins.size(); ++j) {
+                JSONObject join = (JSONObject)joins.get(j);
                 col = join.getString("col");
                 refKey = join.getString("refKey");
                 sql.append(" and t0." + col + " = " + (String)ent.getValue() + "." + refKey);

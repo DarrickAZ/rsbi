@@ -173,19 +173,19 @@ public class CrossDetailService extends BaseCompService {
         while(var32.hasNext()) {
             Entry<String, Object> ent = (Entry)var32.next();
             col = (String)ent.getKey();
-            Object val = ent.getValue();
-            JSONObject col = this.findColByName(col, cols);
-            val = col.getString("type");
-            if ("String".equals(val) || "Date".equals(val) || "Datetime".equals(val)) {
-                val = "'" + val + "'";
+            Object valO = ent.getValue();
+            JSONObject colJ = this.findColByName(col, cols);
+            valO = colJ.getString("type");
+            if ("String".equals(valO) || "Date".equals(valO) || "Datetime".equals(valO)) {
+                valO = "'" + valO + "'";
             }
 
-            val2 = col.getString("expression");
-            String name = col.getString("name");
+            val2 = colJ.getString("expression");
+            String name = colJ.getString("name");
             sb.append(" and ");
             sb.append(val2 != null && val2.length() != 0 ? val2 : name);
             sb.append(" = ");
-            sb.append(val);
+            sb.append(valO);
         }
 
         return sb.toString();

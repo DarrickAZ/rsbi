@@ -156,7 +156,7 @@ public class DataLoaderService extends EtlBaseService {
             targetConn.commit();
         } catch (Exception var27) {
             var27.printStackTrace();
-            int ret = true;
+            //int ret = true;
             throw var27;
         } finally {
             if (exeps != null) {
@@ -249,7 +249,7 @@ public class DataLoaderService extends EtlBaseService {
                         input = new FileInputStream(dateLabel);
                         read = new InputStreamReader(input, dto.getEncode());
                         bufferedReader = new BufferedReader(read);
-                        char cr = true;
+                        //char cr = true;
                         char cr;
                         if ("\t".equals(dto.getSplitWord())) {
                             cr = '\t';

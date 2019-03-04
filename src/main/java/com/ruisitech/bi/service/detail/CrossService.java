@@ -293,15 +293,15 @@ public class CrossService extends BaseCompService {
         if (dims.size() > 0) {
             sb.append(" group by ");
 
-            for(int i = 0; i < dims.size(); ++i) {
-                DimDto dim = (DimDto)dims.get(i);
+            for(int j = 0; j < dims.size(); ++j) {
+                DimDto dim = (DimDto)dims.get(j);
                 if ("y".equals(dim.getDyna())) {
                     sb.append(dim.getColname());
                 } else {
                     sb.append(this.getTableAliasByTname(tableAlias, dim.getTname()) + "." + dim.getColname());
                 }
 
-                if (i != dims.size() - 1) {
+                if (j != dims.size() - 1) {
                     sb.append(",");
                 }
             }
@@ -326,7 +326,7 @@ public class CrossService extends BaseCompService {
             String[] var6 = sqls;
             int var7 = sqls.length;
 
-            int i;
+            //int i;
             for(i = 0; i < var7; ++i) {
                 String s = var6[i];
                 MultiDsContext mctx = new MultiDsContext();
@@ -367,7 +367,7 @@ public class CrossService extends BaseCompService {
 
         orderCols = new ArrayList();
 
-        int i;
+        //int i;
         DimDto dim;
         for(i = 0; i < cross.getCols().size(); ++i) {
             dim = (DimDto)cross.getCols().get(i);

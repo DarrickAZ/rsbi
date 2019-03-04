@@ -37,6 +37,7 @@ public class Runner implements Job {
         this.ctx = ctx;
     }
 
+    @Override
     public void execute(JobExecutionContext arg0) {
         JobDataMap data = arg0.getJobDetail().getJobDataMap();
         this.json = (JSONObject)data.get("json");
@@ -123,7 +124,7 @@ public class Runner implements Job {
                         } else if ("es".equals(tp)) {
                             ElasticService serv = (ElasticService)RSBIUtils.getBean(this.ctx, ElasticService.class);
                             serv.setRowCount(0);
-                            Result ret = serv.run(new Integer(id), this.ctx);
+                            ret = serv.run(new Integer(id), this.ctx);
                             if (ret.getResult() == 0) {
                                 result.append(name + " 执行失败！ \n" + ret.getMsg());
                             }

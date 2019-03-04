@@ -5,16 +5,14 @@
 
 package com.ruisitech.bi.service.bireport;
 
-import com.ruisi.bi.engine.view.context.chart.ChartContext;
-import com.ruisi.bi.engine.view.context.chart.ChartContextImpl;
-import com.ruisi.bi.engine.view.context.chart.ChartKeyContext;
-import com.ruisi.bi.engine.view.context.chart.ChartYcolContext;
 import com.ruisi.ext.engine.init.TemplateManager;
 import com.ruisi.ext.engine.util.IdCreater;
 import com.ruisi.ext.engine.view.context.MVContext;
 import com.ruisi.ext.engine.view.context.MVContextImpl;
 import com.ruisi.ext.engine.view.context.chart.ChartContext;
+import com.ruisi.ext.engine.view.context.chart.ChartContextImpl;
 import com.ruisi.ext.engine.view.context.chart.ChartKeyContext;
+import com.ruisi.ext.engine.view.context.chart.ChartYcolContext;
 import com.ruisi.ext.engine.view.context.dc.grid.*;
 import com.ruisi.ext.engine.view.context.form.InputField;
 import com.ruisi.ext.engine.view.context.html.TextContext;
@@ -436,8 +434,8 @@ public class OlapChartService extends BaseCompService {
         GridSetConfContext conf = new GridSetConfContext();
         TableInfoVO tinfo = this.cahceService.getTableInfo(chart.getTid());
         if ("y".equals(tinfo.getEsEnable()) && "y".equals(tinfo.getUseEs())) {
-            conf.setMaster(tinfo.getTname());
-            conf.setDatasetProvider(this.elaService);
+            //conf.setMaster(tinfo.getTname());
+            //conf.setDatasetProvider(this.elaService);
         }
 
         ctx.setConf(conf);
@@ -446,7 +444,7 @@ public class OlapChartService extends BaseCompService {
         ctx.getConf().setTemplateName(name);
         String maparea = chart.getChartJson().getMaparea();
         String type = chart.getChartJson().getType();
-        int i;
+        //int i;
         if ("map".equals(type) && maparea != null && maparea.length() > 0 && !"china".equals(maparea)) {
             for(int i = 0; i < chart.getChartJson().getDims().size(); ++i) {
                 DimDto dim = (DimDto)chart.getChartJson().getDims().get(i);

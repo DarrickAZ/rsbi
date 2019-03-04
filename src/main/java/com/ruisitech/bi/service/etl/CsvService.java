@@ -51,7 +51,7 @@ public class CsvService {
             input = new FileInputStream(path);
             read = new InputStreamReader(input, dto.getEncode());
             bufferedReader = new BufferedReader(read);
-            char cr = true;
+            //char cr = true;
             char cr;
             if ("\t".equals(dto.getSplitWord())) {
                 cr = '\t';

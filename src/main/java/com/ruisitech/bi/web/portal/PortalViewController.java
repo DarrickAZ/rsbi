@@ -97,7 +97,7 @@ public class PortalViewController {
         String ret;
         InputStream is;
         if ("html".equals(type)) {
-            String ret = ser.buildMV(mv, req.getServletContext());
+            ret = ser.buildMV(mv, req.getServletContext());
             ret = RSBIUtils.htmlPage(ret, RSBIUtils.getConstant("resPath"), "report");
             is = IOUtils.toInputStream(ret, "utf-8");
             IOUtils.copy(is, res.getOutputStream());

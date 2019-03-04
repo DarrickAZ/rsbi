@@ -194,11 +194,12 @@ public class EtlBaseService {
             daoHelper.execute(sql);
         } else if ("oracle".equals(dbName)) {
             sql = (String)daoHelper.execute(new ConnectionCallback<Object>() {
+                @Override
                 public Object doInConnection(Connection arg0) throws SQLException, DataAccessException {
                     return EtlBaseService.this.getCurrentSchema(arg0, dbName);
                 }
             });
-            String sql = "select count(1) cnt from all_tables where owner='" + sql + "'  and TABLE_NAME = upper('" + tname + "')";
+            sql = "select count(1) cnt from all_tables where owner='" + sql + "'  and TABLE_NAME = upper('" + tname + "')";
             int cnt = daoHelper.queryForInt(sql);
             if (cnt >= 1) {
                 daoHelper.execute("drop table " + tname);

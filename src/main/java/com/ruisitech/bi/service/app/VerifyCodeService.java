@@ -74,7 +74,7 @@ public class VerifyCodeService {
         int red;
         int green;
         int blue;
-        int i;
+       // int i;
         for(int i = 0; i < 10; ++i) {
             red = random.nextInt(this.width);
             green = random.nextInt(this.height);
@@ -84,17 +84,18 @@ public class VerifyCodeService {
         }
 
         StringBuffer randomCode = new StringBuffer();
-        int red = false;
-        int green = false;
-        int blue = false;
+        //int red = false;
+        //int green = false;
+        //int blue = false;
 
-        for(i = 0; i < this.codeCount; ++i) {
+        int k;
+        for(k = 0; k < this.codeCount; ++k) {
             String strRand = String.valueOf(this.codeSequence[random.nextInt(36)]);
             red = random.nextInt(255);
             green = random.nextInt(255);
             blue = random.nextInt(255);
             g.setColor(new Color(red, green, blue));
-            g.drawString(strRand, i * this.x + 10, this.codeY);
+            g.drawString(strRand, k * this.x + 10, this.codeY);
             randomCode.append(strRand);
         }
 

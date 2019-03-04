@@ -167,10 +167,10 @@ public class OlapTableService extends BaseCompService {
             String[] cols = new String[orderCols.size()];
             jss = new String[orderCols.size()];
 
-            for(int i = 0; i < orderCols.size(); ++i) {
-                String[] strs = ((String)orderCols.get(i)).split(",");
-                cols[i] = strs[0];
-                jss[i] = strs[1];
+            for(int j = 0; j < orderCols.size(); ++j) {
+                String[] strs = ((String)orderCols.get(j)).split(",");
+                cols[j] = strs[0];
+                jss[j] = strs[1];
             }
 
             sort.setColumn(cols);
@@ -215,7 +215,7 @@ public class OlapTableService extends BaseCompService {
 
                         for(int var13 = 0; var13 < var23; ++var13) {
                             String js = var22[var13];
-                            GridProcContext proc = this.createShift(sqlVO, kpi, js);
+                           proc = this.createShift(sqlVO, kpi, js);
                             ctx.getProcess().add(proc);
                         }
                     }
@@ -308,7 +308,7 @@ public class OlapTableService extends BaseCompService {
             CrossField cf;
             Iterator var31;
             KpiDto kpi;
-            CrossField cf;
+            //CrossField cf;
             String tableColName;
             if (type.equals("kpiOther")) {
                 newCf = new ArrayList();
@@ -317,7 +317,7 @@ public class OlapTableService extends BaseCompService {
 
                     label289:
                     while(true) {
-                        KpiDto kpi;
+                        //KpiDto kpi;
                         do {
                             do {
                                 if (!var28.hasNext()) {
@@ -452,38 +452,38 @@ public class OlapTableService extends BaseCompService {
 
                 tmp = newCf;
             } else {
-                CrossField cf;
-                String alias;
-                String alias;
+                CrossField cf1;
+                //String alias;
+                String alias1;
                 CrossField sumcf;
-                CrossField sumcf;
+                //CrossField sumcf;
                 if ("day".equals(type)) {
                     newCf = new ArrayList();
                     if (((List)tmp).size() == 0) {
-                        cf = new CrossField();
-                        cf.setCasParent(true);
-                        cf.setTop(obj.getTop());
+                        cf1 = new CrossField();
+                        cf1.setCasParent(true);
+                        cf1.setTop(obj.getTop());
                         alias = obj.getTopType();
                         if (alias != null && alias.length() > 0) {
-                            cf.setTopType(alias);
+                            cf1.setTopType(alias);
                         }
 
-                        cf.setId(String.valueOf(obj.getId()));
-                        cf.setType("frd");
-                        cf.setDateType("day");
-                        cf.setSort(obj.getDimord());
-                        cf.setDateTypeFmt(obj.getDateformat());
-                        cf.setUselink(uselink);
-                        cf.setValue(obj.getVals());
-                        cf.setMulti(true);
-                        cf.setShowWeek(false);
-                        cf.setDesc(obj.getDimdesc());
+                        cf1.setId(String.valueOf(obj.getId()));
+                        cf1.setType("frd");
+                        cf1.setDateType("day");
+                        cf1.setSort(obj.getDimord());
+                        cf1.setDateTypeFmt(obj.getDateformat());
+                        cf1.setUselink(uselink);
+                        cf1.setValue(obj.getVals());
+                        cf1.setMulti(true);
+                        cf1.setShowWeek(false);
+                        cf1.setDesc(obj.getDimdesc());
                         alias = obj.getAlias();
-                        cf.setAlias(alias);
-                        cf.setAliasDesc(alias);
-                        cf.setSubs(new ArrayList());
-                        ((List)tmp).add(cf);
-                        newCf.add(cf);
+                        cf1.setAlias(alias);
+                        cf1.setAliasDesc(alias);
+                        cf1.setSubs(new ArrayList());
+                        ((List)tmp).add(cf1);
+                        newCf.add(cf1);
                         if ("y".equals(issum)) {
                             sumcf = new CrossField();
                             sumcf.setType("none");
@@ -503,31 +503,31 @@ public class OlapTableService extends BaseCompService {
                         while(var28.hasNext()) {
                             tp = (CrossField)var28.next();
                             if (!tp.getType().equals("none")) {
-                                cf = new CrossField();
-                                cf.setCasParent(true);
-                                cf.setTop(obj.getTop());
+                                cf1 = new CrossField();
+                                cf1.setCasParent(true);
+                                cf1.setTop(obj.getTop());
                                 alias = obj.getTopType();
                                 if (alias != null && alias.length() > 0) {
-                                    cf.setTopType(alias);
+                                    cf1.setTopType(alias);
                                 }
 
-                                cf.setId(String.valueOf(obj.getId()));
-                                cf.setType("frd");
-                                cf.setDateType("day");
-                                cf.setSort(obj.getDimord());
-                                cf.setDateTypeFmt(obj.getDateformat());
-                                cf.setUselink(uselink);
-                                cf.setValue(obj.getVals());
-                                cf.setMulti(true);
-                                cf.setShowWeek(false);
-                                cf.setDesc(obj.getDimdesc());
+                                cf1.setId(String.valueOf(obj.getId()));
+                                cf1.setType("frd");
+                                cf1.setDateType("day");
+                                cf1.setSort(obj.getDimord());
+                                cf1.setDateTypeFmt(obj.getDateformat());
+                                cf1.setUselink(uselink);
+                                cf1.setValue(obj.getVals());
+                                cf1.setMulti(true);
+                                cf1.setShowWeek(false);
+                                cf1.setDesc(obj.getDimdesc());
                                 code = obj.getAlias();
-                                cf.setAlias(code);
-                                cf.setAliasDesc(code);
-                                cf.setSubs(new ArrayList());
-                                cf.setParent(tp);
-                                tp.getSubs().add(cf);
-                                newCf.add(cf);
+                                cf1.setAlias(code);
+                                cf1.setAliasDesc(code);
+                                cf1.setSubs(new ArrayList());
+                                cf1.setParent(tp);
+                                tp.getSubs().add(cf1);
+                                newCf.add(cf1);
                                 if ("y".equals(issum)) {
                                     sumcf = new CrossField();
                                     sumcf.setType("none");
@@ -549,29 +549,29 @@ public class OlapTableService extends BaseCompService {
                 } else if ("month".equals(type)) {
                     newCf = new ArrayList();
                     if (((List)tmp).size() == 0) {
-                        cf = new CrossField();
-                        cf.setCasParent(true);
-                        cf.setTop(obj.getTop());
+                        cf1 = new CrossField();
+                        cf1.setCasParent(true);
+                        cf1.setTop(obj.getTop());
                         alias = obj.getTopType();
                         if (alias != null && alias.length() > 0) {
-                            cf.setTopType(alias);
+                            cf1.setTopType(alias);
                         }
 
-                        cf.setId(String.valueOf(obj.getId()));
-                        cf.setType("frd");
-                        cf.setDateType("month");
-                        cf.setSort(obj.getDimord());
-                        cf.setDateTypeFmt(obj.getDateformat());
-                        cf.setUselink(uselink);
-                        cf.setValue(obj.getVals());
-                        cf.setMulti(true);
-                        cf.setDesc(obj.getDimdesc());
+                        cf1.setId(String.valueOf(obj.getId()));
+                        cf1.setType("frd");
+                        cf1.setDateType("month");
+                        cf1.setSort(obj.getDimord());
+                        cf1.setDateTypeFmt(obj.getDateformat());
+                        cf1.setUselink(uselink);
+                        cf1.setValue(obj.getVals());
+                        cf1.setMulti(true);
+                        cf1.setDesc(obj.getDimdesc());
                         alias = obj.getAlias();
-                        cf.setAlias(alias);
-                        cf.setAliasDesc(alias);
-                        cf.setSubs(new ArrayList());
-                        ((List)tmp).add(cf);
-                        newCf.add(cf);
+                        cf1.setAlias(alias);
+                        cf1.setAliasDesc(alias);
+                        cf1.setSubs(new ArrayList());
+                        ((List)tmp).add(cf1);
+                        newCf.add(cf1);
                         if ("y".equals(issum)) {
                             sumcf = new CrossField();
                             sumcf.setType("none");
@@ -591,30 +591,30 @@ public class OlapTableService extends BaseCompService {
                         while(var28.hasNext()) {
                             tp = (CrossField)var28.next();
                             if (!tp.getType().equals("none")) {
-                                cf = new CrossField();
-                                cf.setCasParent(true);
-                                cf.setTop(obj.getTop());
+                                cf1 = new CrossField();
+                                cf1.setCasParent(true);
+                                cf1.setTop(obj.getTop());
                                 alias = obj.getTopType();
                                 if (alias != null && alias.length() > 0) {
-                                    cf.setTopType(alias);
+                                    cf1.setTopType(alias);
                                 }
 
-                                cf.setId(String.valueOf(obj.getId()));
-                                cf.setType("frd");
-                                cf.setDateType("month");
-                                cf.setDateTypeFmt(obj.getDateformat());
-                                cf.setSort(obj.getDimord());
-                                cf.setUselink(uselink);
-                                cf.setValue(obj.getVals());
-                                cf.setMulti(true);
-                                cf.setDesc(obj.getDimdesc());
+                                cf1.setId(String.valueOf(obj.getId()));
+                                cf1.setType("frd");
+                                cf1.setDateType("month");
+                                cf1.setDateTypeFmt(obj.getDateformat());
+                                cf1.setSort(obj.getDimord());
+                                cf1.setUselink(uselink);
+                                cf1.setValue(obj.getVals());
+                                cf1.setMulti(true);
+                                cf1.setDesc(obj.getDimdesc());
                                 code = obj.getAlias();
-                                cf.setAlias(code);
-                                cf.setAliasDesc(code);
-                                cf.setSubs(new ArrayList());
-                                cf.setParent(tp);
-                                tp.getSubs().add(cf);
-                                newCf.add(cf);
+                                cf1.setAlias(code);
+                                cf1.setAliasDesc(code);
+                                cf1.setSubs(new ArrayList());
+                                cf1.setParent(tp);
+                                tp.getSubs().add(cf1);
+                                newCf.add(cf1);
                                 if ("y".equals(issum)) {
                                     sumcf = new CrossField();
                                     sumcf.setType("none");
@@ -636,35 +636,35 @@ public class OlapTableService extends BaseCompService {
                 } else {
                     newCf = new ArrayList();
                     if (((List)tmp).size() == 0) {
-                        cf = new CrossField();
-                        cf.setType("frd");
-                        cf.setId(String.valueOf(obj.getId()));
-                        cf.setDesc(obj.getDimdesc());
-                        cf.setSort(obj.getDimord());
+                        cf1 = new CrossField();
+                        cf1.setType("frd");
+                        cf1.setId(String.valueOf(obj.getId()));
+                        cf1.setDesc(obj.getDimdesc());
+                        cf1.setSort(obj.getDimord());
                         alias = obj.getAlias();
                         alias = obj.getTableColKey();
                         alias = obj.getTableColName();
                         if (alias != null && alias.length() != 0 && alias != null && alias.length() != 0) {
-                            cf.setAlias(alias);
-                            cf.setAliasDesc(alias + "2");
+                            cf1.setAlias(alias);
+                            cf1.setAliasDesc(alias + "2");
                         } else {
-                            cf.setAlias(alias);
-                            cf.setAliasDesc(alias);
+                            cf1.setAlias(alias);
+                            cf1.setAliasDesc(alias);
                         }
 
-                        cf.setCasParent(true);
-                        cf.setTop(obj.getTop());
+                        cf1.setCasParent(true);
+                        cf1.setTop(obj.getTop());
                         code = obj.getTopType();
                         if (code != null && code.length() > 0) {
-                            cf.setTopType(code);
+                            cf1.setTopType(code);
                         }
 
-                        cf.setUselink(uselink);
-                        cf.setValue(obj.getVals());
-                        cf.setMulti(true);
-                        cf.setSubs(new ArrayList());
-                        ((List)tmp).add(cf);
-                        newCf.add(cf);
+                        cf1.setUselink(uselink);
+                        cf1.setValue(obj.getVals());
+                        cf1.setMulti(true);
+                        cf1.setSubs(new ArrayList());
+                        ((List)tmp).add(cf1);
+                        newCf.add(cf1);
                         if ("y".equals(issum)) {
                             sumcf = new CrossField();
                             sumcf.setType("none");
@@ -694,38 +694,38 @@ public class OlapTableService extends BaseCompService {
                                         break;
                                     }
 
-                                    cf = new CrossField();
-                                    cf.setType("frd");
-                                    cf.setId(String.valueOf(obj.getId()));
-                                    cf.setDesc(obj.getDimdesc());
-                                    cf.setSort(obj.getDimord());
+                                    cf1 = new CrossField();
+                                    cf1.setType("frd");
+                                    cf1.setId(String.valueOf(obj.getId()));
+                                    cf1.setDesc(obj.getDimdesc());
+                                    cf1.setSort(obj.getDimord());
                                     alias = obj.getAlias();
                                     code = obj.getTableColKey();
                                     tableColName = obj.getTableColName();
                                     if (code != null && code.length() != 0 && tableColName != null && tableColName.length() != 0) {
-                                        cf.setAlias(alias);
-                                        cf.setAliasDesc(alias + "2");
+                                        cf1.setAlias(alias);
+                                        cf1.setAliasDesc(alias + "2");
                                     } else {
-                                        cf.setAlias(alias);
-                                        cf.setAliasDesc(alias);
+                                        cf1.setAlias(alias);
+                                        cf1.setAliasDesc(alias);
                                     }
 
-                                    cf.setCasParent(true);
-                                    cf.setTop(obj.getTop());
+                                    cf1.setCasParent(true);
+                                    cf1.setTop(obj.getTop());
                                     topType = obj.getTopType();
                                     if (topType != null && topType.length() > 0) {
-                                        cf.setTopType(topType);
+                                        cf1.setTopType(topType);
                                     }
 
-                                    cf.setUselink(uselink);
-                                    cf.setValue(obj.getVals());
-                                    cf.setMulti(true);
-                                    cf.setSubs(new ArrayList());
-                                    cf.setParent(tp);
-                                    tp.getSubs().add(cf);
-                                    newCf.add(cf);
+                                    cf1.setUselink(uselink);
+                                    cf1.setValue(obj.getVals());
+                                    cf1.setMulti(true);
+                                    cf1.setSubs(new ArrayList());
+                                    cf1.setParent(tp);
+                                    tp.getSubs().add(cf1);
+                                    newCf.add(cf1);
                                     if ("y".equals(issum)) {
-                                        CrossField sumcf = new CrossField();
+                                        sumcf = new CrossField();
                                         sumcf.setType("none");
                                         aggre = obj.getAggre();
                                         if (aggre != null && aggre.length() > 0 && !"auto".equals(aggre)) {
@@ -744,20 +744,20 @@ public class OlapTableService extends BaseCompService {
 
                             while(var31.hasNext()) {
                                 kpi = (KpiDto)var31.next();
-                                cf = new CrossField();
-                                cf.setType("kpiOther");
-                                cf.setDesc(kpi.getKpi_name());
-                                cf.setAggregation(kpi.getAggre());
-                                cf.setAlias(kpi.getAlias());
-                                cf.setFormatPattern(kpi.getFmt());
-                                cf.setSubs(new ArrayList());
-                                cf.setId(String.valueOf(kpi.getKpi_id()));
+                                cf1 = new CrossField();
+                                cf1.setType("kpiOther");
+                                cf1.setDesc(kpi.getKpi_name());
+                                cf1.setAggregation(kpi.getAggre());
+                                cf1.setAlias(kpi.getAlias());
+                                cf1.setFormatPattern(kpi.getFmt());
+                                cf1.setSubs(new ArrayList());
+                                cf1.setId(String.valueOf(kpi.getKpi_id()));
                                 if (kpi.getRate() != null) {
-                                    cf.setKpiRate(new BigDecimal(kpi.getRate()));
+                                    cf1.setKpiRate(new BigDecimal(kpi.getRate()));
                                 }
 
-                                tp.getSubs().add(cf);
-                                cf.setParent(tp);
+                                tp.getSubs().add(cf1);
+                                cf1.setParent(tp);
                             }
                         }
                     }
@@ -827,7 +827,7 @@ public class OlapTableService extends BaseCompService {
             String vls;
             GridFilterContext filter;
             String[] q;
-            GridFilterContext filter;
+           // GridFilterContext filter;
             if (dim.getType().equals("day")) {
                 if (dim.getDay() != null) {
                     vls = dim.getDay().getStartDay();

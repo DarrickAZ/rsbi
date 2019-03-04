@@ -77,7 +77,7 @@ public class DataSetService extends EtlBaseService {
                 ret.add(m);
             }
 
-            ArrayList var20 = ret;
+            List<Object> var20 = ret;
             return var20;
         } catch (Exception var17) {
             log.error("sql:" + sql, var17);
@@ -137,7 +137,7 @@ public class DataSetService extends EtlBaseService {
 
         String tabId;
         TableInfoVO subTinfo;
-        int i;
+        //int i;
         for(i = 0; i < tabIds.size(); ++i) {
             tabId = (String)tabIds.get(i);
             subTinfo = this.cacheService.getTableInfo(new Integer(tabId));
@@ -169,7 +169,7 @@ public class DataSetService extends EtlBaseService {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        ArrayList var34;
+        List<DSColumn> var34;
         try {
             if (rsds == null) {
                 conn = this.dataSourceService.getConnection();
@@ -184,9 +184,9 @@ public class DataSetService extends EtlBaseService {
             String tname = (String)tables.get(0);
             int idx = 1;
 
-            for(int i = 0; i < meta.getColumnCount(); ++i) {
-                String name = meta.getColumnLabel(i + 1);
-                String tp = meta.getColumnTypeName(i + 1);
+            for(int j = 0; j < meta.getColumnCount(); ++j) {
+                String name = meta.getColumnLabel(j + 1);
+                String tp = meta.getColumnTypeName(j + 1);
                 if ("a$idx".equalsIgnoreCase(name)) {
                     tname = (String)tables.get(idx);
                     ++idx;
@@ -198,7 +198,7 @@ public class DataSetService extends EtlBaseService {
                     col.setType(tp);
                     col.setTname(tname);
                     col.setIsshow(true);
-                    col.setIdx(i);
+                    col.setIdx(j);
                     col.setExpression("");
                     cols.add(col);
                 }

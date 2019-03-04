@@ -71,7 +71,7 @@ public class DynaColCheckService {
         SQLExpr left = expr.getLeft();
         SQLExpr right = expr.getRight();
         String r;
-        ResultScript r;
+        ResultScript rs;
         if (right instanceof SQLBinaryOpExpr) {
             this.parseBinary((SQLBinaryOpExpr)right, res, cols, mustAgg);
         } else if (right instanceof SQLAggregateExpr) {
@@ -80,15 +80,14 @@ public class DynaColCheckService {
                 ret = ret + r;
             }
         } else if (right instanceof SQLNumericLiteralExpr || right instanceof SQLIdentifierExpr || right instanceof SQLIntegerExpr) {
-            r = new ResultScript((String)null, right.toString());
-            r.oper = expr.getOperator().getName();
+            rs = new ResultScript((String)null, right.toString());
+            rs.oper = expr.getOperator().getName();
             if (right instanceof SQLIdentifierExpr) {
-                r.constant = false;
+                rs.constant = false;
             } else {
-                r.constant = true;
+                rs.constant = true;
             }
-
-            res.add(r);
+            res.add(rs);
         }
 
         if (left instanceof SQLBinaryOpExpr) {
@@ -99,15 +98,15 @@ public class DynaColCheckService {
                 ret = ret + r;
             }
         } else if (left instanceof SQLNumericLiteralExpr || left instanceof SQLIdentifierExpr || left instanceof SQLIntegerExpr) {
-            r = new ResultScript((String)null, left.toString());
-            r.oper = expr.getOperator().getName();
+            rs = new ResultScript((String)null, left.toString());
+            rs.oper = expr.getOperator().getName();
             if (left instanceof SQLIdentifierExpr) {
-                r.constant = false;
+                rs.constant = false;
             } else {
-                r.constant = true;
+                rs.constant = true;
             }
 
-            res.add(r);
+            res.add(rs);
         }
 
         return ret;

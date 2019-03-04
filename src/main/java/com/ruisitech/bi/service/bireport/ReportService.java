@@ -84,8 +84,8 @@ public class ReportService extends BaseCompService {
                 StringBuffer sb = new StringBuffer("参数： ");
                 TextContext parStr = new TextContextImpl();
 
-                for(int i = 0; i < params.size(); ++i) {
-                    ParamDto param = (ParamDto)params.get(i);
+                for(int j = 0; j < params.size(); ++j) {
+                    ParamDto param = (ParamDto)params.get(j);
                     type = param.getName();
                     colname = param.getType();
                     if (!"frd".equals(colname) && !"year".equals(colname) && !"quarter".equals(colname)) {
@@ -229,7 +229,7 @@ public class ReportService extends BaseCompService {
     public void createChart(MVContext mv, ChartQueryDto chart, int release) throws IOException, ParseException {
         TableInfoVO tinfo = this.cacheService.getTableInfo(chart.getTid());
         StringBuffer sb = new StringBuffer("");
-        int cnt = false;
+        boolean cnt = false;
 
         DimDto dim;
         for(Iterator var7 = chart.getChartJson().getParams().iterator(); var7.hasNext(); sb.append(dim.getDimdesc() + "(" + dim.getValDesc() + ") - ")) {

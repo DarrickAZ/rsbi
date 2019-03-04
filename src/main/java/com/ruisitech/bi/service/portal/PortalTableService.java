@@ -402,10 +402,10 @@ public class PortalTableService extends BaseCompService {
             String[] cols = new String[orderCols.size()];
             String[] types = new String[orderCols.size()];
 
-            for(int i = 0; i < orderCols.size(); ++i) {
-                String[] strs = ((String)orderCols.get(i)).split(",");
-                cols[i] = strs[0];
-                types[i] = strs[1];
+            for(int j = 0; j < orderCols.size(); ++j) {
+                String[] strs = ((String)orderCols.get(j)).split(",");
+                cols[j] = strs[0];
+                types[j] = strs[1];
             }
 
             sort.setColumn(cols);

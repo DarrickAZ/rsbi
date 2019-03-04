@@ -129,6 +129,7 @@ public class DataWriteService extends EtlBaseService {
 
         sql.append(" where tmp_data_id = " + dto.getDataId());
         this.daoHelper.execute(sql.toString(), new PreparedStatementCallback<Object>() {
+            @Override
             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                 for(int i = 0; i < cols.size(); ++i) {
                     DataWriteColDto col = (DataWriteColDto)cols.get(i);
@@ -176,7 +177,7 @@ public class DataWriteService extends EtlBaseService {
         sql.append("tmp_data_id,tmp_user_id,");
         final List<DataWriteColDto> cols = dto.getCols();
 
-        final int i;
+        int i;
         for(i = 0; i < cols.size(); ++i) {
             DataWriteColDto col = (DataWriteColDto)dto.getCols().get(i);
             sql.append(col.getColName());
@@ -197,9 +198,11 @@ public class DataWriteService extends EtlBaseService {
 
         sql.append(")");
         i = this.daoHelper.queryForInt("select case when max(tmp_data_id) is null then 1 else max(tmp_data_id) + 1 end from " + dto.getTableName());
+        int finalI = i;
         this.daoHelper.execute(sql.toString(), new PreparedStatementCallback<Object>() {
+            @Override
             public Object doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                ps.setInt(1, i);
+                ps.setInt(1, finalI);
                 ps.setInt(2, userId);
 
                 for(int ix = 0; ix < cols.size(); ++ix) {

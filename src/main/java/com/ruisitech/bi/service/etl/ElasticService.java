@@ -305,8 +305,8 @@ public class ElasticService implements DatasetProvider {
                         idx = 0;
                         Map<String, Object> dt = new HashMap();
 
-                        int i;
-                        EtlTableMetaCol c;
+                        //int i;
+                        //EtlTableMetaCol c;
                         for(i = 0; i < table.getMetaCols().size(); ++i) {
                             c = (EtlTableMetaCol)table.getMetaCols().get(i);
                             dt.put(c.getColName(), DataSourceBuilder.getResultSetValue(rs, i + 1));
@@ -638,8 +638,15 @@ public class ElasticService implements DatasetProvider {
 
     }
 
-    public List<Map<String, Object>> queryData(String sql, boolean isAgg, String tname, ExtRequest req, PageInfo page) throws Exception {
-        return this.querySql(sql, tname, req, isAgg, page);
+    @Override
+    public List<Map<String, Object>> queryData(String sql, boolean isAgg, String tname, ExtRequest req, PageInfo page) {
+        List<Map<String, Object>> maps =null;
+        try {
+             maps = this.querySql(sql, tname, req, isAgg, page);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return maps;
     }
 
     public Integer getRowCount() {

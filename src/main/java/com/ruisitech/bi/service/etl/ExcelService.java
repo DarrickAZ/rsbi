@@ -140,7 +140,7 @@ public class ExcelService {
                 xlsx2csv.process(2);
                 p.close();
                 if (dts.size() == 0) {
-                    ArrayList var27 = ret;
+                    List<DSColumn> var27 = ret;
                     return var27;
                 } else {
                     k = 0;
@@ -166,7 +166,7 @@ public class ExcelService {
                     for(Iterator var31 = sec.entrySet().iterator(); var31.hasNext(); ++k) {
                         Entry<String, Object> entity = (Entry)var31.next();
                         Object col = entity.getValue();
-                        DSColumn dscol = (DSColumn)ret.get(k);
+                        dscol = (DSColumn)ret.get(k);
                         if (col instanceof String) {
                             dscol.setType("String");
                             dscol.setLength(400);
@@ -185,7 +185,7 @@ public class ExcelService {
                         }
                     }
 
-                    ArrayList var32 = ret;
+                    List<DSColumn> var32 = ret;
                     return var32;
                 }
             }
@@ -211,6 +211,7 @@ public class ExcelService {
     public void delXls(String xlsPath) {
         File path = new File(xlsPath);
         File[] files = path.listFiles(new FileFilter() {
+            @Override
             public boolean accept(File arg0) {
                 return arg0.getName().endsWith("xls") || arg0.getName().endsWith("xlsx");
             }
@@ -238,7 +239,7 @@ public class ExcelService {
                 XLSX2CSV xlsx2csv = new XLSX2CSV(p, dto, ret);
                 xlsx2csv.process(top);
                 p.close();
-                ArrayList var36 = ret;
+                List<Object> var36 = ret;
                 return var36;
             }
 

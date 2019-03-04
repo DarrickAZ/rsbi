@@ -155,11 +155,11 @@ public class SqlService extends EtlBaseService {
             JSONObject json = JSONObject.fromObject(record.getCfg());
             final String savetype = (String)json.get("savetype");
             String tname = json.getString("tartable");
-            final String sql = json.getString("sql");
+            String sql = json.getString("sql");
             final String dbName = record.getDbName();
             super.droptable(tname, this.daoHelper, dbName);
             super.dropview(tname, this.daoHelper, dbName);
-            final String str1;
+            String str1;
             if ("view".equals(savetype)) {
                 sql = "CREATE VIEW " + tname + " as \n" + sql;
             } else if ("temptable".equals(savetype)) {
@@ -184,15 +184,18 @@ public class SqlService extends EtlBaseService {
 
             log.info(sql);
             str1 = "insert into " + tname + " \n" + json.getString("sql");
+            String finalSql = sql;
+            String finalStr = str1;
             this.daoHelper.execute(new ConnectionCallback<Object>() {
+                @Override
                 public Object doInConnection(Connection conn) throws SQLException, DataAccessException {
                     try {
                         Statement st = conn.createStatement();
-                        st.executeUpdate(sql);
+                        st.executeUpdate(finalSql);
                         st.close();
                         if ("db2".equals(dbName) && "temptable".equals(savetype)) {
                             Statement insertst = conn.createStatement();
-                            insertst.executeUpdate(str1);
+                            insertst.executeUpdate(finalStr);
                             insertst.close();
                         }
                     } catch (SQLException var4) {

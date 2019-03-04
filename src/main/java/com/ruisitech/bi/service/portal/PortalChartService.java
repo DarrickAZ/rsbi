@@ -11,7 +11,8 @@ import com.ruisi.ext.engine.view.context.MVContextImpl;
 import com.ruisi.ext.engine.view.context.chart.*;
 import com.ruisi.ext.engine.view.context.dc.grid.GridDataCenterContext;
 import com.ruisi.ext.engine.view.context.form.InputField;
-import com.ruisi.ext.engine.view.emitter.chart.AbstractChartEmitter.ColorVO;
+import com.ruisi.ext.engine.view.emitter.chart.AbstractChartEmitter;
+import com.ruisi.ext.engine.view.emitter.chart.AbstractChartEmitter$ColorVO;
 import com.ruisitech.bi.entity.bireport.DimDto;
 import com.ruisitech.bi.entity.bireport.KpiDto;
 import com.ruisitech.bi.entity.bireport.TableInfoVO;
@@ -199,17 +200,17 @@ public class PortalChartService extends BaseCompService {
 
         legendLayout = chartJson.getChartJson().getLegendLayout();
         if (legendLayout != null) {
-            ChartKeyContext val1 = new ChartKeyContext("legendLayout", legendLayout);
+            val1 = new ChartKeyContext("legendLayout", legendLayout);
             properties.add(val1);
         }
 
         String legendpos = chartJson.getChartJson().getLegendpos();
         if (legendpos != null) {
-            ChartKeyContext val1 = new ChartKeyContext("legendPosition", legendpos);
+            val1 = new ChartKeyContext("legendPosition", legendpos);
             properties.add(val1);
         }
 
-        ChartKeyContext val1;
+       // ChartKeyContext val1;
         if (obj != null && obj.getId() != null) {
             Integer top = obj.getTop();
             if (top != null) {
@@ -240,7 +241,7 @@ public class PortalChartService extends BaseCompService {
         String labelType = chartJson.getChartJson().getLabelType();
         ChartKeyContext val4 = new ChartKeyContext("labelType", labelType);
         properties.add(val4);
-        ChartKeyContext val1 = new ChartKeyContext("gaugeCnt", "1");
+       val1 = new ChartKeyContext("gaugeCnt", "1");
         properties.add(val1);
         String marginLeft = chartJson.getChartJson().getMarginLeft();
         if (marginLeft != null && marginLeft.length() > 0) {
@@ -512,14 +513,13 @@ public class PortalChartService extends BaseCompService {
     }
 
     public Object queryChartColors() {
-        ColorVO[] vls = ColorVO.values();
+        AbstractChartEmitter$ColorVO[] vls = AbstractChartEmitter$ColorVO.values();
         String[] v = new String[vls.length];
 
         for(int i = 0; i < vls.length; ++i) {
-            ColorVO c = vls[i];
+            AbstractChartEmitter$ColorVO c = vls[i];
             v[i] = c.toString();
         }
-
         return v;
     }
 

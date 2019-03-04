@@ -178,7 +178,7 @@ public class DetailChartSerice extends BaseCompService {
         }
 
         Object o = dset.getJSONArray("param");
-        String name;
+       // String name;
         String tname;
         String expression;
         String val2;

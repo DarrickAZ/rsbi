@@ -527,56 +527,56 @@ public class PortalPageService extends BaseCompService {
             String sql;
             String min;
             if ("radio".equals(type)) {
-                SelectContextImpl target = new SelectContextImpl();
+                SelectContextImpl targetSCI = new SelectContextImpl();
                 if ("static".equals(vtp)) {
-                    this.paramOptions(param, target);
+                    this.paramOptions(param, targetSCI);
                 } else if ("dynamic".equals(vtp)) {
                     sql = this.createDimSql(param);
                     min = TemplateManager.getInstance().createTemplate(sql);
-                    target.setTemplateName(min);
+                    targetSCI.setTemplateName(min);
                 }
 
-                target.setAddEmptyValue(true);
-                input = target;
+                targetSCI.setAddEmptyValue(true);
+                input = targetSCI;
             } else if ("checkbox".equals(type)) {
-                MultiSelectContext target = new MultiSelectContextImpl();
+                MultiSelectContext targetMSC = new MultiSelectContextImpl();
                 if ("static".equals(vtp)) {
-                    this.paramOptions(param, target);
+                    this.paramOptions(param, targetMSC);
                 } else if ("dynamic".equals(vtp)) {
                     sql = this.createDimSql(param);
                     min = TemplateManager.getInstance().createTemplate(sql);
-                    target.setTemplateName(min);
+                    targetMSC.setTemplateName(min);
                 }
 
-                input = target;
+                input = targetMSC;
             } else if (!"dateselect".equals(type) && !"monthselect".equals(type) && !"yearselect".equals(type)) {
                 if ("text".equals(type)) {
                     target = new TextFieldContextImpl();
                     input = target;
                 }
             } else {
-                DateSelectContextImpl target = new DateSelectContextImpl();
+                DateSelectContextImpl target1 = new DateSelectContextImpl();
                 sql = (String)param.get("maxval");
                 if (sql != null && sql.length() > 0) {
-                    target.setMaxDate(sql);
+                    target1.setMaxDate(sql);
                 }
 
                 min = (String)param.get("minval");
                 if (min != null && min.length() > 0) {
-                    target.setMinDate(min);
+                    target1.setMinDate(min);
                 }
 
                 if (dtformat != null && dtformat.length() > 0) {
-                    target.setDateFormat(dtformat);
+                    target1.setDateFormat(dtformat);
                 }
 
                 if ("monthselect".equals(type)) {
-                    target.setDateType("month");
+                    target1.setDateType("month");
                 } else if ("yearselect".equals(type)) {
-                    target.setDateType("year");
+                    target1.setDateType("year");
                 }
 
-                input = target;
+                input = target1;
             }
         }
 
