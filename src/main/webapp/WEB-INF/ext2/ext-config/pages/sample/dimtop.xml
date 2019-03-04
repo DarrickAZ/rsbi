@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<box title="多层级维度取TOP">
+
+
+<div style="width:1020px;margin:auto">
+<text>
+<![CDATA[
+ ps: 行表头由月份、省份构成，对省份取TOP5，按第一个指标排序, 完了再对省按月求合计
+ ]]>
+ </text>
+	<crossReport out="html">
+		<rowHeads>
+		 <rowHead desc="月份"></rowHead>
+		 <rowHead desc="省份排名Top5"></rowHead>
+		</rowHeads>
+		<report-cols>
+			<crossCol desc="网上用户数" type="kpiOther" alias="a0001" aggregation="sum" formatPattern="#,###"/>
+			<crossCol desc="新增用户数" type="kpiOther" alias="a0002" aggregation="sum" formatPattern="#,###"/>
+			<crossCol desc="离网用户数" type="kpiOther" alias="a0003" aggregation="sum" formatPattern="#,###"/>
+			<crossCol desc="主动离网用户数" type="kpiOther" alias="a0004" aggregation="sum" formatPattern="#,###"/>
+			<crossCol desc="被动离网用户数" type="kpiOther" alias="a0005" aggregation="sum" formatPattern="#,###"/>
+			<crossCol desc="出账用户数" type="kpiOther" alias="a0006" aggregation="sum" formatPattern="#,###"/>
+			<crossCol desc="活跃用户数" type="kpiOther" alias="a0007" aggregation="sum" formatPattern="#,###"/>
+		</report-cols>
+		<report-rows>
+			<crossRow desc="月份" type="frd" alias="month_id" aliasDesc="month_id" multi="true" dateFormat="month">
+				<crossRow desc="省份" type="frd" alias="pro_no" aliasDesc="pro_name" multi="true" top="5" casParent="true"/>
+				<crossRow type="none" desc="全省合计：" styleClass="kpihj"/>
+			</crossRow>
+		</report-rows>
+		<ds><![CDATA[ 
+			select month_id, pro_no, pro_name, 
+			sum(A0001) a0001,
+			sum(A0002) a0002,
+			sum(A0003) a0003,
+			sum(A0004) a0004,
+			sum(A0005) a0005,
+			sum(A0006) a0006,
+			sum(A0007) a0007
+			from bi_demo.dm_kpi_w_card_pandect_m2 a,  dmcode_province b
+			where a.prov_id = b.pro_no and month_id between '201011' and '201104'
+			group by month_id, pro_no, pro_name 
+			order by month_id desc, a0001 desc
+		]]></ds>
+	</crossReport>
+</div>
+
+<text>
+	<![CDATA[
+	<style>
+	TABLE.grid3 td.kpihj {
+		font-weight:bold; color:#FF0000; text-align:center
+	}
+	</style>
+	 ]]>
+</text>
+	</box>
+</ext-config>

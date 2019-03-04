@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ruisitech.bi.mapper.dashboard.DashboardMapper" >
+  <resultMap id="BaseResultMap" type="com.ruisitech.bi.entity.dashboard.Dashboard" >
+    <id column="Id" property="id"  />
+    <result column="user_id" property="userId"  />
+    <result column="createdate" property="createdate" />
+    <result column="updatedate" property="updatedate" />
+    <result column="page_name" property="pageName" />
+    <result column="page_info" property="pageInfo"  />
+    <result column="editor_enable" property="editorEnable"  />
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    Id, user_id, createdate, updatedate, page_name, page_info, editor_enable
+  </sql>
+  <select id="list" resultMap="BaseResultMap" >
+    select Id, user_id, createdate, updatedate, page_name, editor_enable
+    from ${sysUser}.dashboard_user_save
+    where user_id = #{userId}
+    <if test="keyword != null">
+    	and page_name like '%${keyword}%'
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+     <include refid="Base_Column_List" />
+    from ${sysUser}.dashboard_user_save
+    where Id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from ${sysUser}.dashboard_user_save
+    where Id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.ruisitech.bi.entity.dashboard.Dashboard" >
+    insert into ${sysUser}.dashboard_user_save (Id, user_id, createdate, 
+      updatedate, page_name, page_info,editor_enable)
+    values (#{id}, #{userId}, 
+ 		<if test="dbName == 'mysql'">
+    	now(), now()
+    	</if> 
+    	<if test="dbName == 'oracle'">
+    	sysdate, sysdate
+    	</if> 
+    	<if test="dbName == 'sqlser'">
+    	getdate(), getdate()
+    	</if> 
+    	<if test="dbName == 'db2'">
+    	current timestamp, current timestamp
+    	</if> 
+    , #{pageName}, #{pageInfo}, '1' )
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.ruisitech.bi.entity.dashboard.Dashboard" >
+    update ${sysUser}.dashboard_user_save
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId},
+      </if>
+      
+        updatedate = 
+        	<if test="dbName == 'mysql'">
+	    	now()
+	    	</if> 
+	    	<if test="dbName == 'oracle'">
+	    	sysdate
+	    	</if> 
+	    	<if test="dbName == 'sqlser'">
+	    	getdate()
+	    	</if>
+	    	<if test="dbName == 'db2'">
+	    	current timestamp
+	    	</if>  
+	    	,
+      
+      <if test="pageName != null" >
+        page_name = #{pageName},
+      </if>
+      <if test="pageInfo != null" >
+        page_info = #{pageInfo},
+      </if>
+      <if test="editorEnable != null" >
+        editor_enable = #{editorEnable},
+      </if>
+    </set>
+    where Id = #{id}
+  </update>
+  
+  	<select id="maxDashboardId" resultType="Integer">
+		select case WHEN max(id) is null then 1 else  max(id) + 1 end "id" from ${sysUser}.dashboard_user_save
+	</select>
+	
+	<update id="setDefDashboard">
+		update ${sysUser}.sc_login_user set def_dashboard = #{id} where user_id = #{userId}
+	</update>
+	
+	<select id="getDefDashboard" resultType="Integer">
+		select def_dashboard from ${sysUser}.sc_login_user where user_id = #{userId}
+	</select>
+  
+</mapper>

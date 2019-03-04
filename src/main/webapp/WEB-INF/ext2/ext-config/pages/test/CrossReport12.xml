@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	
+<box title="crossReport type为none的使用">
+	 <br/>
+	<fieldset title="示例1">
+	<text>
+	<![CDATA[
+			<div>一般在crossReport的配置中，type可以的值为 month/day/none/kpi/kpiOther/frd</div>
+			<div>type="none"表示当前节点作显示用，不起其他作用。type="kpi/kpiOther"表示当前节点为指标,type="frd"表示从数据中获取维值.</div>
+		
+		<style> .a1{
+			background-color:red;
+		}
+		</style>
+		]]>
+	</text>
+	<crossReport out="html">
+		<baseKpi alias="kpi_value" formatPattern="###,##0" aggregation="sum">
+			</baseKpi>
+		<report-cols>
+				
+					<crossCol desc="账期" type="frd" alias="month_id" aliasDesc="month_id" multi="true" styleClass="a1" />
+					
+					
+			</report-cols>
+			<report-rows rebuild="true">
+					<crossRow desc="用户数" type="none" >
+						<crossRow desc="网上用户数" type="kpi" alias="kpi_code" value="A0001" formatPattern="###,##0" aggregation="sum"/>
+						<crossRow desc="离网用户数" type="kpi" alias="kpi_code" value="A0003" formatPattern="###,##0" aggregation="sum"/>
+					</crossRow>
+					<crossRow desc="出账收入" type="kpi" alias="kpi_code" value="B0001" formatPattern="###,##0" aggregation="sum" />
+			
+			</report-rows>
+		<ds>
+select t.month_id,
+       t.kpi_code,
+       k.kpi_desc,
+    
+       '0.00' kpiFmt,
+       sum(t.kpi_value) kpi_value
+  from dm_kpi_w_card_pandect_m t,
+       dmcode_kpi_lib          k
+    
+ where t.kpi_code = k.kpi_code
+ and t.kpi_code in ('B0001','A0001','A0003')
+   and month_id in ('201002', '201003', '201004', '201005', '201006')
+ group by t.month_id,
+          t.kpi_code,
+          k.kpi_desc
+        
+ order by month_id
+		</ds>
+	</crossReport>
+</fieldset>
+</box>
+
+</ext-config>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<box title="报表使用分析">
+	<data key="info">
+		select t.do_date dt, t.do_cnt cnt, t.do_maxdate md from etl.report_etl_info t order by do_date desc
+	</data>
+	<text>
+		<template>
+			<![CDATA[ &nbsp; 
+			etl采集时间: $info.dt, 采集数据: $info.cnt 条, 最大账期： $info.md
+			]]>
+		</template>
+	</text>
+	<table>
+		<tr><td colspan="3">
+			<div align="right">
+			<dateSelect desc="开始时间" id="sdate" />
+			
+			<dateSelect desc="结束时间" id="edate" />
+			
+			<button desc="查询" type="button" target="qst"/>
+			</div>
+			<fieldset title="时间序列">
+				<chart shape="line" xcol="X" ycol="Y" scol="SER" width="1024" height="330" label="qst">
+					<property>
+						<key name="formatCol" value="##,###.####" />
+						<key name="unitCol" value="unit" />
+						<key name="showBorder" value="false" />
+						<key name="legendBgColor" value="#FFFFFF" />
+						<key name="legendPosition" value="bottom: 'auto'" />
+						<key name="legendLayout" value="horizontal" />
+						<key name="multiAxis" value="false" />
+						<key name="showLegend" value="true" />
+						<key name="xAxisType" value="datetime" />	
+						<key name='markerEnabled' value='true'></key>
+						<key name='margin' value='20,40,100,80'></key>
+				</property>
+					<ds refDataCenter="DC-67467065">
+					</ds>
+				</chart>
+			</fieldset>
+		</td></tr>
+		
+		<tr>
+			<td>
+	<fieldset title="用户使用次数分析">
+			<crossReport out="html" export="true">
+					<rowHeads>
+						<rowHead desc="用户" styleClass=""/>
+					</rowHeads>
+					<report-cols>
+						<crossCol desc="次数" type="kpiOther"  alias="cnt" aggregation="sum"  width="100"  formatPattern="#,##0"/>
+					</report-cols>
+					<report-rows>
+						<crossRow width="200" desc="" type="frd" alias="login_id" aliasDesc="login_name" multi="true"/>
+					</report-rows>
+					<row-dims>
+						<dim name="报表" code="report_id" type="frd" codeDesc="report_name" ref="d1"/>
+					</row-dims>
+					<ds pageSize="10">
+select sum(cnt) cnt, login_name, login_id from (
+
+select t.cnt, a.login_name, a.login_id, b.report_name, b.report_id
+  from etl.report_dm_report_user t, etl.report_user a, etl.report_info b
+ where t.report_id = b.report_id
+   and t.loginid = a.login_id 
+   
+   ) group by login_name, login_id order by cnt desc
+					</ds>
+				</crossReport>
+	</fieldset>
+			</td>
+			<td>
+				<text><![CDATA[ &nbsp; ]]></text>
+				</td>
+			<td>
+				<fieldset title="报表查询次数分析">
+				<crossReport out="html" export="true">
+					<rowHeads>
+						<rowHead desc="报表" styleClass=""/>
+					</rowHeads>
+					<report-cols>
+						<crossCol desc="次数" type="kpiOther"  alias="cnt" aggregation="sum"  width="100"  formatPattern="#,##0"/>
+					</report-cols>
+					<report-rows>
+						<crossRow width="200" desc="" type="frd" alias="report_id" aliasDesc="report_name" multi="true"/>
+					</report-rows>
+					<ds pageSize="10">
+select sum(cnt) cnt, report_id, report_name from (
+
+select t.cnt, a.login_name, a.login_id, b.report_name, b.report_id
+  from etl.report_dm_report_user t, etl.report_user a, etl.report_info b
+ where t.report_id = b.report_id
+   and t.loginid = a.login_id 
+   
+   ) group by report_id, report_name order by cnt desc
+					</ds>
+				</crossReport>
+				
+				</fieldset>
+			</td>
+		</tr>
+	</table>
+	</box>
+	
+	<gridDataCenter id="DC-67467065">
+        <ds>
+        	<![CDATA[
+			select t.visit_time x, t.cnt y, '日访问次数' ser
+  from etl.report_dm_day t
+ where t.visit_time between  
+#if($sdate != '' && $edate != '')
+	'$sdate' and '$edate'
+#else
+ '20120101'  and '20120328'
+#end
+
+union all
+
+select t.visit_time x, t.cnt y, '日访问报表数' ser from etl.report_dm_report_day_cnt t
+where t.visit_time between  
+#if($sdate != '' && $edate != '')
+	'$sdate' and '$edate'
+#else
+ '20120101'  and '20120328'
+#end
+
+union all
+
+select t.visit_time x, t.cnt y, '日访问用户数' ser from etl.report_dm_user_day_cnt t
+where t.visit_time between  
+#if($sdate != '' && $edate != '')
+	'$sdate' and '$edate'
+#else
+ '20120101'  and '20120328'
+#end
+
+ order by x
+					   ]]>
+        </ds>
+        <processor>
+		   <dayFill column="x" type="day" dataColumn="y" ser="ser"></dayFill>
+        </processor>
+    </gridDataCenter>
+	
+	<sql id="d1">
+select t.cnt, a.login_name, a.login_id, b.report_name, b.report_id
+  from etl.report_dm_report_user t, etl.report_user a, etl.report_info b
+ where t.report_id = b.report_id
+   and t.loginid = a.login_id 
+   and t.loginid = '${login_id}'
+   order by cnt desc
+</sql>
+	
+</ext-config>

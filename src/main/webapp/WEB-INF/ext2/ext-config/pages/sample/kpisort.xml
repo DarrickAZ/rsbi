@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<box title="指标排名">
+
+
+<div style="width:1020px;margin:auto">
+<text>
+<![CDATA[
+ ps: 对每个指标在省分上进行排名
+ ]]>
+ </text>
+	<crossReport out="html">
+		<rowHeads>
+		 <rowHead desc="月份"></rowHead>
+		</rowHeads>
+		<report-cols>
+			<crossCol desc="网上用户数" type="kpiOther" alias="a0001" aggregation="sum" formatPattern="#,###" order="true" />
+			<crossCol desc="排名" type="kpiOther" alias="a0001_order" aggregation="sum" formatPattern="#,###" styleClass="pms" styleToLine="true"/>
+			<crossCol desc="新增用户数" type="kpiOther" alias="a0002" aggregation="sum" formatPattern="#,###" order="true"/>
+			<crossCol desc="排名" type="kpiOther" alias="a0002_order" aggregation="sum" formatPattern="#,###" styleClass="pms" styleToLine="true"/>
+			<crossCol desc="离网用户数" type="kpiOther" alias="a0003" aggregation="sum" formatPattern="#,###" order="true"/>
+			<crossCol desc="排名" type="kpiOther" alias="a0003_order" aggregation="sum" formatPattern="#,###" styleClass="pms" styleToLine="true"/>
+			<crossCol desc="出账用户数" type="kpiOther" alias="a0006" aggregation="sum" formatPattern="#,###" order="true"/>
+			<crossCol desc="排名" type="kpiOther" alias="a0006_order" aggregation="sum" formatPattern="#,###" styleClass="pms" styleToLine="true"/>
+			<crossCol desc="活跃用户数" type="kpiOther" alias="a0007" aggregation="sum" formatPattern="#,###" order="true"/>
+			<crossCol desc="排名" type="kpiOther" alias="a0007_order" aggregation="sum" formatPattern="#,###" styleClass="pms" styleToLine="true" />
+		</report-cols>
+		<report-rows>
+			<crossRow desc="省份" type="frd" alias="pro_no" aliasDesc="pro_name" multi="true"/>
+		</report-rows>
+		<ds refDataCenter="dc1"></ds>
+	</crossReport>
+</div>
+
+<gridDataCenter id="dc1">
+	<ds>
+	<![CDATA[ 
+			select month_id, pro_no, pro_name, 
+			sum(A0001) a0001,
+			sum(A0002) a0002,
+			sum(A0003) a0003,
+			sum(A0006) a0006,
+			sum(A0007) a0007
+			from bi_demo.dm_kpi_w_card_pandect_m2 a,  dmcode_province b
+			where a.prov_id = b.pro_no and month_id = '201104'
+			group by month_id, pro_no, pro_name 
+			order by month_id desc
+		]]>
+	</ds>
+	<processor>
+		<sort column="a0002" type="desc" appendOrder="true" changeOldOrder="false"/>
+		<sort column="a0003" type="desc" appendOrder="true" changeOldOrder="false"/>
+		<sort column="a0006" type="desc" appendOrder="true" changeOldOrder="true"/>
+		<sort column="a0007" type="desc" appendOrder="true" changeOldOrder="false"/>
+		<sort column="a0001" type="desc" appendOrder="true" changeOldOrder="false"/>
+	</processor>
+</gridDataCenter>
+</box>
+<text>
+	<![CDATA[
+	<style>
+	TABLE.grid3 td.pms {
+		font-weight:bold; color:#FF0000; text-align:center
+	}
+	</style>
+	 ]]>
+</text>
+	
+</ext-config>

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<box title="测试树形参数">
+</box>
+
+<tree id="fl" desc="分类" size="20" valueId="id" valueText="text" valuePid="pid" defRootId="0">
+select id "id", name "text", pid "pid" from report_catalog where type = -1
+</tree>
+
+<tree id="fl3" desc="分类3" size="20" valueId="id" valueText="text" valuePid="pid" defRootId="0">
+select id "id", name "text", pid "pid" from report_catalog where type = -1
+</tree>
+
+
+<select id="myselect" desc="月份" multiple="true">
+select mid value, mname text from code_month
+</select>
+
+<button type="button" desc="提交" mvId="sample.treeparam"/>
+
+	
+</ext-config>

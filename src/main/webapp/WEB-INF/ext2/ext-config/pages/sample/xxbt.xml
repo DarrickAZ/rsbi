@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+	
+	
+<box title="斜线表头">
+
+
+
+	<crossReport out="html">
+		<rowHeads>
+		 <rowHead desc=""></rowHead>
+		</rowHeads>
+		<report-cols>
+			<crossCol desc="月份" type="frd" alias="MONTH_ID" aliasDesc="MONTH_ID"	multi="true" dateFormat="month">
+				<crossCol desc="网上用户数" type="kpiOther" alias="A0001" formatPattern="###,##0" aggregation="sum"></crossCol>
+				<crossCol desc="新增用户数" type="kpiOther" alias="A0002" formatPattern="###,##0" aggregation="sum"></crossCol>
+			</crossCol>
+		</report-cols>
+		<report-rows>
+			<crossRow desc="省份" type="frd" alias="pro_no" aliasDesc="pro_name" multi="true"/>
+		</report-rows>
+		<ds><![CDATA[ 
+			select t.MONTH_ID, b.pro_no, b.pro_name, b.ord, sum(A0001) A0001, sum(A0002) A0002
+			  from bi_demo.dm_kpi_w_card_pandect_m2 t, dmcode_province b
+			 where t.prov_id = b.pro_no
+			   and month_id between '201101' and '201104'
+			 group by t.MONTH_ID, b.pro_no, b.pro_name, b.ord
+			 order by t.MONTH_ID desc, b.ord
+		]]></ds>
+	</crossReport>
+
+<text>
+	<![CDATA[ 
+	<script>
+	var $ = jQuery;
+	$(function(){
+		var setHeadFunc = function(){
+			var obj = $("table.grid3 #xxhead");
+			obj.css("padding", "0px");
+			var w = obj.width();
+			var h = obj.height();
+			var pos = obj.position();
+			var html = "<img style=\"position:absolute;left:"+pos.left+"px;top:"+pos.top+"px;\" src='../ext-res/image/xxbt.png' width='"+w+"' height='"+h+"'>" + 
+				"<div style=\"height:"+(h/2)+"px;\" align=\"right\"><span>月份</span></div>" + 
+				"<div style=\"height:"+(h/2)+"px;float:left;\" align=\"left\"><span>省分</span></div>" + 
+				"<div style=\"height:"+(h/2)+"px;\" align=\"right\"><span style=\"padding-right:2px;\">指标</span></div>";
+			obj.html(html);
+		}
+		setHeadFunc();
+		$(window).resize(setHeadFunc)
+	});
+	</script>
+	
+	
+	 ]]>
+	</text>
+	</box>
+</ext-config>

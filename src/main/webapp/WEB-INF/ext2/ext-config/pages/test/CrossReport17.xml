@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<script>
+	 	<![CDATA[
+		//在月份钻取时，对201006不钻取
+		function isMonthdirll(a){
+			if(a.value == '201005'){
+				return false;
+			}
+			return true;
+		}
+		//在省份钻取时，对011不钻取
+		function isProvdirll(a){
+			if(a.value == '011'){
+				return false;
+			}
+			return true;
+		}
+		]]>
+	 </script>
+<box title="crossReport配置维度钻取,在指定的行上不钻取">
+	 
+	<fieldset title="示例1">
+	<text>
+	<![CDATA[
+			<div>本示例主要演示使用crossReport标签配置维度钻取功能, 并且在指定的行上不钻取。</div>
+			<div>通过在crossRow上配置testFunc实现,在多级钻取时，也需要在row-dims/dim上配置testFunc</div>
+			<div>testFunc配置能够指向一个JS函数，该函数定义于&lt;script&gt;&lt;/script&gt;标签中,该函数必须返回true/false,当返回false时，表示在当前行上不用钻取。</div>
+			<div>当系统调用testFunc里指定的函数时，会把当前row对象传给函数，用户可以通过row函数获取当前节点的 value, alias, type, desc等值。</div>
+			<div>本例中，调用的JS函数为isMonthdirll,isProvdirll两函数</div>
+		]]>
+	</text>
+	<crossReport out="html" rowHead="">
+		<baseKpi alias="kpi_value" aggregation="sum" formatPattern="###,###" />
+		<report-cols>
+				<crossCol desc="" type="frd" alias="kpi_code" aliasDesc="kpi_desc" multi="true"/>
+			</report-cols>
+			<report-rows rebuild="true">
+				<crossRow desc="账期" type="frd" alias="month_id" aliasDesc="month_id" multi="true" uselink="true" testFunc="isMonthdirll"/>
+			</report-rows>
+		<!--纵向表头钻取的维度 -->
+		<row-dims>
+			<dim name="省份" code="pro_no" type="frd" codeDesc="pro_name" testFunc="isProvdirll" />
+			<dim name="地市" code="city_no" type="frd" codeDesc="city_desc" />
+		</row-dims>
+		<ds refDsource="oracdb">
+		select t.month_id,
+       t.kpi_code,
+       k.kpi_desc,
+       p.pro_no,
+       p.pro_name,
+       c.city_no,
+       c.city_desc,
+       '0.00' kpiFmt,
+       sum(t.kpi_value) kpi_value
+  from dm_kpi_w_card_pandect_m t,
+       dmcode_kpi_lib          k,
+       dmcode_province         p,
+       dmcode_city             c
+ where t.kpi_code = k.kpi_code
+   and p.pro_no = t.prov_id
+   and c.city_no = t.area_no
+   and t.kpi_code in ('A0001', 'A0054', 'A0002', 'A0003', 'A0004')
+   and month_id in ('201002','201003', '201004', '201005', '201006')
+ group by t.month_id,
+          t.kpi_code,
+          k.kpi_desc,
+          p.pro_no,
+          p.pro_name,
+          c.city_no,
+          c.city_desc
+ order by month_id, pro_no, city_no
+		</ds>
+	</crossReport>
+</fieldset>
+</box>
+	<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+</ext-config>

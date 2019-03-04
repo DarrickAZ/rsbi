@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<box title="分析报表演示">
+
+<text>
+ <template>
+ <![CDATA[
+ 
+ <div style="margin:10px; line-height:25px;">
+   <a href="extView?mvid=sample.xxbt">斜线表头</a>  <br/>
+   <a href="extView?mvid=sample.btpx">表头排序</a>  <br/>
+   <a href="extView?mvid=sample.sdbt&_hideMVDiv=true&_showForm=false">锁定表头</a> <br/>
+   <a href="extView?mvid=sample.bgyj">表格预警</a>  <br/>
+   <a href="extView?mvid=sample.bgzq">表格钻取</a>  <br/>
+   <a href="extView?mvid=sample.bgqr">表格嵌入</a>  <br/>
+   <a href="extView?mvid=sample.bgld">表格与图形的联动</a>  <br/>
+   <a href="extView?mvid=sample.dimtop">多层级维度取TOP</a>  <br/>
+   <a href="extView?mvid=sample.kpisort">指标排名</a>  <br/>
+   <a href="extView?mvid=sample.fzjcb">较复杂交叉表</a>  <br/>
+   <a href="extView?mvid=sample.zbjs">指标占比计算</a>  <br/>
+   <a href="extView?mvid=sample.ttld">图图联动</a>  <br/>
+   <a href="extView?mvid=sample.gdby">固定表样</a>  <br/>
+  </div>
+ ]]>
+ </template>
+</text>
+
+	</box>
+</ext-config>

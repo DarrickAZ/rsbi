@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ruisitech.bi.mapper.app.OlapSaveMapper">
+    <resultMap id="BaseResultMap" type="com.ruisitech.bi.entity.app.OlapSave">
+		<id column="pageid" property="id"/>
+		<result column="userid" property="userId"/>
+		<result column="pageinfo" property="pageInfo"/>
+		<result column="pagename" property="pageName"/>
+		<result column="name" property="name"/>
+		<result column="crtdate" property="crtdate"/>
+		<result column="updatedate" property="updatedate"/>
+    </resultMap>
+    
+  <insert id="save" parameterType="com.ruisitech.bi.entity.app.OlapSave">
+		insert into ${sysUser}.olap_3g_save(pageid,userid,pageinfo,pagename, crtdate, updatedate) values(#{id},#{userId}, #{pageInfo}, #{pageName},
+		<if test="dbName == 'mysql'">  
+		now(), now()
+		</if>
+		<if test="dbName == 'oracle'">
+		sysdate, sysdate  
+		</if>
+		<if test="dbName == 'sqlser'">
+		GETDATE(), GETDATE()  
+		</if>
+		<if test="dbName == 'db2'">
+		current timestamp, current timestamp
+		</if>
+	     )
+	</insert>
+	
+	<select id="maxId" resultType="Integer">
+		select case when max(pageid) is null then 1 else max(pageid) + 1 end from ${sysUser}.olap_3g_save 
+	</select>
+	
+	<update id="update" parameterType="com.ruisitech.bi.entity.app.OlapSave">
+		update ${sysUser}.olap_3g_save set pageinfo = #{pageInfo}, updatedate=
+		<if test="dbName == 'mysql'">  
+		now()
+		</if>
+		<if test="dbName == 'oracle'">
+		sysdate 
+		</if>
+		<if test="dbName == 'sqlser'">
+		GETDATE()
+		</if>
+		<if test="dbName == 'db2'">
+		current timestamp
+		</if>
+		 where  pageid = #{id}
+	</update>
+	
+	<select id="list" resultMap="BaseResultMap">
+		select pagename, pagename as name, crtdate, pageid  from ${sysUser}.olap_3g_save order by crtdate desc
+	</select>
+	
+	<delete id="delete">
+		delete from ${sysUser}.olap_3g_save where pageid = #{id}
+	</delete>
+	
+	<select id="getById" resultType="java.lang.String">
+		select  pageinfo "content"
+		from ${sysUser}.olap_3g_save where pageid = #{id}
+	</select>
+	
+</mapper>

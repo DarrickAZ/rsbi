@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+    <box title="dateSelect配置说明">
+        <fieldset title="示例1">
+            <text>
+                <![CDATA[
+			<div>使用dateSelect标签输出日期选择控件。如下：</div>
+		]]>
+            </text>
+            <dateSelect id="dt" desc="账期"/>
+			
+        </fieldset>
+    </box>
+</ext-config>

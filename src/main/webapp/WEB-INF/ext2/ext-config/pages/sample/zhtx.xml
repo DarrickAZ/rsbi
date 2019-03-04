@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<div style="width:1020px;margin:auto;height:1000px;overflow:auto">
+	<chart shape="column" xcol="month_id" ycol="value" width="900"
+		height="240" scol="kpi_desc" align="center" rightSer="新增用户数">
+		<property>
+			<key name="formatCol" value="kpi_fmt" />
+			<key name="legendLayout" value="horizontal" />
+			<key name="ydesc" value="网上用户数" />
+		</property>
+		<ds><![CDATA[ 
+		
+			select  month_id, sum(KPI_VALUE) value, c.kpi_code, c.kpi_desc, '#' kpi_fmt
+			from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib c 
+			where c.kpi_code = t.kpi_code and c.kpi_code in ('A0001', 'A0002')
+			and month_id between '201002' and '201010'
+			group by c.kpi_code, c.kpi_desc,month_id
+            order by c.kpi_code, month_id 
+		
+		]]></ds>
+	</chart>
+	<crossReport out="html">
+		<rowHeads>
+		 <rowHead desc=""></rowHead>
+		</rowHeads>
+		<report-cols>
+			<crossCol desc="月份" type="frd" alias="MONTH_ID" aliasDesc="MONTH_ID"	multi="true" dateFormat="month">
+				<crossCol desc="网上用户数" type="kpiOther" alias="A0001" formatPattern="###,##0" aggregation="sum"></crossCol>
+				<crossCol desc="新增用户数" type="kpiOther" alias="A0002" formatPattern="###,##0" aggregation="sum"></crossCol>
+			</crossCol>
+		</report-cols>
+		<report-rows>
+			<crossRow desc="省份" type="frd" alias="pro_no" aliasDesc="pro_name" multi="true"/>
+		</report-rows>
+		<ds><![CDATA[ 
+			select t.MONTH_ID, b.pro_no, b.pro_name, b.ord, sum(A0001) A0001, sum(A0002) A0002
+			  from dm_kpi_w_card_pandect_m2 t, dmcode_province b
+			 where t.prov_id = b.pro_no
+			   and month_id between '201101' and '201104'
+			 group by t.MONTH_ID, b.pro_no, b.pro_name, b.ord
+			 order by t.MONTH_ID desc, b.ord
+		]]></ds>
+	</crossReport>
+</div>
+</ext-config>

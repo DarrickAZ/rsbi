@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<box title="crossReport为行、列配置链接">
+		 <br/>
+	<fieldset title="示例1">
+	<text>
+	<![CDATA[
+			<div>使用crossReport标签配置行链接</div>
+			<div>在需要显示链接的行必须加uselink="true"才能显示链接</div>
+		]]>
+	</text>
+	<crossReport out="html" rowHead="关键指标">
+		<baseKpi alias="kpi_value">
+			</baseKpi>
+		<report-cols>
+				<crossCol desc="" type="frd" alias="kpi_code" aliasDesc="kpi_desc" multi="true"/>
+			</report-cols>
+			<report-rows rebuild="true">
+				<crossRow desc="" type="frd" alias="month_id" aliasDesc="month_id" multi="true"  uselink="true"/>
+			</report-rows>
+		<row-link mvId="test.Table" />
+		<ds refDsource="oracdb">
+			select t.month_id, t.kpi_code, k.kpi_desc, '0.00' kpiFmt, sum(t.kpi_value)
+					kpi_value
+					from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib k where
+					t.kpi_code =
+					k.kpi_code
+					group by t.month_id, t.kpi_code, k.kpi_desc
+					order by month_id
+		</ds>
+	</crossReport>
+	</fieldset>
+		
+	<br/>
+	<fieldset title="示例2">
+	<text>
+	<![CDATA[
+			<div>使用crossReport标签配置列链接</div>
+			<div>在需要显示链接的列加上uselink="true"属性才能显示链接</div>
+		]]>
+	</text>
+	<crossReport out="html" rowHead="关键指标">
+		<baseKpi alias="kpi_value">
+			</baseKpi>
+		<report-cols>
+			<crossCol desc="" type="frd" alias="kpi_code" aliasDesc="kpi_desc" multi="true" uselink="true"/>
+		</report-cols>
+		<report-rows rebuild="true">
+			<crossRow desc="" type="frd" alias="month_id" aliasDesc="month_id" multi="true"/>
+		</report-rows>
+		<col-link mvId="test.Chart" />
+		<ds refDsource="oracdb">
+			select t.month_id, t.kpi_code, k.kpi_desc, '0.00' kpiFmt, sum(t.kpi_value)
+					kpi_value
+					from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib k where
+					t.kpi_code =
+					k.kpi_code
+					group by t.month_id, t.kpi_code, k.kpi_desc
+					order by month_id
+		</ds>
+	</crossReport>
+	</fieldset>
+	
+	</box >
+	
+	<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+</ext-config>

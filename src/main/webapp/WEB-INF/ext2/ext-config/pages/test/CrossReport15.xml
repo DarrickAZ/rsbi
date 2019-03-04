@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<script>
+	<![CDATA[ 	
+	var df = new java.text.DecimalFormat('###,##0');
+	/**
+	* value 当前值
+	* b 当前col
+	* c 当前row
+	* d 当前数据行
+	* e html/xls两值
+	**/
+	function printKpi(value, b, c, d, e){
+		if(value == null || value == ""){
+			out.print("");
+			return;
+		}
+		if(value > 1000 && e == "html"){
+			out.print('<font color="red">' + df.format(value) + '</font>');
+			//out.print(b);
+		}else{
+			out.print(df.format(value));
+		}
+	}
+	]]>
+	</script>
+	<box title="script配置说明">
+		<fieldset title="示例1">
+			<text>
+    <![CDATA[
+			<div>1.jsFunc属性主要用在crossReport的crossRow和crossCol标签中,调用一个定义好的 js函数,目前只支持out="html"方式</div>
+			<div>2. jsFunc只能定义与type="kpi/kpiOther"中</div>
+			<div>3.调用的函数包括4个参数: 1.当前值、2.当前col对象、 3.当前row对象、 4.当前行数据map对象、5.当前输出方式是html或xls（在导出excel时，该值为xls）</div>
+			<div>4.当前实例中的函数名为printKpi</div>
+		]]>
+			</text>
+	
+		
+		<crossReport out="html" export="true">
+			<report-cols>
+					<crossCol desc="网上用户数" type="kpi" alias="kpi_code" value="A0001" aggregation="sum" formatPattern="###,###"/>
+					<crossCol desc="新增用户数" type="kpi" alias="kpi_code" value="A0002" aggregation="sum" formatPattern="###,###"/>
+					<crossCol desc="离网用户数" type="kpi" alias="kpi_code" value="A0003" jsFunc="printKpi" aggregation="sum" formatPattern="###,###"/>
+					<crossCol desc="收入1" type="kpi" alias="kpi_code" value="A0004" jsFunc="printKpi" aggregation="sum" />
+					<crossCol desc="收入2" type="kpi" alias="kpi_code" value="A0054" jsFunc="printKpi" aggregation="sum"/>
+			</report-cols>
+			<report-rows >
+				<crossRow desc="" type="frd" alias="pro_no" aliasDesc="pro_name" multi="true" total="false"/>
+			</report-rows>
+			<ds refDsource="oracdb">
+		select t.month_id,t.kpi_code,k.kpi_desc,p.pro_no,p.pro_name,c.city_no,c.city_desc, sum(t.kpi_value) kpi_value
+  from dm_kpi_w_card_pandect_m t,
+       dmcode_kpi_lib          k,
+       dmcode_province         p,
+       dmcode_city             c
+ where t.kpi_code = k.kpi_code
+   and p.pro_no = t.prov_id
+   and c.city_no = t.area_no
+   and t.kpi_code in ('A0001', 'A0054', 'A0002', 'A0003', 'A0004')
+   and month_id in ('201002','201003', '201004', '201005', '201006')
+ group by t.month_id,
+          t.kpi_code,
+          k.kpi_desc,
+          p.pro_no,
+          p.pro_name,
+          c.city_no,
+          c.city_desc
+ order by month_id, pro_no, city_no
+			</ds>
+		</crossReport>
+			</fieldset>
+	</box>
+	<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+</ext-config>

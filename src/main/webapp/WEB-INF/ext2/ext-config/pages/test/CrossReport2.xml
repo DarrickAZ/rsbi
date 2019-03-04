@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<box title="crossReport配置说明">
+	    <textField type="hidden" id="test"></textField>
+	    <br/>
+		<fieldset title="示例1">
+			<text>
+				<![CDATA[
+						<div>本示例主要演示使用crossReport标签配置指标定制功能。(指标在行上)</div>
+						<div>在纵向列上加上rebuild="true"</div>
+						<div>点击 <a href="extView?mvid=test.CrossReport7">这里</a> 查看另一种指标定制方式.</div>
+					]]>
+			</text>
+			<crossReport out="json" export="true" bgAgg="true">
+					<rowHeads>
+						<rowHead desc="指标" styleClass=""/>
+					</rowHeads>
+					<report-cols>
+						<crossCol desc="次数" type="kpiOther"  alias="cnt" aggregation="sum"  width="100"  formatPattern="#,##0"/>
+					</report-cols>
+					<report-rows>
+						<crossRow width="300" desc="" type="frd" alias="kpid" aliasDesc="kpid" multi="true"/>
+					</report-rows>
+					<row-dims>
+						<dim name="用户" code="login_name" type="frd" codeDesc="login_name"/>
+					</row-dims>
+					<ds>
+					 		select t.kpid, sum(t.cnt) cnt, t.login_name from etl.kpi_kpi_use_time t group by kpid, login_name
+					</ds>
+				</crossReport>
+		</fieldset>
+	</box>
+</ext-config>

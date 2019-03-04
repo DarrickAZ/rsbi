@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+	
+	
+
+
+<script>
+<![CDATA[
+var df = new java.text.DecimalFormat('0.0%');
+function fmtkpi(a,b,c,d,e){
+	out.print("<div style=\"width:"+(a*500)+"px;line-height:22px; background-color:#900;color:#ffffff\">"+(a>0.05?df.format(a):"&nbsp;")+"</div>");
+}
+ ]]>
+</script>
+
+<box title="占比计算">
+
+<text>
+<![CDATA[
+ ps: 在月份分组下，计算每个指标在省分上占比情况。以柱状图显示占比情况
+ ]]>
+ </text>
+	<crossReport out="html">
+		<rowHeads>
+		 <rowHead desc="月份"></rowHead>
+		  <rowHead desc="省份"></rowHead>
+		</rowHeads>
+		<report-cols>
+			<crossCol desc="网上用户数" type="kpiOther" alias="a0001" aggregation="sum" formatPattern="#,###"  />
+			<crossCol desc="占比情况" type="kpiOther" alias="a0001_zb" aggregation="avg" formatPattern="0.00%" styleClass="pms" styleToLine="true"/>
+			<crossCol desc="新增用户数" type="kpiOther" alias="a0002" aggregation="sum" formatPattern="#,###" />
+			<crossCol desc="占比情况" type="kpiOther" alias="a0002_zb" aggregation="avg" formatPattern="0.00%" jsFunc="fmtkpi"/>
+			<crossCol desc="离网用户数" type="kpiOther" alias="a0003" aggregation="sum" formatPattern="#,###" />
+			<crossCol desc="占比情况" type="kpiOther" alias="a0003_zb" aggregation="avg" formatPattern="0.00%" styleClass="pms" styleToLine="true"/>
+		</report-cols>
+		<report-rows>
+			<crossRow desc="月份" type="frd" alias="month_id" aliasDesc="month_id" multi="true">
+				<crossRow desc="省份" type="frd" alias="pro_no" aliasDesc="pro_name" multi="true"/>
+			</crossRow>
+		</report-rows>
+		<ds refDataCenter="dc1"></ds>
+	</crossReport>
+
+<gridDataCenter id="dc1">
+	<ds>
+	<![CDATA[ 
+			select month_id, pro_no, pro_name, 
+			sum(A0001) a0001,
+			sum(A0002) a0002,
+			sum(A0003) a0003,
+			sum(A0006) a0006,
+			sum(A0007) a0007
+			from bi_demo.dm_kpi_w_card_pandect_m2 a,  dmcode_province b
+			where a.prov_id = b.pro_no and month_id between '201101' and '201104'
+			group by month_id, pro_no, pro_name 
+			order by month_id desc, a0001 desc
+		]]>
+	</ds>
+	<processor>
+		<account column="a0001" groupDim="month_id"/>
+		<account column="a0002" groupDim="month_id"/>
+		<account column="a0003" groupDim="month_id"/>
+	</processor>
+</gridDataCenter>
+</box>
+<text>
+	<![CDATA[
+	<style>
+	TABLE.grid3 td.pms {
+		font-weight:bold; color:#FF0000; text-align:center
+	}
+	</style>
+	 ]]>
+</text>
+	
+</ext-config>

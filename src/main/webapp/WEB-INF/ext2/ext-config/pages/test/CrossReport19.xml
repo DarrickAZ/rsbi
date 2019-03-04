@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<script>
+	function jsarpu(a, b){
+		return a/b;
+	}
+	function js2(a, b){
+		return a/b;
+	}
+</script>	
+	
+	<box title="crossOther标签的使用">
+	   <br />
+		<fieldset title="示例1">
+		<text>
+				<![CDATA[
+					<div>crossOther标签作为对crossCol/crossRow标签的补充，可以用在如下地方：</div>
+					<div>1.作为当前节点的一个限制条件。</div>
+					<div>2.作为配置计算公式的一列。</div>
+					<div>3.作为动态衍生指标的配置。</div>
+					]]>
+			</text>
+		</fieldset>
+		<br/>
+		<fieldset title="crossOther做限制条件">
+		<text>一般情况下，一个crossCol/crossRow用来做一个条件，比如如下例子中的crossCol,每一个表头的数据筛选条件为：month_id=XXXXX.</text>
+		<text><![CDATA[<br/>通过crossOther元素来增加判断条件,比如crossRow中，有两个筛选条件，kpi_code=A0001&pro_no=011即为北京网上用户数。]]></text>
+		<crossReport out="html" >
+		<report-cols>
+			<crossCol desc="" type="frd" alias="month_id" aliasDesc="month_id" multi="true">
+			</crossCol>
+		</report-cols>
+		<report-rows >
+			<crossRow type="kpi" alias="kpi_code" value="A0001" desc="北京网上用户数" formatPattern="###,##0" aggregation="sum">
+				<crossOther type="kpi" alias="pro_no" value="011"/>
+			</crossRow>
+			<crossRow type="kpi" alias="kpi_code" value="A0002" desc="内蒙古新增用户数" formatPattern="###,##0" aggregation="sum">
+				<crossOther type="kpi" alias="pro_no" value="010"/>
+			</crossRow>
+		</report-rows>
+		<ds refDsource="oracdb">
+			select t.month_id,
+			       t.kpi_code,
+			       k.kpi_desc,
+             d.pro_no,
+             d.pro_name,
+			       sum(t.kpi_value) kpi_value
+			  from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib k, dmcode_province d
+			 where t.kpi_code = k.kpi_code and t.kpi_code in ('A0001','A0002') and d.pro_no = t.prov_id
+       		 and t.prov_id in ('010','011','013','017')
+			 group by t.month_id, t.kpi_code, k.kpi_desc, d.pro_no, d.pro_name
+			 order by month_id
+		</ds>
+		</crossReport>
+		</fieldset>
+		
+		<br/>
+		<fieldset title="crossOther配置计算指标">
+		<text>在需要使用计算公式的crossCol/crossRow上配置 crossOther既可,其中id必须配置，当前ID为在公式运算中传递的参数，当前的crossCol/crossRow的type一般情况为kpi/kpiOther,并且需要formula属性来标示计算的JS公式，JS公式一般定义在script标签中，比如本例中的jsarpu和js2两函数.</text>
+		<crossReport out="html">
+			<baseKpi alias="kpi_value" aggregation="sum" formatPattern="###,###" />
+		<report-cols>
+				<crossCol desc="" type="frd" alias="kpi_code" aliasDesc="kpi_desc" multi="true"/>
+				<crossCol desc="arpu" type="kpi" alias="kpi_code" value="B0001" formatPattern="###,##0.00" aggregation="sum" id="a" formula="jsarpu" order="true">
+					<crossOther id="b" type="kpi" alias="kpi_code" value="A0001"/>
+				</crossCol>
+				<crossCol desc="离网用户占比" type="kpi" alias="kpi_code" value="A0003" formatPattern="0.00%" aggregation="avg" id="a" formula="js2" order="true">
+					<crossOther id="b" type="kpi" alias="kpi_code" value="A0001"/>
+				</crossCol>
+			</report-cols>
+			<report-rows rebuild="true">
+				<crossRow desc="账期" type="frd" alias="month_id" aliasDesc="month_id" multi="true"/>
+			</report-rows>
+		<ds refDsource="oracdb">
+select t.month_id,
+       t.kpi_code,
+       k.kpi_desc,
+    
+       '0.00' kpiFmt,
+       sum(t.kpi_value) kpi_value
+  from dm_kpi_w_card_pandect_m t,
+       dmcode_kpi_lib          k
+    
+ where t.kpi_code = k.kpi_code
+ and t.kpi_code in ('B0001','A0001','A0003')
+   and month_id in ('201002', '201003', '201004', '201005', '201006')
+ group by t.month_id,
+          t.kpi_code,
+          k.kpi_desc
+        
+ order by month_id
+		</ds>
+	</crossReport>
+		</fieldset>
+		
+		<br/>
+		<fieldset title="crossOther配置动态衍生指标">
+			<text>在需要使用动态指标的crossCol上配置 crossOther既可,其中必须配置use="true"属性，如果无此属性，不给显示</text>
+		<crossReport out="json" rowHead="账期">
+		<report-cols>
+			<crossCol desc="" type="frd" alias="kpi_code" aliasDesc="kpi_desc" multi="true">
+				<crossOther type="kpiOther" alias="sy" desc="上月值" use="true"/>
+				<crossOther type="kpiOther" alias="lj" desc="累计值" use="true"/>
+			</crossCol>
+		</report-cols>
+		<report-rows rebuild="true">
+			<crossRow desc="" type="frd" alias="month_id" aliasDesc="month_id" multi="true"/>
+		</report-rows>
+		<ds refDsource="oracdb">
+			select t.month_id,
+			       t.kpi_code,
+			       k.kpi_desc,
+			       '0.00' kpiFmt,
+			       sum(t.kpi_value) kpi_value,
+			       sum(t.m_lm_value) sy,
+			       sum(t.y_ty_value)  lj
+			  from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib k
+			 where t.kpi_code = k.kpi_code
+			 and t.kpi_code in ('A0001', 'A0002', 'A0003', 'A0004')
+			 group by t.month_id, t.kpi_code, k.kpi_desc
+			 order by month_id
+		</ds>
+	</crossReport>
+		
+		</fieldset>
+	</box>
+	
+	<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+</ext-config>

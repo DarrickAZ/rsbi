@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<box title="crossReport与图形的联动">
+	<br/>
+	<textField type="hidden" id="month_id" defaultValue="201002"/>
+	<fieldset title="示例1">
+	<text>
+	<![CDATA[
+			<div>在 row 上使用联动</div>
+			<div>使用crossReport配置与图形联动，配置方法如下：</div>
+			<div>&lt;row-link target=&quot;cid&quot; /&gt; ,其中的cid代表图形的label,如果有多个图形，用逗号分隔图形的label, 同时在需要链接的crossRow上增加uselink="true"的配置。</div>
+			<div>当进行链接的时候，系统会把当前链接节点的值做参数传给图形，如下面例子中，会传递month_id=xxx的参数，通过在页面定义id="month_id"的参数，就可以在图形sql中获取到参数。</div>
+		]]>
+	</text>
+	<textField type="hidden" id="kpi_code" defaultValue="网上用户数"/>
+	<chart shape="line" xcol="x" ycol="y" scol="ser" width="700" height="250" label="cid">
+		<property>
+			<key name="showBorder" value="false"/>
+			<key name="legendBgColor" value="#FFFFFF"/>
+			<key name="multiAxis" value="false"/>
+			<key name="showLegend" value="true"/>
+			<key name="showLabel" value="false"/>
+		</property>
+		<ds>
+			select '北京' x, ${month_id}/1000 y , '发展用户数' ser, '1' isuse, 'a' id from dual
+			union
+			select '天津' x, 120 y , '发展用户数' ser, '1' isuse, 'a' id from dual
+			union
+			select '河北' x, 130 y , '发展用户数' ser, '1' isuse, 'a' id from dual
+			union
+			select '辽宁' x, 90 y , '发展用户数' ser, '1' isuse, 'a' id from dual
+			union
+			select '吉林' x, 50 y , '发展用户数' ser, '1' isuse, 'a' id from dual
+			union
+			select '内蒙' x, 40 y , '发展用户数' ser, '1' isuse, 'a' id from dual
+			union
+			select '北京' x, 70 y , '有效用户数' ser, '1' isuse, 'b' id from dual
+			union
+			select '天津' x, 90 y , '有效用户数' ser, '1' isuse, 'b' id from dual
+			union
+			select '河北' x, 110 y , '有效用户数' ser, '1' isuse, 'b' id from dual
+			union
+			select '辽宁' x, 80 y , '有效用户数' ser, '1' isuse, 'b' id from dual
+			union
+			select '吉林' x, 60 y , '有效用户数' ser, '1' isuse, 'b' id from dual
+			union
+			select '内蒙' x, 30 y , '有效用户数' ser, '1' isuse, 'b' id from dual
+		</ds>
+	</chart>
+	<crossReport out="html" rowHead="账期">
+		<baseKpi alias="kpi_value" formatPattern="###,##0" aggregation="sum"/>
+		<report-cols>
+			<crossCol desc="" type="frd" alias="kpi_code" aliasDesc="kpi_desc" multi="true" />
+		</report-cols>
+		<report-rows>
+			<crossRow desc="账期" type="frd" alias="month_id" aliasDesc="month_id" multi="true" uselink="true"/>
+		</report-rows>
+		<row-link target="cid" type="chart"/>
+		<ds refDsource="oracdb">
+			select t.month_id, t.kpi_code, k.kpi_desc, '0.00' kpiFmt, sum(t.kpi_value)
+					kpi_value
+					from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib k where
+					t.kpi_code =
+					k.kpi_code
+					and t.kpi_code in ('A0001', 'A0002', 'A0003', 'A0004', 'A0005')
+					group by t.month_id, t.kpi_code, k.kpi_desc
+					order by month_id
+		</ds>
+	</crossReport>
+</fieldset>
+
+<fieldset title="示例2">
+	<text>
+	<![CDATA[
+			<div>在 col 上使用联动</div>
+			<div>使用crossReport配置与图形联动，配置方法如下：</div>
+			<div>&lt;col-link target=&quot;cid2&quot; /&gt; ,其中的cid2代表图形的label,如果有多个图形，用逗号分隔图形的label, 同时在需要链接的crossCol上增加uselink="true"的配置。</div>
+			<div>当进行链接的时候，系统会把当前链接节点的值做参数传给图形，如下面例子中，会传递month_id=xxx&kpi_code=xxx的参数，通过在页面定义id="month_id"和id="kpi_code"的参数，就可以在图形sql中获取到参数。</div>
+			<div>注意：在进行col上链接时，传递的参数会比row链接上多。</div>
+		]]>
+	</text>
+	<chart shape="line" xcol="x" ycol="y" scol="ser" width="700" height="250" label="cid2">
+		<property>
+			<key name="showLegend" value="true"/>
+			<key name="showLabel" value="true"/>
+		</property>
+		<ds>
+			select '北京' x, ${month_id}/1000 y , '${kpi_code}' ser, '1' isuse, 'a' id from dual
+			union
+			select '天津' x, 120 y , '${kpi_code}' ser, '1' isuse, 'a' id from dual
+			union
+			select '河北' x, 130 y , '${kpi_code}' ser, '1' isuse, 'a' id from dual
+			union
+			select '辽宁' x, 90 y , '${kpi_code}' ser, '1' isuse, 'a' id from dual
+			union
+			select '吉林' x, 50 y , '${kpi_code}' ser, '1' isuse, 'a' id from dual
+			union
+			select '内蒙' x, 40 y , '${kpi_code}' ser, '1' isuse, 'a' id from dual
+			
+		</ds>
+	</chart>
+	<crossReport out="html" rowHead="账期">
+		<baseKpi alias="kpi_value" formatPattern="###,##0" aggregation="sum"/>
+		<report-cols>
+			<crossCol desc="" type="frd" alias="kpi_code" aliasDesc="kpi_desc" multi="true" uselink="true"/>
+		</report-cols>
+		<report-rows>
+			<crossRow desc="账期" type="frd" alias="month_id" aliasDesc="month_id" multi="true"/>
+		</report-rows>
+		<col-link target="cid2" type="chart"/>
+		<ds refDsource="oracdb">
+			select t.month_id, t.kpi_code, k.kpi_desc, '0.00' kpiFmt, sum(t.kpi_value)
+					kpi_value
+					from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib k where
+					t.kpi_code =
+					k.kpi_code
+					and t.kpi_code in ('A0001', 'A0002', 'A0003', 'A0004', 'A0005')
+					group by t.month_id, t.kpi_code, k.kpi_desc
+					order by month_id
+		</ds>
+	</crossReport>
+</fieldset>
+
+</box>
+
+	<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+</ext-config>

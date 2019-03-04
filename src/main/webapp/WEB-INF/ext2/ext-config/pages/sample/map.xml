@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+
+
+<box title="地图分析">
+</box>
+
+<textField type="hidden" id="area_no"/>
+
+<data key="sf">
+select pro_name from dmcode_province where pro_no = '$area_no'
+</data>
+
+<text> 点击省份，钻取到地市。 </text>
+	<chart shape="map" xcol="city_desc" ycol="A0001" width="740"
+		height="430" scol="ser" xcolDesc="area_no" align="center">
+		<property>
+			<key name="margin" value="30, 20, 50, 90" />
+			<key name="ydesc" value="网上用户数(人)" />
+			<key name="formatCol" value="kpi_fmt" />
+			<key name="unitCol" value="kpi_unit" />
+			<key name="mapJson" value="china.json" />
+		</property>
+		<title><![CDATA[ <font color="red"> #if(!$sf.pro_name) 全国 #else $sf.pro_name #end </font> 3G网上用户数地域分析 ]]> </title>
+		<drill refDataCenter="DC-11" mapCol="mapjsonfile"></drill>
+		<ds refDataCenter="DC-12"><![CDATA[ ]]></ds>
+	</chart>
+	<gridDataCenter id="DC-12">
+		<ds><![CDATA[
+select t.prov_id "area_no", t26.pro_name "city_desc", t26.map_id cmap_id,'省分' ser, '0' kpi_fmt,'人' kpi_unit,
+sum(A0001) A0001 from dm_kpi_w_card_pandect_m2 t ,dmcode_province t26 
+where 1=1 and t.prov_id = t26.pro_no
+group by t.prov_id, t26.pro_name,t26.map_id order by t.area_no asc
+		]]></ds>
+	</gridDataCenter>
+	<gridDataCenter id="DC-11">
+		<ds><![CDATA[
+select t.area_no, t26.city_desc city_desc, t26.map_id cmap_id,'地市' ser, '0' kpi_fmt,'人' kpi_unit, p.mapjsonfile,
+sum(A0001) A0001 from dm_kpi_w_card_pandect_m2 t ,dmcode_city t26, dmcode_province p 
+where 1=1 and t.area_no = t26.city_no and t.prov_id = '$area_no' and p.pro_no = t26.area_no
+group by t.area_no, t26.city_desc,t26.map_id order by t.area_no asc
+		]]></ds>
+	</gridDataCenter>
+
+</ext-config>

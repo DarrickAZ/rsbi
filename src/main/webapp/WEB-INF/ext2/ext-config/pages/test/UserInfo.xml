@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+    <box title="从xml中获取用户信息">
+    <text>
+	<![CDATA[
+			<div>一般情况，用户信息是被存放于SESSION中，如何从SESSION中读取用户信息呢？</div>
+			<div>1.创建用户信息加载类，该类实现com.bonc.ext.engine.service.loginuser.LoginUserInfoLoader接口，如下代码：</div>
+			<div style='margin-left:20px'>
+public class LoginUserInfoLoaderImpl implements LoginUserInfoLoader {  <br>
+
+	@Override  <br>
+	public String getUserId() { <br>
+		return XUtils.getLoginId(); <br>
+	} <br>
+<br>
+	@Override <br>
+	public Map<String, Object> loadUserInfo(ExtRequest req, DaoHelper dao) { <br>
+		Map<String, Object> m = new HashMap<String, Object>(); <br>
+		XUtils.getUser(); <br>
+		m.put("areaNo", XUtils.getUser().getAreaId()); <br>
+		m.put("loginId", XUtils.getUser().getLoginId()); <br>
+		m.put("cityNo", XUtils.getUser().getCityId()); <br>
+		m.put("townNo", XUtils.getUser().getTownId()); <br>
+		return m;  <br>
+	}  <br>
+}  <br>
+			</div>
+			<div>2.在ext2的 ext-config.xml中增加配置：&lt;constant name="loginUserClass" value="com.bonc.dss.utils.LoginUserInfoLoaderImpl"/&gt;</div>
+			<div>3.从xml读取数据，方式如下：${s.areaNo}  ${s.cityNo}，其中s代码session，areaNo/loginId和接口文件中的内容对应。</div>
+		]]>
+	</text>
+	
+	<text>
+		<template> 用户id  ： ${s.login_id}</template>
+	</text>
+	
+	<br />
+	</box>
+</ext-config>

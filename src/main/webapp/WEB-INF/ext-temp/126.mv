@@ -1,0 +1,1 @@
+select count(distinct ip) as d2 from logs where 1=1   

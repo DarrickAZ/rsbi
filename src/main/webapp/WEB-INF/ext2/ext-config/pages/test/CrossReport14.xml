@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+<box title="crossReport中kpi与kpiOther的使用与区别">
+	 <br/>
+	<fieldset title="示例1">
+	<text>
+	<![CDATA[
+			<div>1.crossReport中type的值包括kpi/kpiOther等，kpi主要用来获取数据行中指标的值，而kpiOther用来获取当前数据行中的衍生指标的值，比如同比、环比、日均、累计等值.</div>
+			<div>2.kpi和kpiOther包含一些自己特殊的配置信息，比如formatPattern(指标的格式化方式)/aggregation(指标的计算方式sum/avg)/jsFunc(指标上的计算函数)</div>
+			<div>3.如果在一个交叉区域上同时存在kpi和kpiOther,kpiOther的指标信息比kpi优先，在type="kpi"中必须配置value,而在kpiOther中一般情况下不用配置value</div>
+			<div>4.kpi在使用中都需要带value="xxx"属性，而kpiOther一般不用。</div>
+			<div>5.kpi为纵向取值，所以需要value值去匹配，而kpiOther一般为横向取值。</div>
+			<br/>
+		]]>
+	</text>
+	<text>有年份维度</text>
+	<crossReport out="html" rowHead="账期" label="x2">
+		<report-cols>
+				<crossCol desc="网上用户数" type="kpi" alias="kpi_code" value="A0001">
+					<crossCol desc="当月值" type="kpiOther" alias="kpi_value" aggregation="sum" formatPattern="###,###" order="true"/>
+					<crossCol desc="上月值" type="kpiOther" alias="syz" aggregation="sum" formatPattern="###,###"/>
+					<crossCol desc="累计值" type="kpiOther" alias="ljz" aggregation="sum" formatPattern="###,###"/>
+				</crossCol>
+				<crossCol desc="新增用户数" type="kpi" alias="kpi_code" value="A0002">
+					<crossCol desc="当月值" type="kpiOther" alias="kpi_value" aggregation="sum" formatPattern="###,###"/>
+					<crossCol desc="上月值" type="kpiOther" alias="syz" aggregation="sum" formatPattern="###,###"/>
+					<crossCol desc="累计值" type="kpiOther" alias="ljz" aggregation="sum" formatPattern="###,###"/>
+				</crossCol>
+			</report-cols>
+			<report-rows rebuild="true">
+				<crossRow desc="账期" type="frd" alias="month_id" aliasDesc="month_id" multi="true"/>
+			</report-rows>
+		<ds>
+select t.month_id,
+       t.kpi_code,
+       k.kpi_desc,
+       sum(t.kpi_value) kpi_value,
+       sum(t.m_lm_value) syz,
+       sum(t.m_ly_value) ljz
+  from dm_kpi_w_card_pandect_m t,
+       dmcode_kpi_lib          k
+ where t.kpi_code = k.kpi_code
+   and t.kpi_code in ('A0001', 'A0002')
+   and month_id in ('201002','201003', '201004', '201005', '201006')
+ group by t.month_id,
+          t.kpi_code,
+          k.kpi_desc
+ order by month_id
+		</ds>
+	</crossReport>
+	<br/>
+	<text>无年份维度</text>
+	<crossReport out="html" rowHead="指标">
+		<report-cols>
+					<crossCol desc="当月值" type="kpiOther" alias="kpi_value" aggregation="sum" formatPattern="###,###"/>
+					<crossCol desc="上月值" type="kpiOther" alias="syz" aggregation="sum" formatPattern="###,###"/>
+					<crossCol desc="累计值" type="kpiOther" alias="ljz" aggregation="sum" formatPattern="###,###"/>
+			</report-cols>
+			<report-rows>
+				<crossRow type="frd" alias="kpi_code" desc="指标" aliasDesc="kpi_desc" multi="true"/>
+			</report-rows>
+		<ds>
+select t.month_id,
+       t.kpi_code,
+       k.kpi_desc,
+       sum(t.kpi_value) kpi_value,
+       sum(t.m_lm_value) syz,
+       sum(t.m_ly_value) ljz
+  from dm_kpi_w_card_pandect_m t,
+       dmcode_kpi_lib          k
+ where t.kpi_code = k.kpi_code
+   and t.kpi_code in ('A0001', 'A0002')
+   and month_id in ('201003')
+ group by t.month_id,
+          t.kpi_code,
+          k.kpi_desc
+ order by month_id
+		</ds>
+	</crossReport>
+</fieldset>
+</box>
+</ext-config>

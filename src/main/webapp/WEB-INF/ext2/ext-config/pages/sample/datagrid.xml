@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<box title="jQuery easyUI 锁定表头">
+</box>
+
+<table>
+<tr>
+<td width="50%">
+<text>
+ <template>
+ <![CDATA[
+<table id="dg" title="Basic DataGrid" style="width:600px;height:250px"
+			data-options="singleSelect:true,collapsible:true,method:'get'">
+		<thead>
+			<tr>
+				<th data-options="field:'itemid',width:80">Item ID</th>
+				<th data-options="field:'productid',width:100">Product</th>
+				<th data-options="field:'listprice',width:80,align:'right'">List Price</th>
+				<th data-options="field:'unitcost',width:80,align:'right'">Unit Cost</th>
+				<th data-options="field:'attr1',width:150">Attribute</th>
+				<th data-options="field:'status',width:60,align:'center'">Status</th>
+			</tr>
+		</thead>
+	</table>
+	<script>
+	jQuery(function(){
+	var dt = {"total":28,"rows":[
+	{"productid":"FI-SW-01","productname":"Koi","unitcost":10.00,"status":"P","listprice":36.50,"attr1":"Large","itemid":"EST-1"},
+	{"productid":"K9-DL-01","productname":"Dalmation","unitcost":12.00,"status":"P","listprice":18.50,"attr1":"Spotted Adult Female","itemid":"EST-10"},
+	{"productid":"RP-SN-01","productname":"Rattlesnake","unitcost":12.00,"status":"P","listprice":38.50,"attr1":"Venomless","itemid":"EST-11"},
+	{"productid":"RP-SN-01","productname":"Rattlesnake","unitcost":12.00,"status":"P","listprice":26.50,"attr1":"Rattleless","itemid":"EST-12"},
+	{"productid":"RP-LI-02","productname":"Iguana","unitcost":12.00,"status":"P","listprice":35.50,"attr1":"Green Adult","itemid":"EST-13"},
+	{"productid":"FL-DSH-01","productname":"Manx","unitcost":12.00,"status":"P","listprice":158.50,"attr1":"Tailless","itemid":"EST-14"},
+	{"productid":"FL-DSH-01","productname":"Manx","unitcost":12.00,"status":"P","listprice":83.50,"attr1":"With tail","itemid":"EST-15"},
+	{"productid":"FL-DLH-02","productname":"Persian","unitcost":12.00,"status":"P","listprice":23.50,"attr1":"Adult Female","itemid":"EST-16"},
+	{"productid":"FL-DLH-02","productname":"Persian","unitcost":12.00,"status":"P","listprice":89.50,"attr1":"Adult Male","itemid":"EST-17"},
+	{"productid":"AV-CB-01","productname":"Amazon Parrot","unitcost":92.00,"status":"P","listprice":63.50,"attr1":"Adult Male","itemid":"EST-18"}
+]}
+	
+	jQuery("#dg").datagrid({
+		data: dt
+	});
+	});
+	</script>
+ ]]>
+ </template>
+</text>
+</td>
+<td  width="50%">
+	<crossReport out="lockUI">
+		<baseKpi alias="A0001" formatPattern="###,##0" aggregation="sum"/>
+		<report-cols>
+			<crossCol desc="月份" type="frd" alias="MONTH_ID" aliasDesc="MONTH_ID"	multi="true" dateFormat="month">
+				<crossCol desc="网上用户数" type="kpiOther" alias="A0001" formatPattern="###,##0" aggregation="sum"></crossCol>
+				<crossCol desc="新增用户数" type="kpiOther" alias="A0002" formatPattern="###,##0" aggregation="sum"></crossCol>
+			</crossCol>
+		</report-cols>
+		<report-rows>
+			<crossRow desc="省份" type="frd" alias="pro_no" aliasDesc="pro_name" multi="true"/>
+		</report-rows>
+		<ds><![CDATA[ 
+			select t.MONTH_ID, b.pro_no, b.pro_name, b.ord, sum(A0001) A0001, sum(A0002) A0002
+			  from dm_kpi_w_card_pandect_m2 t, dmcode_province b
+			 where t.prov_id = b.pro_no
+			   and month_id between '201101' and '201104'
+			 group by t.MONTH_ID, b.pro_no, b.pro_name, b.ord
+			 order by t.MONTH_ID desc, b.ord
+		]]></ds>
+	</crossReport>
+</td>
+</tr>
+</table>
+</ext-config>

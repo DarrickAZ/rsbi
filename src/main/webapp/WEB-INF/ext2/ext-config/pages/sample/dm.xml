@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<box title="数据挖掘演示">
+</box>
+
+<text>
+ <template>
+ <![CDATA[
+ <div style="margin:10px; line-height:25px;">
+<a href="extView?mvid=sample.hgqx">回归分析</a>  <br/>
+<a href="extView?mvid=sample.sjqs">时间趋势分析</a>  <br/>
+  </div>
+ ]]>
+ </template>
+</text>
+
+	
+</ext-config>

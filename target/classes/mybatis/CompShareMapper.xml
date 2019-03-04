@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ruisitech.bi.mapper.dashboard.CompShareMapper" >
+  <resultMap id="BaseResultMap" type="com.ruisitech.bi.entity.dashboard.CompShare" >
+    <id column="id" property="id" />
+    <result column="crtuser" property="crtuser" />
+    <result column="crtdate" property="crtdate" />
+    <result column="title" property="title"  />
+    <result column="cfg" property="cfg"  />
+    <result column="comp_icon" property="compIcon"  />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, crtuser, crtdate, title,comp_icon
+  </sql>
+  <sql id="Blob_Column_List" >
+    cfg
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from ${sysUser}.comp_share
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="list" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from ${sysUser}.comp_share
+    where 1=1
+    	<if test="keyword != null">
+			<bind name="pattern" value="'%' + keyword + '%'" />
+			AND title  LIKE #{pattern}
+		</if>
+    order by crtdate desc
+  </select>
+  <delete id="deleteByPrimaryKey" >
+    delete from ${sysUser}.comp_share
+    where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.ruisitech.bi.entity.dashboard.CompShare" >
+    insert into ${sysUser}.comp_share (id, crtuser, crtdate, 
+      title, cfg, comp_icon)
+    values (#{id}, #{crtuser}, <if test="dbName == 'mysql'">
+    	now()
+    	</if> 
+    	<if test="dbName == 'oracle'">
+    	sysdate
+    	</if> 
+    	<if test="dbName == 'sqlser'">
+    	getdate()
+    	</if> 
+    	<if test="dbName == 'db2'">
+    	current timestamp
+    	</if> , 
+      #{title}, #{cfg}, #{compIcon})
+  </insert>
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.ruisitech.bi.entity.dashboard.CompShare" >
+    update ${sysUser}.comp_share
+    <set >
+      <if test="crtuser != null" >
+        crtuser = #{crtuser},
+      </if>
+      <if test="title != null" >
+        title = #{title},
+      </if>
+      <if test="cfg != null" >
+        cfg = #{cfg},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+</mapper>

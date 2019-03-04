@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<box title="分析报表演示">
+</box>
+
+<text>
+ <![CDATA[
+bbb <font size="12" color="#999999">你好，我好大家好</font> ccc
+ ]]>
+</text>
+
+	
+</ext-config>

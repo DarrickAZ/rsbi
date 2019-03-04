@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<box title="tab配置说明">
+	<fieldset title="示例1">
+	<text>
+	<![CDATA[
+			<div>本示例主要演示tab标签的使用。</div>
+			<div>对于tab标签，主页面的参数会自动传递到每个ref文件中,在ref文件中只用定义好接受参数，即可接受主页面传递过来的参数.</div>
+		]]>
+	</text>
+	<textField type="hidden" id="tabId" show="true"/>
+	
+		<br/>
+	<br/>
+	</fieldset>
+	
+	<tabView ajax="false" outParameterName="tabId">
+		<tab title="自定义报表" value="a" ref="test.CrossReport4" />
+		<tab title="共享报表" value="b" active="true"  ref="test.CrossReport5" />
+		<tab title="公有报表" value="c" ref="test.CrossReport6" />
+	</tabView>
+	
+	</box>
+</ext-config>

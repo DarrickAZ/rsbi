@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+<box title="button配置说明">
+	<fieldset title="示例1">
+	<text>
+    <![CDATA[
+			<div>输出一个button按钮。如下：</div>
+			<div>button 可以用来提交查询条件</div>
+		]]>
+	</text>
+	<br/>
+	
+	<select id="date" desc="日期" defaultValue="200101">
+		<option value="200101">200101</option>
+		<option value="200102">200102</option>
+	</select>
+	<button type="button" desc="查询" mvId="test.button"/>
+	<br/>
+		<br/>
+	 <text>
+	 	<template>
+			你选择的是  ${date}
+	 	</template>
+	 </text>
+	</fieldset>
+	</box>
+</ext-config>

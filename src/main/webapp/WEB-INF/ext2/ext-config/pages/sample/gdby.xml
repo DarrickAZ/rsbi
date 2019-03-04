@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+
+<!-- 
+  固定表样报表
+ -->
+
+
+<box title="固定表头">
+<text>行表头固定</text>
+	<crossReport out="html">
+		<rowHeads>
+		 <rowHead desc="商品"></rowHead>
+		</rowHeads>
+		<report-cols>
+			<crossCol desc="打折金额" type="kpiOther" alias="dzamt" formatPattern="###,##0" aggregation="sum"></crossCol>
+			<crossCol desc="销售金额" type="kpiOther" alias="amt" formatPattern="###,##0" aggregation="sum"></crossCol>
+			<crossCol desc="销售数量" type="kpiOther" alias="menu_cnt" formatPattern="###,##0" aggregation="sum"></crossCol>
+			<crossCol desc="ARPG" type="kpiOther" alias="mcxsje" formatPattern="###,##0.00" aggregation="avg"></crossCol>
+		</report-cols>
+		<report-rows>
+			<crossRow desc="主食" type="kpi" alias="menu_lv1" value="1"/>
+			<crossRow desc="粥类" type="kpi" alias="menu_lv1" value="2"/>
+			<crossRow desc="其中：咸粥" spaceNum="3" type="kpi" alias="menu_lv1" value="2">
+				<crossOther alias="menu_lv2" value="3" type="none"/>
+			</crossRow>
+			<crossRow desc="甜粥" spaceNum="9" type="kpi" alias="menu_lv1" value="2">
+				<crossOther alias="menu_lv2" value="4" type="none"/>
+			</crossRow>
+			<crossRow desc="凉菜" type="kpi" alias="menu_lv1" value="3"/>
+			<crossRow desc="热菜" type="kpi" alias="menu_lv1" value="4"/>
+			<crossRow desc="酒水饮料" type="kpi" alias="menu_lv1" value="5"/>
+			<crossRow desc="套餐" type="kpi" alias="menu_lv1" value="6"/>
+		</report-rows>
+		<ds><![CDATA[ 
+			select  t.menu_lv1,  t3.m_name menu_lv1_desc,  t.menu_lv2,  t4.m_name menu_lv2_desc, sum(dzq_amt) dzamt, sum(amt) amt,sum(menu_cnt) menu_cnt,sum(amt)/sum(menu_cnt) mcxsje 
+			from appraise.dm_income_amt_y t ,appraise.code_menu_lv1 t3,appraise.code_menu_lv2 t4 
+			where 1=1  and t.menu_lv1 = t3.m_id and t.menu_lv2 = t4.m_id and t.year in ('2012') 
+			group by t.menu_lv1,t3.m_name,t.menu_lv2,t4.m_name order by t.menu_lv1 asc,t.menu_lv2 asc
+		]]></ds>
+	</crossReport>
+<br/><br/>
+	 <text>表头固定</text>
+	<crossReport out="html">
+		<rowHeads>
+		 <rowHead desc="分店"></rowHead>
+		</rowHeads>
+		<baseKpi alias="amt" formatPattern="###,##0" aggregation="sum">
+		</baseKpi>
+		<report-cols>
+			<crossCol desc="主食" type="kpi" alias="menu_lv1" value="1"/>
+			<crossCol desc="粥类" type="none">
+				<crossCol desc="粥类" type="kpi" alias="menu_lv1" value="2"/>
+				<crossCol desc="其中：咸粥" type="kpi" alias="menu_lv1" value="2">
+					<crossOther alias="menu_lv2" value="3" type="none"/>
+				</crossCol>
+				<crossCol desc="其中：甜粥" type="kpi" alias="menu_lv1" value="2">
+					<crossOther alias="menu_lv2" value="4" type="none"/>
+				</crossCol>
+			</crossCol>
+			<crossCol desc="凉菜" type="kpi" alias="menu_lv1" value="3"/>
+			<crossCol desc="热菜" type="kpi" alias="menu_lv1" value="4"/>
+			<crossCol desc="酒水饮料" type="kpi" alias="menu_lv1" value="5"/>
+			<crossCol desc="套餐" type="kpi" alias="menu_lv1" value="6"/>
+		</report-cols>
+		<report-rows>
+			<crossRow desc="分店" type="frd" alias="fd_id" aliasDesc="fd_id_desc" multi="true"/>
+		</report-rows>
+		<ds><![CDATA[ 
+			select  t.fd_id,  t8.fdname fd_id_desc,  t.menu_lv1,  t3.m_name menu_lv1_desc,  t.menu_lv2,  t4.m_name menu_lv2_desc, sum(amt) amt 
+			from appraise.dm_income_amt_y t ,appraise.code_branch t8,appraise.code_menu_lv1 t3,appraise.code_menu_lv2 t4 
+			where 1=1  and t.fd_id = t8.fdid and t.menu_lv1 = t3.m_id and t.menu_lv2 = t4.m_id and t.year in ('2012') 
+			group by t.fd_id,t8.fdname,t.menu_lv1,t3.m_name,t.menu_lv2,t4.m_name 
+			order by t.menu_lv1 asc,t.menu_lv2 asc,t.fd_id asc
+		]]></ds>
+	</crossReport>
+</box>
+</ext-config>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+<script>
+		<![CDATA[
+		var df = new java.text.DecimalFormat('###,###');
+		function showCol(data){
+			var dd = data.get('kpi_value')
+			if(dd > 0){
+				out.print('<font color=red>' + df.format(dd) + '</font>');
+			}else{
+				out.print('<font color=blue>' + df.format(dd) + '</font>');
+			}
+		}
+		]]>
+	</script>
+<box title="dataGrid配置说明">
+	<fieldset title="示例1">
+	<text>
+	<![CDATA[
+			<div>本示例主要演示使用DataGrid标签如何调用js函数</div>
+			<div>上面那段JS代码会在服务器段执行，如果数据中的kpi_value >0 , 显示颜色为红色，或则为蓝色</div>
+			<div>关于js代码的应用，请产考script标签</div>
+		]]>
+	</text>
+			<dataGrid label="abc">
+				<col-config>
+					<col alias="month_id" desc="帐期" width="200" order="true"/>
+					<col alias="pro_name" desc="省份" width="100" />
+					<col alias="pay_type_desc" desc="付费类型" width="100" />
+					<col alias="kpi_value" desc="指标指" width="100" jsFunc="showCol"/>
+				</col-config>
+				<ds pageSize="8" ajax="true" init="true" refDsource="oracdb">
+		 		select t.month_id, d.pro_name, t.kpi_value, k.pay_type_desc
+				  from dm_kpi_w_card_pandect_m t, dmcode_pay_type k, dmcode_province d
+				 where t.pay_mode = k.pay_type_id
+				   and t.prov_id = d.pro_no order by t.month_id
+				</ds>
+			</dataGrid>
+			</fieldset>
+	</box>
+	
+	<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+	
+</ext-config>

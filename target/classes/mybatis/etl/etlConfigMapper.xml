@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ruisitech.bi.mapper.etl.ConfigMapper">
+  
+    <resultMap id="BaseResultMap" type="com.ruisitech.bi.entity.etl.Config">
+		<id column="cfgid" property="cfgid"/>
+		<result column="cfgcontent" property="cfgContent"/>
+		<result column="cfgname" property="cfgName"/>
+		<result column="crtdate" property="crtDate"/>
+		<result column="crtuser" property="crtUser"/>
+		<result column="file_id" property="fileId"/>
+		<result column="imptype" property="impType"/>
+		<result column="updatedate" property="updateDate"/>
+		<result column="loginName" property="loginName"/>
+    </resultMap>
+   
+   <update id="updateConfig" parameterType="com.ruisitech.bi.entity.etl.Config">
+		update ${sysUser}.etl_config set file_id = #{fileId} where cfgid = #{cfgid} 
+	</update>
+	
+	<select id="getConfig" resultType="java.lang.String">
+		select cfgcontent "ctx" from ${sysUser}.etl_config where cfgid = #{cfgid} 
+	</select>
+	
+	<select id="listConfig" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select cfgid , cfgname , crtdate , updatedate , b.login_name "loginName", a.imptype
+		from ${sysUser}.etl_config a, ${sysUser}.sc_login_user b 
+		where a.crtuser = b.user_id 
+		order by crtdate desc
+	</select>
+	
+	<insert id="insertCfg" parameterType="com.ruisitech.bi.entity.etl.Config">
+		insert into ${sysUser}.etl_config(cfgid, cfgname, crtuser, crtdate, updatedate, cfgcontent, imptype
+		<if test="fileId != null">
+			,file_id
+		</if>
+		) values(#{cfgid},#{cfgName},#{crtUser},
+		<if test="dbName == 'mysql'">
+			now(),now()
+		</if>
+		<if test="dbName == 'sqlser'">
+			GETDATE(),GETDATE()
+		</if>
+		<if test="dbName == 'oracle'">
+			sysdate,sysdate
+		</if>
+		<if test="dbName == 'db2'">
+			current timestamp,current timestamp
+		</if>
+		,#{cfgContent}, #{impType}
+		<if test="fileId != null">
+			, #{fileId}
+		</if>
+		)
+	</insert>
+	
+	<update id="updateCfgInfo" parameterType="com.ruisitech.bi.entity.etl.Config">
+		update ${sysUser}.etl_config set cfgcontent = #{cfgContent}, updatedate = 
+		<if test="dbName == 'mysql'">
+			now()
+		</if>
+		<if test="dbName == 'sqlser'">
+			GETDATE()
+		</if>
+		<if test="dbName == 'oracle'">
+			sysdate
+		</if>
+		<if test="dbName == 'db2'">
+			current timestamp
+		</if>
+		 where cfgid = #{cfgid} 
+	</update>
+	
+	<select id="maxCfgid" resultType="java.lang.Integer">
+		select case WHEN max(cfgid) is null then 1 else  max(cfgid) + 1 end "rid" from ${sysUser}.etl_config
+	</select>
+	
+	<delete id="delCfg" parameterType="com.ruisitech.bi.entity.etl.Config">
+		delete from ${sysUser}.etl_config where cfgid = #{cfgid}
+	</delete>
+</mapper>

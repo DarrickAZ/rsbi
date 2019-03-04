@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+	<text><![CDATA[ <style><!-- 
+
+--></style> ]]></text>
+	<table class="mylayout">
+		<tr>
+			<td colspan="1" width="100%" rowspan="1" styleClass="layouttd">
+				<gridReport id="grid25" lockUI="false">
+					<header>
+						<row>
+							<cell class="C26"></cell>
+							<cell class="C27"></cell>
+							<cell class="C28"></cell>
+						</row>
+					</header>
+					<detail>
+						<row>
+							<cell desc="FDID" alias="FDID" class="C29"></cell>
+							<cell desc="FDNAME" alias="FDNAME" class="C30"></cell>
+							<cell desc="SITE_ID" alias="SITE_ID" class="C31"></cell>
+						</row>
+					</detail>
+					<footer>
+						<row>
+							<cell dynamicText="true" alias="FDID_sum" class="C32"></cell>
+							<cell dynamicText="true" alias="SITE_ID_count" class="C33"></cell>
+							<cell class="C34"></cell>
+						</row>
+					</footer>
+					<ds refDataCenter="DC-35"></ds>
+				</gridReport>
+			</td>
+		</tr>
+	</table>
+	<text><![CDATA[ <style>div.crossReport #T_grid25 th.C26{}div.crossReport #T_grid25 th.C27{}div.crossReport #T_grid25 th.C28{}div.crossReport #T_grid25 td.C29{}div.crossReport #T_grid25 td.C30{}div.crossReport #T_grid25 td.C31{}div.crossReport #T_grid25 th.C32{}div.crossReport #T_grid25 th.C33{}div.crossReport #T_grid25 th.C34{}</style> ]]></text>
+	<gridDataCenter id="DC-35">
+		<ds refDsource=""><![CDATA[select * from code_branch]]></ds>
+		<multiDs>
+			<ds>
+				aaa
+			</ds>
+			<ds>
+				bbb
+			</ds>
+		</multiDs>
+		<processor>
+			<aggregation toExt="true">
+				<aggreConfig type="sum" name="FDID" alias="FDID_sum" />
+			</aggregation>
+			<aggregation toExt="true">
+				<aggreConfig type="count" name="SITE_ID" alias="SITE_ID_count" />
+			</aggregation>
+		</processor>
+	</gridDataCenter>
+</ext-config>

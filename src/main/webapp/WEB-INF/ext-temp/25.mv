@@ -1,0 +1,1 @@
+select DATE_FORMAT(date,'%Y-%m-%d') k13,  max(0) kpi_value  from logs  where 1=1  group by DATE_FORMAT(date,'%Y-%m-%d')

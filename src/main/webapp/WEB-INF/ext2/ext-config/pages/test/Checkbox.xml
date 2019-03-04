@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+<box title="checkBox配置说明">
+	<fieldset title="示例1">
+	 <text>
+    <![CDATA[
+			<div>输出一个checkbox输入框到页面。如下：</div>
+		]]>
+	</text>
+	<checkBox id="cbxd" desc="月份对比" defaultValue="1,2">
+		<option value="1">1月</option>
+		<option value="2">2月</option>
+		<option value="3">3月</option>
+		<option value="4">4月</option>
+		<option value="5">5月</option>
+	</checkBox>
+	</fieldset>
+	
+	<fieldset title="示例2">
+	 <text>
+    <![CDATA[
+			<div>采用SQL构建选项。如下：</div>
+			<div>value为值， text为显示内容，查询的sql中必须包含这两个字段。</div>
+		]]>
+	</text>
+	<checkBox id="cbxd2" desc="省分">
+		select t.pro_no value, t.pro_name text from bi_demo.dmcode_province t
+	</checkBox>
+	<br/>
+	<button type="button" desc="提交" mvId="test.Checkbox" />
+	<br/>
+	<text>
+		<template>
+			<![CDATA[
+			#foreach($t in $cbxd2)
+				$t,
+			#end
+			]]>
+		</template>
+	</text>
+	</fieldset>
+</box>
+</ext-config>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<script>
+function jsa(a, b){	
+	var ret = (a - b) / b * 100;
+	return ret;
+}
+</script>
+<box title="table配置说明">
+<br/>
+    <fieldset title="示例1">
+	<text>
+	<![CDATA[
+			<div>用table标签进行页面布局，输出一个一行两列的表格，如下：</div>
+		]]>
+	</text>
+	<text>
+	<![CDATA[ 
+	<style type="text/css">
+	<!--
+	   .tab{
+	       width: 450px;
+	       border:1px solid #FF9900;
+	   }
+	   .td{
+	      width: 50px;
+	      height: 25px;
+	      text-align: right;
+		  border:1px solid #FF9900;
+	   }
+	   -->
+	</style>
+	]]>
+	</text>
+	<table class="tab">
+		<tr>
+			<td styleClass="td">
+				
+				<text>
+					位置1
+				</text>
+
+			</td>
+			<td styleClass="td">
+				<text>
+					位置2
+				</text>
+				
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" styleClass="td">
+				
+				<text>
+					位置3
+				</text>
+			</td>
+		</tr>
+	</table>
+	</fieldset>
+	</box>
+</ext-config>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ruisitech.bi.mapper.etl.EtlTransformMapper" >
+  <resultMap id="BaseResultMap" type="com.ruisitech.bi.entity.etl.EtlTransform" >
+    <id column="Id" property="id" />
+    <result column="name" property="name" />
+    <result column="crtuser" property="crtuser"  />
+    <result column="crtUserName" property="crtUserName"  />
+    <result column="crtdate" property="crtdate" />
+    <result column="updatedate" property="updatedate" />
+    <result column="company_id" property="companyId" />
+    <result column="primary_table" property="primaryTable" />
+    <result column="target_table" property="targetTable" />
+    <result column="table_meta_id" property="tableMetaId" />
+    <result column="income" property="income" />
+    <result column="save_type" property="saveType" />
+    <result column="cfg" property="cfg" />
+    <result column="es_enable" property="esEnable" />
+  </resultMap>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
+    select a.id, a.name, a.crtuser, a.crtdate, updatedate,
+	primary_table, target_table , table_meta_id, save_type, cfg
+	from ${sysUser}.etl_transform a
+    where Id = #{id}
+  </select>
+  
+   <select id="getTfConfig" resultType="java.lang.String" >
+    select cfg
+	from ${sysUser}.etl_transform a
+    where Id = #{id}
+  </select>
+  
+  <select id="listTf" resultMap="BaseResultMap" >
+    select a.id, a.name, a.crtuser, a.crtdate, updatedate,
+	primary_table, target_table , b.LOGIN_NAME "crtUserName", table_meta_id, save_type
+	from ${sysUser}.etl_transform a, ${sysUser}.sc_login_user b
+	where a.crtuser = b.user_id and income = #{income}
+    order by a.crtdate
+  </select>
+  
+  <select id="listEsTables" resultMap="BaseResultMap" >
+  	select a.id,
+       a.name,
+       a.crtuser,
+       a.crtdate,
+       updatedate,
+       primary_table,
+       target_table,
+       b.LOGIN_NAME "crtUserName",
+       table_meta_id,
+       save_type,
+       c.es_enable
+  from ${sysUser}.etl_transform a
+  left join ${sysUser}.sc_login_user b on a.crtuser = b.user_id
+  left join ${sysUser}.etl_src_meta  c on a.table_meta_id = c.table_id
+ where  a.income = 'es'
+ order by a.crtdate
+  </select>
+  
+  <delete id="deleteByPrimaryKey">
+    delete from ${sysUser}.etl_transform
+    where Id = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="com.ruisitech.bi.entity.etl.EtlTransform" >
+    insert into ${sysUser}.etl_transform
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="crtuser != null" >
+        crtuser,
+      </if>
+        crtdate,
+        updatedate,
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="primaryTable != null" >
+        primary_table,
+      </if>
+      <if test="targetTable != null" >
+        target_table,
+      </if>
+      <if test="tableMetaId != null" >
+        table_meta_id,
+      </if>
+      <if test="income != null" >
+        income,
+      </if>
+      <if test="saveType != null" >
+        save_type,
+      </if>
+      <if test="cfg != null" >
+        cfg,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="crtuser != null" >
+        #{crtuser},
+      </if>
+   		<if test="dbName == 'mysql'">
+    	now()
+    	</if> 
+    	<if test="dbName == 'oracle'">
+    	sysdate
+    	</if> 
+    	<if test="dbName == 'sqlser'">
+    	getdate()
+    	</if> 
+    	<if test="dbName == 'db2'">
+    	current timestamp
+    	</if> ,
+ 
+   		<if test="dbName == 'mysql'">
+    	now()
+    	</if> 
+    	<if test="dbName == 'oracle'">
+    	sysdate
+    	</if> 
+    	<if test="dbName == 'sqlser'">
+    	getdate()
+    	</if> 
+    	<if test="dbName == 'db2'">
+    	current timestamp
+    	</if> ,
+     
+      <if test="companyId != null" >
+        #{companyId},
+      </if>
+      <if test="primaryTable != null" >
+        #{primaryTable},
+      </if>
+      <if test="targetTable != null" >
+        #{targetTable},
+      </if>
+      <if test="tableMetaId != null" >
+        #{tableMetaId},
+      </if>
+      <if test="income != null" >
+        #{income},
+      </if>
+      <if test="saveType != null" >
+        #{saveType},
+      </if>
+      <if test="cfg != null" >
+        #{cfg},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.ruisitech.bi.entity.etl.EtlTransform" >
+    update ${sysUser}.etl_transform
+    <set >
+      <if test="name != null" >
+        name = #{name},
+      </if>
+      <if test="crtuser != null" >
+        crtuser = #{crtuser},
+      </if>
+        updatedate = 
+	        <if test="dbName == 'mysql'">
+	    	now()
+	    	</if> 
+	    	<if test="dbName == 'oracle'">
+	    	sysdate
+	    	</if> 
+	    	<if test="dbName == 'sqlser'">
+	    	getdate()
+	    	</if> 
+	    	<if test="dbName == 'db2'">
+	    	current timestamp
+	    	</if> ,
+      <if test="companyId != null" >
+        company_id = #{companyId},
+      </if>
+      <if test="primaryTable != null" >
+        primary_table = #{primaryTable},
+      </if>
+      <if test="targetTable != null" >
+        target_table = #{targetTable},
+      </if>
+      <if test="tableMetaId != null" >
+        table_meta_id = #{tableMetaId},
+      </if>
+      <if test="income != null" >
+        income = #{income},
+      </if>
+      <if test="saveType != null" >
+        save_type = #{saveType},
+      </if>
+      <if test="cfg != null" >
+        cfg = #{cfg},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  	<select id="maxtfid" resultType="java.lang.Integer">
+		select case WHEN max(id) is null then 1 else  max(id) + 1 end "rid" from ${sysUser}.etl_transform
+	</select>
+	
+	<select id="tfTableExist" resultType="java.lang.Integer">
+		select count(1) from ${sysUser}.etl_transform
+		where target_table = #{targetTable}
+	</select>
+	
+</mapper>

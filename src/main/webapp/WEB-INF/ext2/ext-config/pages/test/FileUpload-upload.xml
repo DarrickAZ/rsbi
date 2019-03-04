@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+    <box title="fileField配置说明">
+        <fieldset>
+            <text>
+            	<template>上传文件成功!  上传文件名：${name}</template>
+			</text>
+			<link title="返回" action="test.FileUpload" method="" />
+		</fieldset>
+    </box>
+</ext-config>

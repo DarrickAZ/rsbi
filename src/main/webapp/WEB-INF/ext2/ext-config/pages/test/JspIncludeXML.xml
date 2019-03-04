@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<box title="在JSP中调用xml文件">
+	<br/>
+	<fieldset title="示例3">
+	<text>
+	<![CDATA[
+			<div>本示例主要演示如何在JSP中调用xml文件</div>
+		]]>
+	</text>
+			
+			<gridReport>
+				<header>
+                	<row>
+                		<cell colSpan="2" rowSpan="1" desc="a" align="center"/>
+						<cell colSpan="3" rowSpan="1" desc="b" align="center"/>
+					</row>
+					<row>
+						<cell colSpan="1" rowSpan="1" desc="c" align="center"/>
+						<cell colSpan="1" rowSpan="1" desc="d" align="center"/>
+						<cell colSpan="1" rowSpan="1" desc="e" align="center" order="true"/>
+						<cell colSpan="1" rowSpan="1" desc="f" align="center"/>
+						<cell colSpan="1" rowSpan="1" desc="g" align="center"/>
+					</row>
+				</header>
+				<detail>
+                	<row>
+                    	<cell alias="month_id" align="center"/>
+						<cell alias="pro_name"/>
+						<cell alias="kpi_value" formatPattern="#,##0.00"/>
+						<cell alias="pay_type_desc"/>
+						<cell alias="val2" formatPattern="#,##0.00"/>
+					</row>
+				</detail>
+				<footer>
+                	<row>
+                    	<cell desc="记录数：" alias="count"  dynamicText="true" formatPattern="#,##0"/>
+						<cell desc="footer2"/>
+						<cell desc="footer3"/>
+						<cell desc="footer4"/>
+						<cell desc="合计：" alias="val23" dynamicText="true" formatPattern="#,##0.00"/>
+					</row>
+				</footer>
+				<ds refDataCenter="DC-67467065" pageSize="5"/>
+			</gridReport>
+	</fieldset>
+	</box>
+	
+	 <gridDataCenter id="DC-67467065">
+        <ds>
+        	<![CDATA[
+					select t.month_id, d.pro_name, t.kpi_value, k.pay_type_desc
+					  from dm_kpi_w_card_pandect_m t, dmcode_pay_type k, dmcode_province d
+					 where t.pay_mode = k.pay_type_id
+					   and t.prov_id = d.pro_no and rownum <11 order by t.month_id
+					   ]]>
+        </ds>
+        <processor>
+		   <compute formula="@KPI_VALUE@ / 1000" name="val2" ></compute>
+		   <sort column="val2" type="asc"/>
+		   <aggregation column="val2" type="sum" name="val23"/>
+		   <aggregation column="month_id" type="count" name="count"/>
+        </processor>
+    </gridDataCenter>
+</ext-config>

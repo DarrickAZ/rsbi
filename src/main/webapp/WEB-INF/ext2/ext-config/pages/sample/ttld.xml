@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+
+<!-- 
+   图形和图形联动演示
+ -->
+
+
+<box title="图形和图形联动"/>
+
+<textField id="monthId" desc="月份" type="hidden" defaultValue="201309">
+</textField>
+	<textField type="hidden" id="c_id_lv1" defaultValue="1"/>
+	
+	<br/>
+	<br/>
+	<table class="mylayout">
+		<tr>
+			<td colspan="1" width="50%" rowspan="1" styleClass="layouttd">
+				<text align="center" size="16" weight="normal" id="C33"><![CDATA[ 一级成本分析 ]]></text>
+				<div id="C34" styleClass="textClass">
+					<chart shape="pie" xcol="c_id_lv1_desc" xcolDesc="c_id_lv1" ycol="amt" width="500"
+						height="250" rate="10000">
+						<property>
+							<key name="ydesc" value="营业收入（万元）" />
+							<key name="xdesc" value="一级成本" />
+							<key name="formatCol" value="###,##0.0" />
+							<key name="unitCol" value="元" />
+							<key name="showLegend" value="false" />
+							<key name="xcnt" value="5" />
+							<key name="showLabel" value="true" />
+							<key name="gaugeCnt" value="1" />
+						</property>
+						<link target="ld" type="chart"/>
+						<ds refDataCenter="DC-36"><![CDATA[ ]]></ds>
+					</chart>
+				</div>
+			</td>
+			<td colspan="1" width="50%" rowspan="1" styleClass="layouttd">
+				<text align="center" size="16" weight="normal" id="C37"><![CDATA[ 二级成本分析 ]]></text>
+				<div id="C38" styleClass="textClass">
+					<chart shape="column" xcol="c_id_lv2_desc" ycol="amt" width="400"
+						height="250" rate="10000" label="ld">
+						<property>
+							<key name="showBorder" value="false" />
+							<key name="ydesc" value="营业收入（万元）" />
+							<key name="xdesc" value="二级成本" />
+							<key name="formatCol" value="###,##0.0" />
+							<key name="unitCol" value="元" />
+							<key name="showLegend" value="false" />
+							<key name="xcnt" value="5" />
+							<key name="gaugeCnt" value="1" />
+						</property>
+						<ds refDataCenter="DC-40"><![CDATA[ ]]></ds>
+					</chart>
+				</div>
+			</td>
+		</tr>
+	</table>
+	<text><![CDATA[ <style>#C33{}#C34{}#C37{}#C38{}</style> ]]></text>
+	<gridDataCenter id="DC-40">
+		<ds><![CDATA[select  a1.c_id as c_id_lv2, a1.c_name as c_id_lv2_desc,sum(amt) as amt from dm_cost_d a0,code_cost_lv2 a1 where 1=1 
+		#if($c_id_lv1 != '')
+			and a0.c_id_lv1 = $c_id_lv1
+		#end
+		and month_id = '$monthId'
+		and a0.c_id_lv2= a1.c_id group by a1.c_id,a1.c_name order by  a1.c_id asc]]></ds>
+	</gridDataCenter>
+	<gridDataCenter id="DC-36">
+		<ds><![CDATA[select  a1.c_id as c_id_lv1, a1.c_name as c_id_lv1_desc,sum(amt) as amt from dm_cost_d a0,code_cost_lv1 a1 
+		where 1=1 
+		and month_id = '$monthId'
+		and a0.c_id_lv1= a1.c_id group by a1.c_id,a1.c_name order by  a1.c_id asc]]></ds>
+	</gridDataCenter>
+</ext-config>

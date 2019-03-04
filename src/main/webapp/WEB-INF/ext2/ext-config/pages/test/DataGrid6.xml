@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<box title="动态列配置">
+	<fieldset title="示例1">
+	<text>
+	<![CDATA[
+			<div>通过cols配置动态列：</div>
+			<div>其中上月值、本年累计、去年同期等列为动态列</div>
+		]]>
+	</text>
+	
+	<data key="cols" multi="true" refDsource="oracdb">
+		select 'm_lm_value' key, '上月值' val from dual
+		union
+		select 'y_ty_value' key, '本年累计' val from dual
+		union
+		select 'm_lm_value' key, '去年同期' val from dual
+	</data>
+	
+			<dataGrid out="html">
+				<col-config>
+					<col alias="month_id" desc="帐期" width="200" order="true"/>
+					<col alias="pro_name" desc="省份" width="100" order="true"/>
+					<col alias="pay_type_desc" desc="付费类型" width="100" />
+					<col alias="kpi_value" desc="指标值" width="100" formatPattern="###,##0" order="true"/>
+					<cols alias="key" desc="val" dataRef="cols" width="100" align="right"/>
+				</col-config>
+				<ds pageSize="30" ajax="true" refDsource="oracdb">
+select t.month_id,
+       d.pro_name,
+       sum(t.kpi_value) kpi_value,
+       k.pay_type_desc,
+       d.pro_no,
+       sum(t.m_lm_value) m_lm_value,
+       sum(t.y_ty_value) y_ty_value,
+       sum(t.y_ly_value) y_ly_value
+  from dm_kpi_w_card_pandect_m t, dmcode_pay_type k, dmcode_province d
+ where t.pay_mode = k.pay_type_id
+   and t.prov_id = d.pro_no
+   and month_id = '201003'
+ group by t.month_id, d.pro_name, k.pay_type_desc, d.pro_no
+ order by t.month_id
+				</ds>
+			</dataGrid>
+			</fieldset>
+	</box>
+	
+	<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+</ext-config>

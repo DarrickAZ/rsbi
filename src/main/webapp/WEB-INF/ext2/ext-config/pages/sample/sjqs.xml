@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+
+<box title="时间趋势分析">
+</box>
+<table>
+<tr>
+<td>
+	<crossReport out="html" id="report49">
+		<report-cols>
+			<crossCol desc="销售收入&lt;br&gt;(万元)" type="kpiOther" alias="amt" formatPattern="###,##0" aggregation="sum" kpiRate="10000"></crossCol>
+			<crossCol desc="均值" type="kpiOther" alias="amt_avg" formatPattern="###,##0" aggregation="sum" kpiRate="10000"></crossCol>
+			<crossCol desc="3个月&lt;br&gt;移动平均" type="kpiOther" alias="ydpja" formatPattern="###,##0" aggregation="sum" kpiRate="10000"></crossCol>
+			<crossCol desc="相对误差" type="kpiOther" alias="wc1" formatPattern="###,##0.00%" aggregation="avg"></crossCol>
+			<crossCol desc="5个月&lt;br&gt;移动平均" type="kpiOther" alias="ydpjb" formatPattern="###,##0" aggregation="sum" kpiRate="10000"></crossCol>
+			<crossCol desc="相对误差" type="kpiOther" alias="wc2" formatPattern="###,##0.00%" aggregation="avg"></crossCol>
+		</report-cols>
+		<report-rows>
+			<crossRow desc="月份" type="frd" alias="month_id" aliasDesc="month_id"
+				multi="true" casParent="true" dateFormat="month"></crossRow>
+		</report-rows>
+		<ds refDataCenter="DC-50"><![CDATA[ ]]></ds>
+	</crossReport>
+	<gridDataCenter id="DC-50">
+		<ds><![CDATA[select  t.month_id, sum(amt) amt from dm_income_amt_m t  where 1=1  and t.month_id between 201101 and 201308 group by t.month_id order by t.month_id asc]]></ds>
+		<processor>
+			<computeAvg column="amt"></computeAvg>
+			<computeMoveAvg column="amt" step="3" alias="ydpja"></computeMoveAvg>
+			<computeMoveAvg column="amt" step="5" alias="ydpjb"></computeMoveAvg>
+			<compute formula="@ydpja@ / @amt@" name="wc1" />
+			<compute formula="@ydpjb@ / @amt@" name="wc2" />
+		</processor>
+	</gridDataCenter>
+	</td>
+	<td>
+	<chart shape="line" xcol="month_id" ycol="amt" scol="ser" width="600"
+		height="350" rate="10000" align="center">
+		<title>销售收入移动平均</title>
+		<property>
+			<key name="margin" value="30, 20, 50, 90" />
+			<key name="ydesc" value="销售收入(万元)" />
+			<key name="xdesc" value="月份" />
+			<key name="legendLayout" value="horizontal" />
+			<key name="tickInterval" value="4" />
+			<key name="markerEnabled" value="false" />
+		</property>
+		<ds refDataCenter="DC-51"></ds>
+	</chart>
+	<gridDataCenter id="DC-51">
+		<ds><![CDATA[select  t.month_id, sum(amt) amt, '销售收入' ser from dm_income_amt_m t  where 1=1  and t.month_id between 201101 and 201308 group by t.month_id order by t.month_id asc]]></ds>
+		<processor>
+			<computeMoveAvg column="amt" step="3" alias="ydpja"></computeMoveAvg>
+			<computeMoveAvg column="amt" step="5" alias="ydpjb"></computeMoveAvg>
+			<kpiVertical column="ydpja,ydpjb" alias="3月移动平均,5月移动平均" targetCol="ser" targetKpiCol="amt"/>
+		</processor>
+	</gridDataCenter>
+	</td>
+	</tr>
+	</table>
+</ext-config>

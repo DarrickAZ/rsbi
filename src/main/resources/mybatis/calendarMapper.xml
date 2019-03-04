@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ruisitech.bi.mapper.bireport.CalendarMapper">
+    
+    <resultMap id="BaseResultMap" type="com.ruisitech.bi.entity.bireport.Calendar">
+		<id column="id" property="id"/>
+		<result column="day" property="day"/>
+		<result column="type" property="type"/>
+		<result column="festival" property="festival"/>
+    </resultMap>
+   
+   <insert id="insertFestival">
+		insert into ${sysUser}.cal_festival(
+		<if test="idType==2">id,</if>day, type, festival) 
+		
+		values(<if test="idType==2">#{id},</if>#{day}, #{type}, #{festival})
+	</insert>
+	
+	<delete id="removeFestival" parameterType="com.ruisitech.bi.entity.bireport.Calendar">
+		delete from ${sysUser}.cal_festival where day = #{day}
+	</delete>
+	
+	<select id="maxFestivalId" resultType="java.lang.Integer">
+		select case WHEN max(id) is null then 1 else  max(id) + 1 end "rid" from ${sysUser}.cal_festival
+	</select>
+	
+	<select id="listFestival" resultMap="BaseResultMap">
+		select id, day, type, festival 
+		from ${sysUser}.cal_festival
+	</select>
+</mapper>

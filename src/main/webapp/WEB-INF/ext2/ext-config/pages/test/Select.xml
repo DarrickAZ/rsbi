@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+<box title="select配置说明">
+	<fieldset title="示例1">
+	<text>
+	 <![CDATA[
+			<div>输出一个select输入框到页面。如下：</div>
+		]]>
+	</text>
+	<select id="area" desc="城市" value="">
+			select city_no value, city_desc text from dmcode_city
+					union select '' value, '全部' text from dual
+	</select>
+	</fieldset>
+	<br/>
+	<fieldset title="示例2">
+	 <text>
+    <![CDATA[
+			<div>select 通过option来构建：如下：</div>
+		]]>
+	</text>
+	<select id="city" desc="城市" value="001">
+			<option value="001">北京</option>
+			<option value="002">天津</option>
+			<option value="003">上海</option>
+			<option value="004">深圳</option>
+			<option value="005">南京</option>
+			<option value="006">广州</option>
+	</select>
+	</fieldset>
+	</box>
+</ext-config>

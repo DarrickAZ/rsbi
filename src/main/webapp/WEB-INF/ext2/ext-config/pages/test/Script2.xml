@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+
+	<box title="script配置中的内建对象">
+		<fieldset title="示例1">
+			<text>
+    <![CDATA[
+		scitpt 代码中 已经内置了 out/rquest/extContext 等对象，可以在script代码中直接调用这些对象的方法。
+			<div>1. out 对象。用来输出数据，包括 print方法 和 println方法。</div>
+			<div>2. request 对象，即 HttpSerlvetRequest对象。</div>
+			<div>3. extContext 对象(即velocity模板对象)，方法包括：put(‘xxx’,’xxx’)方法，设置值到extContext中，设置后的值可以通过${xxx}获取值。该方法内容获取主要用在defaultValue 属性和 test属性中，比如textFiled标签中配置defaultValue=”${xxx}”</div>
+			<div> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; get(‘xxx’)方法，获取extContext中的数据。</div>
+		    <br/>
+		当然，也可以在script中创建自己的对象，比如下面：<br>
+		&lt;script&gt;<br>
+		var date = new java.util.Date(); <br>
+		out.print(date);<br>
+		&lt;/script&gt;
+		]]>
+			</text>
+		</fieldset>
+	</box>
+</ext-config>

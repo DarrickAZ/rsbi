@@ -1,0 +1,2 @@
+select  case when isok =1 then '是' when isok =0 then '否' else '未知' end
+ k10, count(rid) d1 from logs  where 1=1   group by case when isok =1 then '是' when isok =0 then '否' else '未知' end

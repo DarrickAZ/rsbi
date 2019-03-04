@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+<box title="指标解释配置说明">
+	<fieldset title="示例1">
+	<text>
+	    <![CDATA[
+	    		<div>指标解释的信息从sc_kpi_desc表中获取，其中key指定的应该是对表中的key字段。显示结果如下：</div>
+			]]>
+	</text>
+	<kpiDesc>
+	  <kpi key="zb1"/>
+	  <kpi key="zb2"/>
+	</kpiDesc>
+	</fieldset>
+	</box>
+</ext-config>

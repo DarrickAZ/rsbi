@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+<box title="data配置说明">
+    <fieldset title="示例1">
+    <text>
+	<![CDATA[
+			<div>data标签的使用，如下：</div>
+		]]>
+	</text>
+	<data key="areals" multi="true">
+		select t.pro_no a1, t.pro_name a2 from dmcode_province t
+	</data>
+	<text>
+		<template>
+			<![CDATA[
+			获取data标签中的值：<br/>
+			#foreach($t in $areals)
+				$t.a1 = $t.a2, <br/>
+			#end
+			]]>
+		</template>
+	</text>
+	</fieldset>
+	</box>
+</ext-config>

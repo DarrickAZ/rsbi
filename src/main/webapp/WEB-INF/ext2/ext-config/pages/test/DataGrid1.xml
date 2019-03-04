@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<box title="用户列表">
+	<fieldset title="示例1">
+	<text>
+	<![CDATA[
+			<div>
+			本示例主要演示使用DataGrid标签配置表格导出。
+			</div>
+			<div>说明：export="true"。</div>
+		]]>
+	</text>
+			<dataGrid export="true">
+				<col-config>
+					<col alias="month_id" desc="帐期" width="200" order="true"/>
+					<col alias="pro_name" desc="省份" width="100" />
+					<col alias="pay_type_desc" desc="付费类型" width="100" />
+					<col alias="kpi_value" desc="指标指" width="100" formatPattern="0.00%" order="true"/>
+				</col-config>
+				<ds pageSize="10" ajax="true" refDsource="oracdb">
+				 		select t.month_id, d.pro_name, t.kpi_value, k.pay_type_desc
+				  from dm_kpi_w_card_pandect_m t, dmcode_pay_type k, dmcode_province d
+				 where t.pay_mode = k.pay_type_id
+				   and t.prov_id = d.pro_no order by t.month_id
+				</ds>
+			</dataGrid>
+	</fieldset>
+	</box>
+	
+	<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+</ext-config>

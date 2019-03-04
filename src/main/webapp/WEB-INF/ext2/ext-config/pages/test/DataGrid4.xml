@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<box title="用户列表">
+	<fieldset title="示例1">
+	<text>
+	<![CDATA[
+			<div>本示例主要演示如何在DataGrid表格列上配置链接.</div>
+			<div>colLink为指定的列加上链接.byAlias 表示需要传递的参数，如果要传递多个参数，用逗号分隔.</div>
+		]]>
+	</text>
+			<dataGrid out="html">
+				<col-config>
+					<col alias="month_id" desc="帐期" width="200" order="true">
+					   <colLink action="test.FileUpload" method="" styleClass="abc" byAlias="month_id,pro_no"/>
+					</col>
+					<col alias="pro_name" desc="省份" width="100" />
+					<col alias="pay_type_desc" desc="付费类型" width="100" />
+					<col alias="kpi_value" desc="指标指" width="100" formatPattern="0.00%" order="true"/>
+				</col-config>
+				<ds pageSize="10" ajax="true" refDsource="oracdb">
+				 		select t.month_id, d.pro_name, d.pro_no, t.kpi_value, k.pay_type_desc
+						  from dm_kpi_w_card_pandect_m t, dmcode_pay_type k, dmcode_province d
+						 where t.pay_mode = k.pay_type_id
+						   and t.prov_id = d.pro_no order by t.month_id
+				</ds>
+			</dataGrid>
+			</fieldset>
+	</box>
+	
+	<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+</ext-config>

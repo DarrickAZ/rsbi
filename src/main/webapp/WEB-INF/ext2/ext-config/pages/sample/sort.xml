@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<box title="测试排序">
+</box>
+
+<div style="width:1020px;margin:auto">
+	<crossReport out="html">
+		<report-cols>
+				<crossCol desc="网上用户数" type="kpiOther" alias="A0001" formatPattern="###,##0" aggregation="sum"></crossCol>
+				<crossCol desc="新增用户数" type="kpiOther" alias="A0002" formatPattern="###,##0" aggregation="sum"></crossCol>
+		</report-cols>
+		<report-rows>
+			<crossRow desc="月份" type="frd" alias="MONTH_ID" aliasDesc="MONTH_ID"	multi="true" dateFormat="month">
+				<crossRow desc="省份" type="frd" alias="pro_no" aliasDesc="pro_name" multi="true"/>
+			</crossRow>
+		</report-rows>
+		<ds refDataCenter="DC-40"></ds>
+	</crossReport>
+</div>
+
+<gridDataCenter id="DC-40">
+	<ds>
+	<![CDATA[ 
+				select t.MONTH_ID, b.pro_no, b.pro_name, b.ord, sum(A0001) A0001, sum(A0002) A0002
+				  from dm_kpi_w_card_pandect_m2 t, dmcode_province b
+				 where t.prov_id = b.pro_no
+				   and month_id between '201101' and '201104' and prov_id in ('051', '010', '089')
+				 group by t.MONTH_ID, b.pro_no, b.pro_name, b.ord
+			]]>
+	</ds>
+	<processor>
+		<sort column="month_id,ord" type="desc,desc" changeOldOrder="true"/>
+	</processor>
+</gridDataCenter>
+
+	
+</ext-config>

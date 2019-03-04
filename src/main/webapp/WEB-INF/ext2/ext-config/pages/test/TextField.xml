@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+    <box title="textField配置说明">
+        <fieldset title="示例1">
+            <text>
+                <![CDATA[
+			<div>使用text标签输出文本框。如下：</div>
+		]]>
+            </text>
+            <textField type="text" id="monthId" defaultValue="201102" desc="月份" show="true"/>
+            <textField type="hidden" id="areaId" value="-1" show="true"/>
+			
+			
+			<br/>
+			<br/>
+			<br/>
+			<radio desc="发 布 到" id="fbd">
+				<option value="abc">自定义报表</option>
+				<option value="abc">公有报表(需审核)</option>
+			</radio><br/>
+			<textField type="text" id="dd" defaultValue="" desc="报表名称" show="true"/><br/>
+				<textField type="text" id="ddd" defaultValue="" desc="发布目录" show="true"/><br/>
+			<br/>
+			<br/>
+			<radio desc="审核" id="fbdd">
+				<option value="abc">通过</option>
+				<option value="abc">不通过</option>
+			</radio><br/>
+			<textField type="text" id="ddddd" defaultValue="" desc="留言" show="true"/><br/>
+			<textField type="text" id="ddddddd" defaultValue="" desc="发布目录" show="true"/><br/>
+			<br/>
+			
+        </fieldset>
+    </box>
+</ext-config>

@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<box title="表格钻取">
+	<crossReport out="html">
+		<baseKpi alias="value" aggregation="sum" formatPattern="#,###"/>
+		<rowHeads>
+		 <rowHead desc=""></rowHead>
+		</rowHeads>
+		<report-cols>
+			<crossCol desc="指标" type="frd" alias="kpi_code" aliasDesc="kpi_desc" order="true"	multi="true">
+			</crossCol>
+		</report-cols>
+		<report-rows>
+			<crossRow desc="省份" type="frd" alias="pro_no" aliasDesc="pro_name" multi="true" uselink="true"/>
+		</report-rows>
+		<row-dims>
+			<dim name="地市" code="city_no" type="frd" codeDesc="city_desc" ref="d1"/>
+		</row-dims>
+		<ds refDsource="oracdb"><![CDATA[ 
+		select  b.pro_no, b.pro_name, b.ord, sum(KPI_VALUE) value, c.kpi_code, c.kpi_desc
+		from dm_kpi_w_card_pandect_m t, dmcode_province b, dmcode_kpi_lib c 
+		where t.prov_id = b.pro_no and month_id = '201102' and c.kpi_code in ('A0001', 'A0002','A0003', 'A0004', 'A0005','A0006') and c.kpi_code = t.kpi_code
+		group by b.pro_no, b.pro_name,b.ord, c.kpi_code, c.kpi_desc 
+           order by c.kpi_code,b.ord
+		]]></ds>
+	</crossReport>
+
+	</box>
+
+<sql id="d1">
+		select  b.city_no, b.city_desc, b.ord, sum(KPI_VALUE) value, c.kpi_code, c.kpi_desc
+		from dm_kpi_w_card_pandect_m t, dmcode_city b, dmcode_kpi_lib c 
+		where t.area_no = b.city_no and month_id = '201102' and t.prov_id = '${pro_no}' and c.kpi_code in ('A0001', 'A0002','A0003', 'A0004', 'A0005','A0006') and c.kpi_code = t.kpi_code
+		group by b.city_no, b.city_desc, b.ord, c.kpi_code, c.kpi_desc 
+           order by c.kpi_code,b.ord
+</sql>
+
+	<text>
+	<![CDATA[
+	<style>
+	TABLE.grid3 TH {
+		padding:10px;
+	}
+	TABLE.grid3 th#xxhead div span {
+		display:-moz-inline-box;  
+		display:inline-block;
+		padding:2px 10px 3px 10px;
+	}
+	</style>
+	<script>
+	var $ = jQuery;
+	$(function(){
+		var setHeadFunc = function(){
+			var obj = $("table.grid3 #xxhead");
+			obj.css("padding", "0px");
+			var w = obj.width();
+			var h = obj.height();
+			var pos = obj.position();
+			var html = "<img style=\"position:absolute;left:"+pos.left+"px;top:"+pos.top+"px;\" src='../ext-res/image/xxbt2.png' width='"+w+"' height='"+h+"'>" + 
+				"<div style=\"height:"+(h/2)+"px;\" align=\"right\"><span>指标</span></div>" + 
+				"<div style=\"height:"+(h/2)+"px;float:left;\" align=\"left\"><span>付费类型</span></div>";
+			obj.html(html);
+		}
+		setHeadFunc();
+		$(window).resize(setHeadFunc)
+	});
+	</script>
+	 ]]>
+	</text>
+	
+	<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+</ext-config>

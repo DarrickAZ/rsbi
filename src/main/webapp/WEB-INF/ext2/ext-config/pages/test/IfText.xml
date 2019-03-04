@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<script>
+	<![CDATA[
+	function chk(){
+		return 1==1;
+	}
+	
+	function chk2(){
+		return 1==2;
+	}
+	]]>
+</script>
+
+ <box title="if标签配置说明">
+	<fieldset title="示例1">
+<text>
+	<![CDATA[
+			<div>通过JS函数判断，在js函数返回true后，才会执行if标签里的内容</div>
+		]]>
+	</text>
+
+	 <if jsFunc="chk">
+		 <text>
+		 	该内容执行
+		 </text>
+	 </if>
+	 
+	 <if jsFunc="chk2">
+		 <text>
+		 	该内容未执行
+		 </text>
+	 </if>
+	 
+	 </fieldset>
+	 
+	 	<fieldset title="示例2">
+<text>
+	<![CDATA[
+			<div>通过el表达式判断,注意:目前判断只支持==和!=, ''表示字符。</div>
+		]]>
+	</text>
+
+	 <if test="'1' == '1'">
+		 <text>
+		 	该内容执行
+		 </text>
+	 </if>
+	 
+	 <if test="'1' == '2'">
+		 <text>
+		 	该内容未执行
+		 </text>
+	 </if>
+	 
+	 </fieldset>
+	 
+	 <fieldset title="示例3">
+<text>
+	<![CDATA[
+			<div>if 标签和参数结合使用</div>
+		]]>
+	</text>
+	<textField type="hidden" id="state" defaultValue="abc"/>
+
+	<if test="${state} == 'abc' ">
+	 	<text>${state} == abc</text>
+	 </if>
+	 
+	 <if test="${state} != 'abc' ">
+	 	<text>${state} != abc</text>
+	 </if>
+	<br/>
+	 <button type="button" desc="等于" onClick="location.href='extView?mvid=test.iftext&amp;state=abc'" />
+	 <button type="button" desc="不等于" onClick="location.href='extView?mvid=test.iftext&amp;state=def'" />
+	 </fieldset>
+	
+	 
+	 </box>
+</ext-config>

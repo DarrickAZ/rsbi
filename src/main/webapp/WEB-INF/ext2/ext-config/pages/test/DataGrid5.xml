@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<box title="用户列表">
+	<fieldset title="示例1">
+	<text>
+	<![CDATA[
+			<div>本示例主要演示如何在DataGrid表格列上配置test,根据判断是否显示本行数据.</div>
+			<div>在 col 标签中增加 test="${pro_no} == '011'" 表示只显示数据中省份代码为 011 (北京)的省分 的指标值</div>
+		]]>
+	</text>
+	<select id="pro" desc="省分">
+		select t.pro_no value, t.pro_name text from dmcode_province t
+		union
+		select '' value, '全部' text from dual
+	</select>
+	<button type="button" desc="提交" mvId="test.DataGrid5"/>
+			<dataGrid out="html">
+				<col-config>
+					<col alias="month_id" desc="帐期" width="200" order="true">
+					   
+					</col>
+					<col alias="pro_name" desc="省份" width="100" order="true"/>
+					<col alias="pay_type_desc" desc="付费类型" width="100" />
+					<col alias="kpi_value" desc="指标值" width="100" formatPattern="###,##0" order="true" test="${pro_no} == '011'"/>
+				</col-config>
+				<ds pageSize="30" ajax="true" refDsource="oracdb">
+select t.month_id, d.pro_name, sum(t.kpi_value) kpi_value, k.pay_type_desc, d.pro_no
+  from dm_kpi_w_card_pandect_m t, dmcode_pay_type k, dmcode_province d
+ where t.pay_mode = k.pay_type_id
+   and t.prov_id = d.pro_no
+   and month_id = '201003'
+   #if($pro != '')
+   	and pro_no = '$pro'
+   #end
+   group by t.month_id, d.pro_name, k.pay_type_desc, d.pro_no
+ order by t.month_id
+				</ds>
+			</dataGrid>
+			</fieldset>
+	</box>
+	
+	<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+</ext-config>

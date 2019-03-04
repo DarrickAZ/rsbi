@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+
+<script>
+	function jsarpu(a, b){
+		return a/b;
+	}
+	function js2(a, b){
+		return a/b;
+	}
+</script>	
+	
+<box title="crossReport配置计算指标">
+	 <br/>
+	<fieldset title="示例1">
+	<text>
+	<![CDATA[
+			<div>配置计算指标：</div>
+			<div>其中arpu、离网用户占比为计算指标</div>
+			<div>通过 出账收入/网上用户  计算arpu.</div>
+			<div>通过 离网用户/网上用户  计算离网用户占比</div>
+		]]>
+	</text>
+	<crossReport out="html">
+		
+		<report-cols>
+				<crossCol desc="" type="frd" alias="kpi_code" aliasDesc="kpi_desc" multi="true">
+					<crossCol type="kpiOther" alias="kpi_value" desc="xxx" formatPattern="###,##0" aggregation="sum"/>
+				</crossCol>
+				<crossCol desc="arpu" type="kpi" alias="kpi_code" value="B0001" formatPattern="###,##0.00" aggregation="sum" id="a" formula="jsarpu" order="true">
+					<crossOther id="b" type="kpi" alias="kpi_code" value="A0001" />
+				</crossCol>
+				<crossCol desc="离网用户占比" type="kpi" alias="kpi_code" value="A0003" formatPattern="0.00%" aggregation="avg" id="a" formula="js2" order="true">
+					<crossOther id="b" type="kpi" alias="kpi_code" value="A0001"/>
+				</crossCol>
+			</report-cols>
+			<report-rows rebuild="true">
+				<crossRow desc="账期" type="frd" alias="month_id" aliasDesc="month_id" multi="true"/>
+			</report-rows>
+		<ds>
+select t.month_id,
+       t.kpi_code,
+       k.kpi_desc,
+    
+       '0.00' kpiFmt,
+       sum(t.kpi_value) kpi_value
+  from dm_kpi_w_card_pandect_m t,
+       dmcode_kpi_lib          k
+    
+ where t.kpi_code = k.kpi_code
+ and t.kpi_code in ('B0001','A0001','A0003')
+   and month_id in ('201002', '201003', '201004', '201005', '201006')
+ group by t.month_id,
+          t.kpi_code,
+          k.kpi_desc
+        
+ order by month_id
+		</ds>
+	</crossReport>
+</fieldset>
+</box>
+
+</ext-config>

@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<box title="表格与图形的联动">
+
+<textField type="hidden" id="kpi_code" defaultValue="A0001"/>
+<textField type="hidden" id="month_id" defaultValue="201104"/>
+<text>
+<![CDATA[
+ ps:点击指标值，柱状图也会刷新
+ ]]>
+ </text>
+	<chart shape="column" xcol="pro_name" ycol="value" scol="kpi_desc" width="960" height="230" label="cid2" align="center">
+		<title>
+		 $month_id.substring(0, 4)年$month_id.substring(4, 6)月
+		</title>
+		<property>
+			<key name="formatCol" value="###,###" />
+			<key name="legendLayout" value="horizontal" />
+			<key name="xcnt" value="40"/>
+			<key name="routeXaxisLable" value="-30"/>
+			<key name="showLabel" value="false"/>
+		</property>
+		<ds refDsource="oracdb">
+		 select  t.MONTH_ID, b.pro_no, b.pro_name,b.ord, sum(KPI_VALUE) value, c.kpi_desc
+			from dm_kpi_w_card_pandect_m t, dmcode_province b, dmcode_kpi_lib c 
+			where t.prov_id = b.pro_no and month_id = '${month_id}' and t.kpi_code = '${kpi_code}' and t.kpi_code = c.kpi_code
+			group by t.MONTH_ID, b.pro_no, b.pro_name,b.ord, c.kpi_desc 
+            order by t.MONTH_ID desc, b.ord
+		</ds>
+	</chart>
+	<crossReport out="html" rowHead="账期">
+		<baseKpi alias="kpi_value" aggregation="sum" formatPattern="#,###"/>
+		<report-cols>
+			<crossCol desc="" type="frd" alias="kpi_code" aliasDesc="kpi_desc" multi="true" uselink="true"/>
+		</report-cols>
+		<report-rows>
+			<crossRow desc="账期" type="frd" alias="month_id" aliasDesc="month_id" multi="true"/>
+		</report-rows>
+		<col-link target="cid2" type="chart"/>
+		<ds refDsource="oracdb">
+			select t.month_id, t.kpi_code, k.kpi_desc,  sum(t.kpi_value) kpi_value
+					from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib k where
+					t.kpi_code =k.kpi_code
+					and t.kpi_code in ('A0001', 'A0002', 'A0003', 'A0004', 'A0005', 'A0006', 'A0007', 'A0008')
+					group by t.month_id, t.kpi_code, k.kpi_desc
+					order by month_id desc
+		</ds>
+	</crossReport>
+	</box>
+
+<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+	
+</ext-config>

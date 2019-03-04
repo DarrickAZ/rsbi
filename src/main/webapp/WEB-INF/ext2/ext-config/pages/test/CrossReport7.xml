@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<box title="crossReport配置说明">
+	    <textField type="hidden" id="test"></textField>
+	    <br/>
+		<fieldset title="示例1">
+			<text>
+				<![CDATA[
+						<div>本示例主要演示使用crossReport标签配置指标定制功能。(指标在列上)</div>
+					]]>
+			</text>
+			<crossReport out="json" rowHead="账期" label="x2">
+				<report-cols >
+					<crossCol desc="" type="frd" alias="month_id" aliasDesc="month_id" aliasFmt="kpiFmt"
+						multi="true" />
+				</report-cols>
+				<report-rows rebuild="true">
+					<crossRow desc="" type="frd" alias="kpi_desc" aliasDesc="kpi_desc"
+						multi="true" />
+				</report-rows>
+
+				<!-- 指标定制 -->
+				<kpi-customize>
+					<svc desc="2G业务" value="000101">
+						<kpi desc="出账收入" value="1" />
+						<kpi desc="发展用户数" value="2" />
+						<kpi desc="在网时长" value="3" />
+					</svc>
+					<svc desc="3G业务" value="000102">
+						<kpi desc="出账收入" value="1" />
+						<kpi desc="发展用户数" value="2" />
+						<kpi desc="在网时长" value="3" />
+						<kpi desc="上网流量" value="4" />
+					</svc>
+				</kpi-customize>
+				<ds>
+					select t.month_id, t.kpi_code, k.kpi_desc, '0.00' kpiFmt, sum(t.kpi_value)
+					kpi_value
+					from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib k where
+					t.kpi_code = k.kpi_code
+					#if($userKpiLs.size() > 0)
+					and t.kpi_code in (
+					#foreach($kpi in $userKpiLs)
+						'$kpi.value',
+					#end
+					'000'
+					)
+					#end
+					group by t.month_id, t.kpi_code, k.kpi_desc
+					order by month_id
+				</ds>
+			</crossReport>
+		</fieldset>
+	</box>
+</ext-config>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+<box title="参数标签配置说明">
+    <fieldset title="示例1">
+    <br/>
+     <text>
+	<![CDATA[
+			<div>使用text标签输出文本信息。如下：</div>
+		]]>
+	</text>
+	<text>helloworld!!!</text>
+    </fieldset>
+ 	<br/>
+	<fieldset title="示例2">
+	 <text>
+	<![CDATA[
+			<div>使用text标签输出文本框。如下：</div>
+		]]>
+	</text>
+	 <text>月份</text><textField type="text" id="monthId" defaultValue="201102" show="true"/>
+	<textField type="hidden" id="areaId" defaultValue="-1" show="true"/>
+	</fieldset>
+	<br/>
+	<fieldset title="示例3">
+	<text>
+    <![CDATA[
+			<div>输出一个button按钮。如下：</div>
+		]]>
+	</text>
+	<select id="date" desc="日期">
+		<option value="01">200101</option>
+		<option value="02">200102</option>
+	</select>
+	<button type="button" desc="查询" />
+	</fieldset>
+	<fieldset title="示例4">
+	<text>
+	 <![CDATA[
+			<div>输出一个select输入框到页面。如下：</div>
+		]]>
+	</text>
+	<select id="area" desc="地域" value="2102">
+		select t.pro_no value, t.pro_name text from dmcode_province t
+	</select>
+	
+	 <text>
+    <![CDATA[
+			<div>select 另外一种配置方式(通过option来构建)：如下：</div>
+		]]>
+	</text>
+	<select id="city" desc="城市" value="001">
+			<option value="001">北京</option>
+			<option value="002">天津</option>
+			<option value="003">上海</option>
+			<option value="004">深圳</option>
+			<option value="005">南京</option>
+			<option value="006">广州</option>
+	</select>
+	</fieldset>
+	<br />
+	<fieldset title="示例5">
+	<text>
+    <![CDATA[
+			<div>输出一个checkbox输入框到页面。如下：</div>
+		]]>
+	</text>
+	<checkBox id="cbxd" desc="月份对比" defaultValue="1,2">
+		<option value="1">1月</option>
+		<option value="2">2月</option>
+		<option value="3">3月</option>
+		<option value="4">4月</option>
+		<option value="5">5月</option>
+	</checkBox>
+	</fieldset>
+	<br/>
+	<fieldset title="示例6">
+	 <text>
+    <![CDATA[
+			<div>输出一个radio输入框到页面。如下：</div>
+		]]>
+	</text>
+	<radio id="gender" desc="性别" defaultValue="1">
+		<option value="1">男</option>
+		<option value="2">女</option>
+	</radio>
+	</fieldset>
+	<br />
+	<fieldset title="示例8">
+		 <text>
+	<![CDATA[
+			<div>template标签的用法。如下：</div>
+			<div>template标签必须结合text标签使用，text/template 和 text都可以输出文本，他们之间的区别在于text为直接输出文本，而text/template为用模板输出文本，在这里面可以使用模板语言取值</div>
+		]]>
+	</text>
+	<text>
+		<template>
+			#set($list = ["pine", "oak", "maple"])
+			#foreach ($element in $list)
+			$velocityCount
+			This is $element.
+			#end	
+		</template>
+	</text>
+	</fieldset>
+	
+	  <fileField id="ddddddd" desc="dd"/>
+	
+	</box>
+</ext-config>

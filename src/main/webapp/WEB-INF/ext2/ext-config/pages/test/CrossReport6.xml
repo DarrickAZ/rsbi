@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<box title="crossReport配置说明">
+	   <br />
+		<fieldset title="示例1">
+		<text>
+				<![CDATA[
+					<div>实现行上计算指标的隐藏及显示</div>
+					<div>crossOther指定单元格的附加属性，例如：上月值、累计值等。</div>
+					<div>点击指标后能显示指标的上月值、累计值等内容</div>
+					]]>
+			</text>
+		<crossReport out="lockUI" rowHead="账期">
+		<report-cols>
+			<crossCol desc="" type="frd" alias="kpi_code" aliasDesc="kpi_desc" multi="true">
+				<crossOther type="kpiOther" alias="sy" desc="上月值" use="true"/>
+				<crossOther type="kpiOther" alias="lj" desc="累计值" use="true"/>
+			</crossCol>
+		</report-cols>
+		<report-rows rebuild="true">
+			<crossRow desc="" type="frd" alias="month_id" aliasDesc="month_id" multi="true"/>
+		</report-rows>
+		<ds refDsource="oracdb">
+			select t.month_id,
+			       t.kpi_code,
+			       k.kpi_desc,
+			       '0.00' kpiFmt,
+			       sum(t.kpi_value) kpi_value,
+			       sum(t.m_lm_value) sy,
+			       sum(t.y_ty_value)  lj
+			  from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib k
+			 where t.kpi_code = k.kpi_code
+			 group by t.month_id, t.kpi_code, k.kpi_desc
+			 order by month_id
+		</ds>
+	</crossReport>
+		</fieldset>
+	</box>
+	<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+</ext-config>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<box title="crossReport配置说明">
+	 <br/>
+	<fieldset title="示例1">
+		<text>
+		<![CDATA[
+				<p>本示例主要演示使用crossReport标签配置表格：</p>
+				<p>type="frd" 表示从数据中读取维度，必须和multi="true",aliasDesc同时使用</p>
+				<p>alias表示关联数据中的纬度、aliasDesc表示关联的纬度别名(中文名)</p>
+				
+					
+			]]>
+		</text>
+		<crossReport out="html" rowHead="账期">
+			<report-cols>
+				<crossCol desc="" type="frd" alias="kpi_code" aliasDesc="kpi_desc" multi="true"/>
+			</report-cols>
+			<report-rows>
+				<crossRow desc="" type="frd" alias="month_id" aliasDesc="month_id" multi="true"/>
+			</report-rows>
+			<ds>
+				select t.month_id, t.kpi_code, k.kpi_desc, sum(t.kpi_value) kpi_value
+			  from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib k where t.kpi_code = k.kpi_code
+			 group by t.month_id, t.kpi_code, k.kpi_desc order by month_id
+				
+			</ds>
+		</crossReport>
+	</fieldset>
+	
+	<dataCenter id="dc1">
+	  <ds>
+			<kpi>CKP_880,CKP_886</kpi>
+			<extKpis>
+				<extKpi>CV</extKpi>
+				<extKpi>CV.1M</extKpi>
+				<extKpi>CV/CV.1M - 1</extKpi>
+			</extKpis>
+			<dims>
+				<dim id="DIM_001" values="201101@201103"/>
+				<dim id="DIM_002" values=""/>
+			</dims>
+		</ds>
+		<processor>
+			<kpiCompute formula="@CKP_880@ / @CKP_886@" name="nkpi"/>
+			<aggregation type="max" dim="DIM_002"/>
+			<filterKpi kpis="CKP_880,CKP_886"/>
+		</processor>
+	</dataCenter>
+	
+	</box>
+</ext-config>

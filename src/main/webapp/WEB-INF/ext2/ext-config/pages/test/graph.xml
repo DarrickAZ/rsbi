@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+
+<box title="曲线图配置说明">
+	<fieldset title="示例1">
+	<text>
+	<![CDATA[
+		<div>使用chart标签配置曲线图.</div>
+		]]>
+	</text>
+	<div style="margin:5px;">
+		<radio id="view1" desc="曲线图" defaultValue="1">
+			<option value="1" ref="test.chart1">第一种</option>
+			<option value="2" ref="test.chart2">第二种</option>
+			<option value="3" ref="test.chart5">第三种</option>
+		</radio>
+	</div>
+	</fieldset>
+	</box>
+</ext-config>

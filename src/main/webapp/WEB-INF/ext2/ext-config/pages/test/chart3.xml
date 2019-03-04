@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+<script>
+function fk(a, b){
+	return b / a;
+}
+</script>
+
+<chart shape="column"  xcol="x" ycol="y" scol="ser"  width="800" height="280" >
+				<property>
+						<key name="formatCol" value="format"/>
+						<key name="multiAxis" value="false"/>
+						<key name="showLegend" value="true"/>
+						<key name="xAxisType" value="datetime"></key>
+						<key name="showLabel" value="false"/>
+					</property>
+					<ds>
+						select '北京' x, 100 y , '发展用户数' ser, '1' isuse, 'a' id from dual
+			union
+			select '天津' x, 120 y , '发展用户数' ser, '1' isuse, 'a' id from dual
+			union
+			select '河北' x, 130 y , '发展用户数' ser, '1' isuse, 'a' id from dual
+			union
+			select '辽宁' x, 90 y , '发展用户数' ser, '1' isuse, 'a' id from dual
+			union
+			select '吉林' x, 50 y , '发展用户数' ser, '1' isuse, 'a' id from dual
+			union
+			select '内蒙' x, 40 y , '发展用户数' ser, '1' isuse, 'a' id from dual
+			union
+			select '北京' x, 70 y , '有效用户数' ser, '1' isuse, 'b' id from dual
+			union
+			select '天津' x, 90 y , '有效用户数' ser, '1' isuse, 'b' id from dual
+			union
+			select '河北' x, 110 y , '有效用户数' ser, '1' isuse, 'b' id from dual
+			union
+			select '辽宁' x, 80 y , '有效用户数' ser, '1' isuse, 'b' id from dual
+			union
+			select '吉林' x, 60 y , '有效用户数' ser, '1' isuse, 'b' id from dual
+			union
+			select '内蒙' x, 30 y , '有效用户数' ser, '1' isuse, 'b' id from dual
+					</ds>
+			</chart>
+</ext-config>

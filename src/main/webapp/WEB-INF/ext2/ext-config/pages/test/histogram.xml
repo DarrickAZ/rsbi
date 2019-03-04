@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+
+<box title="柱形图配置说明">
+	<fieldset title="示例1">
+	<br/>
+	<text>
+	<![CDATA[
+		<div>使用chart标签配置柱状图.</div>
+		]]>
+	</text>
+	<div style="margin:5px;">
+		<radio id="view2" desc="查看方式" defaultValue="3">
+			<option value="3" ref="test.chart3">第一种</option>
+			<option value="4" ref="test.chart4">第二种</option>
+			<option value="5" ref="test.chart6">第三种</option>
+		</radio>
+	</div>
+	</fieldset>
+	</box>
+</ext-config>

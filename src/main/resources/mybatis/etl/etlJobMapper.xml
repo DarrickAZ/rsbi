@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ruisitech.bi.mapper.etl.JobConfigMapper">
+  
+    <resultMap id="BaseResultMap" type="com.ruisitech.bi.entity.etl.JobConfig">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="crtuser" property="crtUser"/>
+		<result column="crtdate" property="crtDate"/>
+		<result column="crtUserName" property="crtUserName"/>
+		<result column="updatedate" property="updatedate"/>
+		<result column="cfg" property="cfg"/>
+		<result column="state" property="state"/>
+    </resultMap>
+    
+    <select id="listJobs" resultMap="BaseResultMap">
+		select a.id, a.name, a.crtuser, a.crtdate, cfg, a.state, b.LOGIN_NAME "crtUserName"
+		from ${sysUser}.etl_job_config a, ${sysUser}.sc_login_user b
+		where a.crtuser = b.user_id
+		order by a.crtdate desc
+	</select>
+	
+	<select id="listRuningJobs" resultMap="BaseResultMap">
+		select id , name, cfg
+		from ${sysUser}.etl_job_config a
+		where state = 2
+	</select>
+	
+	<select id="listJobsteps" resultType="java.util.HashMap">
+		select cfgid "cfgid", cfgname "cfgname", 'dataLoad' as "type" 
+		from ${sysUser}.etl_config a
+		where a.imptype = 'db'
+		union all
+		select id as "cfgid", name as "cfgname", income as "type"
+		from ${sysUser}.etl_transform a
+	</select>
+	
+	<insert id="savejob" parameterType="com.ruisitech.bi.entity.etl.JobConfig">
+		insert into ${sysUser}.etl_job_config(<if test="idType == 2">id,</if>name, crtuser, crtdate, updatedate, cfg,  state)
+		values(<if test="idType == 2">#{id},</if>#{name}, #{crtUser},
+		<if test="dbName == 'mysql'">
+			now(),now(),
+		</if>
+		<if test="dbName == 'sqlser'">
+			GETDATE(),GETDATE(),
+		</if>
+		<if test="dbName == 'oracle'">
+			sysdate,sysdate,
+		</if>
+		<if test="dbName == 'db2' ">
+			current timestamp,current timestamp,
+		</if>
+		#{cfg}, #{state})
+	</insert>
+	
+	<update id="updatejob" parameterType="com.ruisitech.bi.entity.etl.JobConfig">
+		update ${sysUser}.etl_job_config set name = #{name}, updatedate = 
+			<if test="dbName == 'mysql'">
+				now()
+			</if>
+			<if test="dbName == 'sqlser'">
+				GETDATE()
+			</if>
+			<if test="dbName == 'oracle'">
+				sysdate
+			</if>
+			<if test="dbName == 'db2' ">
+				current timestamp
+			</if>
+		, cfg = #{cfg} 
+		where id = #{id}
+	</update>
+	
+	<delete id="deljob">
+		delete from ${sysUser}.etl_job_config where id = #{id}
+	</delete>
+	
+	<select id="getjobcfg" resultType="java.lang.String">
+		select cfg "cfg" from ${sysUser}.etl_job_config where id = #{id}
+	</select>
+	
+	<select id="maxjobid" resultType="java.lang.Integer">
+		select case WHEN max(id) is null then 1 else  max(id) + 1 end "rid" from ${sysUser}.etl_job_config
+	</select>
+	
+	<update id="startState">
+		update ${sysUser}.etl_job_config set state = 2
+		where id = #{id}
+	</update>
+	
+	<update id="stopState">
+		update ${sysUser}.etl_job_config set state = 1
+		where id = #{id}
+	</update>
+</mapper>

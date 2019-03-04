@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<script>
+	<![CDATA[ 	
+	out.print('hello world');
+	
+	var df = new java.text.DecimalFormat('###,##0');
+	function printKpi(value, b, c, d){
+		if(value > 1000){
+			out.print('<font color="red">' + df.format(value) + '</font>');
+		}else{
+			out.print(df.format(value));
+		}
+	}
+	]]>
+	</script>
+	<box title="script配置说明">
+		<fieldset title="示例1">
+			<text>
+    <![CDATA[
+			<div>在页面输出一段script代码。通过script标签实现</div>
+			<div>该段JS代码会在服务器段执行，可以使用在test标签、crossReport标签、dataGrid标签中</div>
+			<div>通过js输出内容, 并结合crossReport使用, 对于值大于1000的指标为红色显示, 并用js函数给予格式化, 通过jsFunc="xxxx" 调用js函数</div>
+			<div>对于printKpi中4个参数的说明: 1.当前值、2.当前col对象、 3.当前row对象、 4.当前行数据map对象.</div>
+			<div>这种形式只能使用在out="html"中</div>
+		]]>
+			</text>
+		</fieldset>
+		
+		<crossReport out="html" rowHead="账期">
+			<report-cols>
+				<crossCol desc="" type="frd" alias="kpi_code" aliasDesc="kpi_desc" aliasFmt="fmt" multi="true" jsFunc="printKpi"/>
+			</report-cols>
+			<report-rows >
+				<crossRow desc="" type="frd" alias="pro_no" aliasDesc="pro_name" multi="true"/>
+			</report-rows>
+			<ds>
+select t.month_id, t.kpi_code, k.kpi_desc, p.pro_name, p.pro_no, sum(t.kpi_value) kpi_value, '0' fmt 
+  from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib k, dmcode_province p
+ where t.kpi_code = k.kpi_code and t.prov_id = p.pro_no and t.month_id = '201002'
+ group by t.month_id, t.kpi_code, k.kpi_desc, p.pro_name, p.pro_no
+ order by p.pro_no
+			</ds>
+		</crossReport>
+	</box>
+</ext-config>

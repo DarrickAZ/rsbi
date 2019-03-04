@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ruisitech.bi.mapper.app.AppPushMapper">
+   
+    <resultMap id="BaseResultMap" type="com.ruisitech.bi.entity.app.AppPush">
+		<id column="push_id" property="id"/>
+		<result column="user_id" property="userId"/>
+		<result column="title" property="pageName"/>
+		<result column="cfg" property="pageInfo"/>
+		<result column="p_state" property="state"/>
+		<result column="crtdate" property="crtdate"/>
+		<result column="channel_id" property="channel"/>
+    </resultMap>
+   
+   	<select id="pushlist" resultType="java.util.HashMap">
+		select push_id "push_id", title "title", crtdate "crtdate",p_state "state" 
+		from ${sysUser}.app_push where user_id = #{userId}
+	</select>
+	
+	<select id="getPushCfg" resultType="String" parameterType="com.ruisitech.bi.entity.app.AppPush">
+		select cfg "ctx" from ${sysUser}.app_push where user_id = #{userId} and push_id = #{id}
+	</select>
+	
+	<select id="pushSubject" resultType="java.util.HashMap">
+		select a.tid "tid", a.tname "tname", a.tdesc "tdesc"
+		from ${sysUser}.olap_table_meta a, ${sysUser}.olap_table_col_meta b, ${sysUser}.olap_dim_list c 
+		where a.tid = b.tid  and b.col_id = c.dim_id and b.col_type = 1 and c.dim_type = #{subjectType}
+		order by a.tid
+	</select>
+	
+	<insert id="addPushCfg" parameterType="com.ruisitech.bi.entity.app.AppPush">
+		insert into ${sysUser}.app_push(push_id, user_id, title, cfg, p_state, crtdate) values(#{id},#{userId},#{pageName},#{pageInfo}, 1, 
+			<if test="dbName == 'mysql'">  
+			now()
+			</if>
+			<if test="dbName == 'oracle'">
+			sysdate
+			</if>
+			<if test="dbName == 'sqlser'">
+			GETDATE() 
+			</if>
+			<if test="dbName == 'db2'">
+			current timestamp
+			</if>
+		)
+	</insert>
+	
+	<update id="updatePushCfg" parameterType="com.ruisitech.bi.entity.app.AppPush">
+		update ${sysUser}.app_push set cfg = #{pageInfo} where user_id = #{userId} and push_id = #{id}
+	</update>
+	
+	<select id="maxPushId" resultType="java.lang.Integer">
+		select case when max(push_id) is null then 1 else max(push_id) + 1 end from ${sysUser}.app_push 
+	</select>
+	
+	<delete id="delPush" parameterType="com.ruisitech.bi.entity.app.AppPush">
+		delete from ${sysUser}.app_push where user_id = #{userId} and push_id = #{id}
+	</delete>
+	
+	<update id="stopPush" parameterType="com.ruisitech.bi.entity.app.AppPush">
+		update ${sysUser}.app_push set p_state = 0 where push_id = #{id} and user_id = #{userId}
+	</update>
+	
+	<update id="startPush" parameterType="com.ruisitech.bi.entity.app.AppPush">
+		update ${sysUser}.app_push set p_state = 1 where push_id = #{id} and user_id = #{userId}
+	</update>
+	
+	<select id="listRuningPush" resultMap="BaseResultMap">
+		select a.push_id, a.user_id, a.cfg, b.channel_id
+		from ${sysUser}.app_push a, ${sysUser}.sc_login_user b     
+		where a.user_id = b.user_id and p_state = 1
+	</select>
+
+</mapper>

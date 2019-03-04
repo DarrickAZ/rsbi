@@ -1,0 +1,3 @@
+#if($!k244.d2) $extUtils.numberFmt($!k244.d2, '#,###') #if($outType=='html') <font style='font-size:12px;'> #end
+ #if($outType=='html') </font> #end
+#else - #end

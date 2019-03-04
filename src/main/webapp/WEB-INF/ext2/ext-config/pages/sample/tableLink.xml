@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<textField type="hidden" id="kpi_code"/>
+<chart shape="column" xcol="month_id" ycol="value" width="900"
+		height="240" scol="kpi_desc" align="center">
+		<property>
+			<key name="showBorder" value="false" />
+			<key name="formatCol" value="kpi_fmt" />
+			<key name="legendLayout" value="horizontal" />
+		</property>
+		<ds><![CDATA[ 
+		
+			select  month_id, sum(KPI_VALUE) value, c.kpi_code, c.kpi_desc, '#' kpi_fmt
+			from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib c 
+			where c.kpi_code = t.kpi_code and c.kpi_code = '${kpi_code}'
+			group by c.kpi_code, c.kpi_desc,month_id
+            order by c.kpi_code, month_id 
+		
+		]]></ds>
+	</chart>
+	
+</ext-config>

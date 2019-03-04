@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+    <box title="fileField配置说明">
+        <fieldset title="示例1">
+        	<text>
+        		<![CDATA[
+		<div>fileField为文件上传标签，处理类为com.bonc.ext.runtime.test.FileUploadService</div>
+		<div>对于操作性系统，配置采用service实现，service为操作性系统的处理类，如struts2的action,而xml配置用来展现，如jsp,</div>
+		]]>
+        	</text>
+             <textField id="name" desc="文件名称" require="true"/>
+			 <br/>
+			 <fileField id="myfile" desc="上传文件" require="true"/>
+			 
+			 <button type="submit" action="test.FileUpload"  method="upload" desc="上传"/>
+        </fieldset>
+    </box>
+</ext-config>

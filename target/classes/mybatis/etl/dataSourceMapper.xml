@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ruisitech.bi.mapper.etl.DataSourceMapper">
+    
+    <resultMap id="BaseResultMap" type="com.ruisitech.bi.entity.etl.DataSource">
+		<id column="id" property="id"/>
+		<result column="uname" property="uname"/>
+		<result column="psd" property="psd"/>
+		<result column="dbname" property="database"/>
+		<result column="ipaddress" property="ipAddress"/>
+		<result column="ipport" property="ipPort"/>
+		<result column="linkType" property="linkType"/>
+		<result column="name" property="name"/>
+    </resultMap>
+    
+    <select id="listDataSource" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select id, name, linktype , ipaddress , 
+		ipport , dbname , uname , psd 
+		from ${sysUser}.etl_datasource
+	</select>
+    
+    <insert id="insertDataSource" parameterType="com.ruisitech.bi.entity.etl.DataSource">
+    	insert into ${sysUser}.etl_datasource(id,name,linktype,ipaddress,ipport,dbname,uname,psd) 
+		values(#{id}, #{name}, #{linkType}, #{ipAddress}, #{ipPort}, #{database}, #{uname}, #{psd})
+    </insert>
+    
+    <delete id="delDataSource" parameterType="com.ruisitech.bi.entity.etl.DataSource">
+		delete from ${sysUser}.etl_datasource where id = #{id}
+	</delete>
+	
+	<select id="maxDataSourceid" resultType="java.lang.Integer">
+		select case WHEN max(id) is null then 1 else  max(id) + 1 end "rid" from ${sysUser}.etl_datasource
+	</select>
+  
+</mapper>

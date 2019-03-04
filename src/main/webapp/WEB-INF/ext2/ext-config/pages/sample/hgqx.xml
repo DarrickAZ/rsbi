@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<box title="回归曲线">
+</box>
+
+	<chart shape="regression" xcol="month_id" ycol="amt" width="auto"
+		height="240" scol="ser" rate="10000" align="center">
+		<title>销售收入回归分析</title>
+		<property>
+			<key name="margin" value="30, 20, 50, 90" />
+			<key name="ydesc" value="实际收入(万元)" />
+			<key name="xdesc" value="月份" />
+			<key name="formatCol" value="kpi_fmt" />
+			<key name="unitCol" value="kpi_unit" />
+			<key name="legendLayout" value="horizontal" />
+		</property>
+		<ds><![CDATA[ select  t.month_id, '销售收入' ser, '$extUtils.printJH()#,$extUtils.printJH()0' kpi_fmt,'元' kpi_unit,sum(amt) amt from dm_income_amt_m t  where 1=1  and t.month_id between 201201 and 201212 group by t.month_id order by t.month_id asc]]></ds>
+	</chart>
+	
+	<text>
+	<![CDATA[
+	线性回归方程：y = 14.5 * x + 425.38  <br/>
+	拟合度：R^2 = 0.962
+	]]>
+	</text>
+
+</ext-config>

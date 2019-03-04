@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+<box title="图形与checkbox混合">
+<fieldset title="示例1">
+	<text>
+	<![CDATA[
+		<div>图形和checkbox混合使用</div>
+		<vid>extUtils为ext2内建对象，具体使用请参考extUtils使用方式。</div>
+		]]>
+	</text>
+	<div style="margin:5px;">
+		<checkBox id="view3" desc="指标" defaultValue="10,20" target="AAA" >
+			<option value="10">指标1</option>
+			<option value="20">指标2</option>
+			<option value="30">指标3</option>
+			<option value="40">指标4</option>
+			<option value="50">指标5</option>
+		</checkBox>
+	</div>
+	
+<chart shape="line" xcol="x" ycol="y" scol="ser" width="500" height="200" label="AAA">
+					<property>
+						<key name="formatCol" value="format"/>
+						<key name="multiAxis" value="false"/>
+						<key name="showLegend" value="true"/>
+						<key name="xAxisType" value="datetime"></key>
+						<key name="showLabel" value="false"/>
+					</property>
+					
+						<ds refDsource="oracdb">
+							#set( $t = $view3.split(","))
+					#foreach($tmp in $t)		
+						select '北京' x, 100 + $tmp y  , '指标' || '$tmp' ser, '1' isuse, 'a' id  from dual
+						union
+						select '天津' x, 120 + $tmp y  , '指标' || '$tmp' ser, '1' isuse, 'a' id from dual
+						union
+						select '河北' x, 130 + $tmp y  , '指标' || '$tmp' ser, '1' isuse, 'a' id from dual
+						union
+						select '辽宁' x, 90 + $tmp y  , '指标' || '$tmp' ser, '1' isuse, 'a' id from dual
+						union
+						select '吉林' x, 50 + $tmp y  , '指标' || '$tmp' ser, '1' isuse, 'a' id from dual
+						union
+						select '内蒙' x, 40 + $tmp y  , '指标' || '$tmp' ser, '1' isuse, 'a' id from dual    
+						
+						#if($velocityCount != $extUtils.getArraySize($t))
+							union 
+						#end	
+						
+					#end
+						</ds>
+					</chart>
+					
+						</fieldset>
+</box>
+
+<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+</ext-config>

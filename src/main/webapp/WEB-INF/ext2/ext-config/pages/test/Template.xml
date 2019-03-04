@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+    <box title="template配置说明">
+	<fieldset title="示例1">
+     <text>
+	<![CDATA[
+			<div>本示例主要演示template标签的用法，如下：</div>
+			<div>template标签必须结合text标签使用，text/template 和 text都可以输出文本，他们之间的区别在于text为直接输出文本，而text/template为用模板输出文本，在这里面可以使用模板语言取值</div>
+		]]>
+	</text>
+	<text>
+	<![CDATA[
+	        #set( $list = ["pine", "oak", "maple"])  <br/>
+			#foreach ($element in $list) <br/>
+			$velocityCount <br/>
+			This is $element. <br/>
+			#end	 <br/>
+	]]>
+	</text>
+	<text>
+		<template>
+		<![CDATA[
+		执行结果:<br>
+			#set( $list = ["pine", "oak", "maple"])
+			#foreach ($element in $list)
+			$velocityCount
+			This is $element.
+			#end	
+				]]>
+		</template>
+	</text>
+	</fieldset>
+	
+	<fieldset title="示例2">
+     <text>
+	<![CDATA[
+			<div>本示例主要演示template内建对象(extUtils)的函数使用，如下：</div>
+		]]>
+	</text>
+	<text>
+		<template>
+		<![CDATA[
+				1、月份运算函数：
+				public String monthAdd(String start, int length);  <br/>
+				2、日期运算函数：
+				public String dayAdd(String start, int length); <br/>
+				3、数字格式化函数：
+				public String numberFmt(BigDecimal value, String fmt); <br/>
+				4、日期格式化函数：
+				public String dateFmt(Date d, String fmt); <br/>
+				5、输出# #函数: 由于# #在模板中表示代码注释，所有要输出# #需要用该函数
+				public String printJH();<br/>
+				6、输出空格函数:
+				public String printSpace(int l);<br/>
+				7、获取数组长度函数：
+				public int getArraySize(String[] args);<br/>
+				8、月份运算函数：
+				public String monthCompute(String start, int s);<br/>
+				9、日期、月份比较函数：
+				public int dateCompare(String m1, String m2, String fmt); <br/>
+			]]>
+		</template>
+	</text>
+	
+	<text>
+		<template>
+		<![CDATA[
+				<div> 函数使用 </div>
+				
+				1. $extUtils.monthAdd('201101', 10) <br/>
+				2. $extUtils.dayAdd('20110101', -10) <br/>
+				3. $extUtils.numberFmt(10000, '0.00') <br/>
+				4. $extUtils.dateFmt('Date 对象', 'yyyyMMdd')<br/>
+				5. $extUtils.printJH() <br/>
+				6. $extUtils.printSpace(10)   (10个空格)<br/>
+				7. $extUtils.getArraySize('数组') <br/>
+				8. $extUtils.monthCompute('201010', 10) <br/>
+				9. $extUtils.dateCompare('20101001', '20101002', 'yyyyMMdd') <br/>
+			]]>
+		</template>
+	</text>
+	
+	</fieldset>
+	</box>
+</ext-config>

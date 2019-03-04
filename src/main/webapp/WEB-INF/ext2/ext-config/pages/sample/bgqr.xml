@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<box title="表格嵌入">
+
+
+
+<div style="width:1020px;margin:auto">
+<text>
+<![CDATA[
+ ps:点击指标分析指标月度趋势
+ ]]>
+ </text>
+	<crossReport out="html">
+		<baseKpi alias="value" aggregation="sum" formatPattern="#,###"/>
+		<rowHeads>
+		 <rowHead desc="指标"></rowHead>
+		</rowHeads>
+		<report-cols>
+		<crossCol type="frd" alias="month_id" aliasDesc="month_id" multi="true" dateFormat="month">
+			
+		</crossCol>
+		</report-cols>
+		<report-rows>
+			<crossRow desc="指标" type="frd" alias="kpi_code" aliasDesc="kpi_desc" multi="true" uselink="true"/>
+		</report-rows>
+		<row-link mvId="sample.tableLink" />
+		<ds refDsource="oracdb"><![CDATA[ 
+			select  month_id, sum(KPI_VALUE) value, c.kpi_code, c.kpi_desc
+			from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib c 
+			where c.kpi_code = t.kpi_code and month_id between '201005' and '201104'
+			group by c.kpi_code, c.kpi_desc,month_id
+            order by c.kpi_code, month_id 
+		]]></ds>
+	</crossReport>
+</div>
+	</box>
+	<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+</ext-config>

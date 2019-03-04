@@ -1,0 +1,2 @@
+select DATE_FORMAT(date,'%Y') k11, count(rid) d1,count(distinct ip) d2,count( distinct(ip)  ) / count( rid )   zb from logs  where 1=1  #if($month && $month != '')  and DATE_FORMAT(date,'%Y-%m') = '$month'  #end#if($fwzt && $fwzt != '')  and case when isok =1 then '是' when isok =0 then '否' else '未知' end
+ = '$fwzt'  #end group by DATE_FORMAT(date,'%Y')

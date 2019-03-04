@@ -1,0 +1,1 @@
+select count(rid) as d1 from logs where 1=1   #if($c1 && $c1 != '' && $c2 && $c2 != '')  and DATE_FORMAT(date,'%Y-%m') between '$c1' and '$c2' #end

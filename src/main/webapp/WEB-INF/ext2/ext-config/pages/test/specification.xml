@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+<box title="MV命名规范">   
+	<br/>
+	<text>
+	 <![CDATA[
+	    <div>1.一个MV既一个Xml文件,用来配置一个展现页面，比如可以配置表格，输入框，图形等多种内容.</div>
+		<div>2.一个xml文件对应一个MV，MV可以作为一个页面单独运行，也可以嵌套在其他的mv中运行。</div>
+	    <div>3.Xml文件命名规则和xmlResource配置相关，比如xmlResoure的配置路径为WEB-INF/ext2/ext-config/sample/，在 sample下新建test目录新建helloWrold.xml文件，则xml文件标识为test.helloWorld，该文件可与通过extView?mvid=test.helloWorld直接访问。
+	</div>
+	<div>4.当前访问文件的路径为:extView?mvid=test.specification, 表示当前页面的xml文件路径为:WEB-INF/ext2/ext-config/sample/test/specification.xml</div>
+	]]>
+	</text>
+	</box>
+</ext-config>

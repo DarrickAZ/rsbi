@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+	
+
+
+
+
+<script>
+<![CDATA[
+var df = new java.text.DecimalFormat('###,##0');
+function yj1(a, b, c, d){
+	if(a < 0){
+		out.print("<div style=\"width:100%;height:100%;background-color:#C30;color:#FFFFFF\">" + df.format(a) + "</div>");
+	}else{
+		out.print( df.format(a) );
+	}
+}
+]]>
+</script>
+
+<box title="表格预警">
+
+<text>
+<![CDATA[
+ ps:对于增减额为负数的省份、用红色背景重点标出。
+ ]]>
+ </text>
+	<crossReport out="html">
+		<baseKpi alias="value" aggregation="sum" formatPattern="#,###"/>
+		<rowHeads>
+		 <rowHead desc="省份"></rowHead>
+		</rowHeads>
+		<report-cols>
+		<crossCol type="frd" alias="month_id" aliasDesc="month_id" multi="true" dateFormat="month">
+			<crossCol desc="网上用户数" type="none">
+				<crossCol desc="本月" type="kpiOther" alias="v1_by"  order="true" aggregation="sum" formatPattern="#,###"/>
+				<crossCol desc="上月" type="kpiOther" alias="v1_sy"  order="true" aggregation="sum" formatPattern="#,###"/>
+				<crossCol desc="增减额" type="kpiOther" alias="v1_zf"  order="true" aggregation="sum" formatPattern="#,###" jsFunc="yj1"/>
+			</crossCol>
+			<crossCol desc="新增用户数" type="none">
+				<crossCol desc="本月" type="kpiOther" alias="v2_by"  order="true" aggregation="sum" formatPattern="#,###"/>
+				<crossCol desc="上月" type="kpiOther" alias="v2_sy"  order="true" aggregation="sum" formatPattern="#,###"/>
+				<crossCol desc="增减额" type="kpiOther" alias="v2_zf"  order="true" aggregation="sum" formatPattern="#,###" jsFunc="yj1"/>
+			</crossCol>
+			<crossCol desc="离网用户数" type="none">
+				<crossCol desc="本月" type="kpiOther" alias="v3_by"  order="true" aggregation="sum" formatPattern="#,###"/>
+				<crossCol desc="上月" type="kpiOther" alias="v3_sy"  order="true" aggregation="sum" formatPattern="#,###"/>
+				<crossCol desc="增减额" type="kpiOther" alias="v3_zf"  order="true" aggregation="sum" formatPattern="#,###" jsFunc="yj1"/>
+			</crossCol>
+		</crossCol>
+		</report-cols>
+		<report-rows>
+			<crossRow desc="省份" type="frd" alias="pro_no" aliasDesc="pro_name" multi="true"/>
+		</report-rows>
+		<ds><![CDATA[ 
+						select pro_no, pro_name, v1_sy,v1_by , v1_by- v1_sy v1_zf ,
+            v2_sy,v2_by, v2_by- v2_sy v2_zf ,
+            v3_sy,v3_by, v3_by - v3_sy v3_zf, '201102' month_id
+            from (
+            select  b.pro_no, b.pro_name, 
+            sum(case when month_id = '201101' then a0001 end)  v1_sy,            
+            sum(case when month_id = '201102' then a0001 end)  v1_by,            
+            sum(case when month_id = '201101' then a0002 end)  v2_sy,            
+            sum(case when month_id = '201102' then a0002 end)  v2_by,            
+            sum(case when month_id = '201101' then a0003 end)  v3_sy,            
+            sum(case when month_id = '201102' then a0003 end)  v3_by
+            from bi_demo.dm_kpi_w_card_pandect_m2 t, dmcode_province b
+			where t.prov_id = b.pro_no and month_id in ('201101','201102')
+			group by b.pro_no, b.pro_name 
+                     
+) vcc
+		]]></ds>
+	</crossReport>
+
+	</box>
+</ext-config>

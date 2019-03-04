@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+<box title="crossReport配置维度切换">
+	 <br/>
+	<fieldset title="示例1">
+	<text>
+	<![CDATA[
+			<div>本示例主要演示使用crossReport标签配置维度切换功能</div>
+			<div>点击账期表头后，会出现省份、地市等可以切换的维度，基本上维度切换和维度钻取同时存在，能钻取维度，也能通过表头切换维度</div>
+		]]>
+	</text>
+	<crossReport out="json" rowHead="账期" label="x2">
+		<report-cols>
+				<crossCol desc="" type="frd" alias="kpi_code" aliasDesc="kpi_desc" multi="true"/>
+			</report-cols>
+			<report-rows rebuild="true">
+				<crossRow desc="账期" type="frd" alias="month_id" aliasDesc="month_id" multi="true"/>
+			</report-rows>
+		<!--纵向表头钻取的维度 -->
+		<row-dims>
+			<dim name="省份" code="pro_no" type="frd" codeDesc="pro_name"/>
+			<dim name="地市" code="city_no" type="frd" codeDesc="city_desc" />
+		</row-dims>
+		<ds>
+		select t.month_id,
+       t.kpi_code,
+       k.kpi_desc,
+       p.pro_no,
+       p.pro_name,
+       c.city_no,
+       c.city_desc,
+       '0.00' kpiFmt,
+       sum(t.kpi_value) kpi_value
+  from dm_kpi_w_card_pandect_m t,
+       dmcode_kpi_lib          k,
+       dmcode_province         p,
+       dmcode_city             c
+ where t.kpi_code = k.kpi_code
+   and p.pro_no = t.prov_id
+   and c.city_no = t.area_no
+   and t.kpi_code in ('A0001', 'A0054', 'A0002', 'A0003', 'A0004')
+   and month_id in ('201002','201003', '201004', '201005', '201006')
+ group by t.month_id,
+          t.kpi_code,
+          k.kpi_desc,
+          p.pro_no,
+          p.pro_name,
+          c.city_no,
+          c.city_desc
+ order by month_id, pro_no, city_no
+		</ds>
+	</crossReport>
+	
+</fieldset>
+</box>
+</ext-config>

@@ -1,0 +1,1 @@
+select DATE_FORMAT(date,'%Y') k11, count(rid) d1,count(distinct ip) d2 from logs  where 1=1  #if($c1 && $c1 != '' && $c2 && $c2 != '')  and DATE_FORMAT(date,'%Y-%m') between '$c1' and '$c2' #end#if($p65 && $p65 != '') and  DATE_FORMAT(date,'%Y-%m-%d') = '$p65' #end group by DATE_FORMAT(date,'%Y')

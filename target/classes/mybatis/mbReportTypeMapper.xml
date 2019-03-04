@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ruisitech.bi.mapper.report.MbReportTypeMapper">
+    <resultMap id="BaseResultMap" type="com.ruisitech.bi.entity.report.MbReportType">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="text" property="text"/>
+		<result column="note" property="note"/>
+		<result column="crtuser" property="crtUser"/>
+		<result column="crtDate" property="crtDate"/>
+		<result column="ord" property="ord"/>
+		<result column="iconCls" property="iconCls"/>
+		<result column="income" property="income"/>
+    </resultMap>
+    
+    <select id="listcataTree" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select id, name , name as "text",  'icon-subject3' as "iconCls" 
+		from ${sysUser}.portal_3greport_type
+		where 1=1
+		<if test="income != null and income != ''">
+			and income = #{income}
+		</if>
+		order by ord
+	</select>
+	
+	<insert id="insertType" parameterType="com.ruisitech.bi.entity.report.MbReportType">
+		insert into ${sysUser}.portal_3greport_type(<if test="idType==2">id,</if> name, note, crtuser, crtdate, ord, income) 
+		values(<if test="idType==2">#{id},</if> #{name}, #{note}, #{crtUser},
+		<if test="dbName == 'mysql'">
+    	now()
+    	</if> 
+    	<if test="dbName == 'oracle'">
+    	sysdate
+    	</if> 
+    	<if test="dbName == 'sqlser'">
+    	getdate()
+    	</if> 
+    	<if test="dbName == 'db2'">
+    	current timestamp
+    	</if> 
+		, 
+		#{ord}, #{income})
+	</insert>
+	
+	<update id="updateType" parameterType="com.ruisitech.bi.entity.report.MbReportType">
+		update ${sysUser}.portal_3greport_type set name=#{name}, note=#{note}, ord=#{ord} 
+		where id=#{id}
+	</update>
+	
+	<delete id="deleleType">
+		delete from  ${sysUser}.portal_3greport_type where id= #{id}
+	</delete>
+	
+	<select id="getType" resultMap="BaseResultMap">
+		select id , name , note , ord  from ${sysUser}.portal_3greport_type where id = #{id}
+	</select>
+	
+	<select id="cntMobileReport" resultType="java.lang.Integer" >
+		select count(1) cnt from ${sysUser}.portal_user_save where is3g = 'y' and cata_id = #{id}
+	</select>
+	
+	<select id="cntReport" resultType="java.lang.Integer" >
+		select count(1) cnt from ${sysUser}.portal_user_save where is3g != 'y' and cata_id = #{id}
+	</select>
+	
+	<select id="maxTypeId" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select max(id) from ${sysUser}.portal_3greport_type
+	</select>
+</mapper>

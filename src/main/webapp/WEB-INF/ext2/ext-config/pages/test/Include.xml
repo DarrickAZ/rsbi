@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+    <box title="include配置说明">
+	<fieldset title="示例1">
+    <text>
+    <![CDATA[
+			<div>include标签包含jsp页面。如下：</div>
+			<div>include标签不能包含struts2 action文件,比如 test.action 这种文件</div>
+		]]>
+	</text>
+	<!--
+	<include page="/pages/common/param.jsp"/>
+	-->
+	</fieldset>
+	<br/>
+	<fieldset title="示例2">
+	<textField type="hidden" id="test"/>
+	<text> 
+	<![CDATA[
+			<div>include标签也可以包含其它的MV文件。</div>
+			<div>对于include其他mv文件，被引用的MV的参数会自动追加到当前页面，而当前mv的参数不会被自动传递到include的mv</div>
+			<div>请注意：当前MV文件必须包含一个参数,即使它不起任何作用.</div>
+		]]>
+	</text>
+	<include mvid="test.TextField" />
+	<text>
+		<template><![CDATA[include页面参数：monthId = ${monthId}, areaId= ${areaId}]]></template>
+	</text>
+	</fieldset>
+	</box>
+</ext-config>

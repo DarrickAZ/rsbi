@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ext-config>
+<script>
+<![CDATA[
+extContext.put("abc", com.ruisi.vdop.ser.bireport.DimCacheVO.getDim("3"));
+]]>
+</script>
+	<box title="数据关联码表"/>
+	<crossReport out="html" id="report49">
+		<report-cols>
+			<crossCol desc="实际收入(万元)" type="kpiOther" alias="MENU_CNT"
+				formatPattern="###,##0" aggregation="sum" kpiRate="10000"></crossCol>
+		</report-cols>
+		<report-rows>
+			<crossRow desc="月份" type="frd" alias="menu_lv1" aliasDesc="lv2_name"
+				multi="true" casParent="true"></crossRow>
+		</report-rows>
+		<ds refDataCenter="DC-50"><![CDATA[ ]]></ds>
+	</crossReport>
+	<gridDataCenter id="DC-50">
+		<ds><![CDATA[
+		select t.MENU_LV1,
+       sum(MENU_CNT) MENU_CNT
+  from dm_income_amt_d t
+ where 1 = 1
+ group by t.MENU_LV1
+ order by t.MENU_LV1 asc
+ ]]></ds>
+ 	<processor>
+ 	  <join dataKey="abc" masterCol="menu_lv1" slaveCol="id" appendCol="name" appendColAlias="lv2_name"/>
+ 	</processor>
+	</gridDataCenter>
+</ext-config>

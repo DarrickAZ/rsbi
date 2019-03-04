@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<box title="crossReport表格排序">
+	 <br/>
+	<fieldset title="示例1">
+		<text>
+		<![CDATA[
+				<p>本示例主要演示crossReport表格排序：</p>
+				<p>在需要排序的指标上增加 order="true" 属性即可</p>
+			]]>
+		</text>
+		<crossReport out="html" rowHead="账期">
+			<baseKpi alias="kpi_value" aggregation="sum" formatPattern="###,###" />
+			<report-cols>
+				<crossCol desc="" type="frd" alias="kpi_code" aliasDesc="kpi_desc" multi="true" order="true"/>
+			</report-cols>
+			<report-rows rebuild="true">
+				<crossRow desc="" type="frd" alias="month_id" aliasDesc="month_id" multi="true"/>
+			</report-rows>
+			<ds refDsource="oracdb">
+			select t.month_id, t.kpi_code, k.kpi_desc, sum(t.kpi_value) kpi_value
+			  from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib k where t.kpi_code = k.kpi_code
+			 group by t.month_id, t.kpi_code, k.kpi_desc order by month_id
+			</ds>
+		</crossReport>
+	</fieldset>
+	<br/>
+	<fieldset title="示例2">
+		<text>
+		<![CDATA[
+				<p>表格的第一行不排序：</p>
+				<p>增加属性 firstNotSort="true"</p>
+			]]>
+		</text>
+		<crossReport out="lockUI" rowHead="省分" firstNotSort="true">
+			<baseKpi alias="kpi_value" aggregation="sum" formatPattern="###,###" />
+			<report-cols>
+					<crossCol desc="" type="frd" alias="kpi_code" aliasDesc="kpi_desc" multi="true" order="true"/>
+			</report-cols>
+			<report-rows rebuild="false">
+				<crossRow type="none" desc="合计"/>
+				<crossRow desc="" type="frd" alias="prov_id" aliasDesc="pro_name" multi="true"/>
+			</report-rows>
+			<ds refDsource="oracdb">
+			select t.month_id, p.pro_name, t.prov_id, t.kpi_code, k.kpi_desc, sum(t.kpi_value) kpi_value
+			  from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib k, dmcode_province p
+			 where t.kpi_code = k.kpi_code
+			   and t.prov_id = p.pro_no  and month_id = '201004'
+			 group by t.month_id, t.kpi_code, k.kpi_desc, p.pro_name, t.prov_id 
+			 order by month_id
+			</ds>
+		</crossReport>
+	</fieldset>
+	
+	
+	</box>
+	
+	<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+</ext-config>

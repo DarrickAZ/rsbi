@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+	<script>
+		function prtk(a, b, c, d, e){
+			out.print(a);
+		}
+	</script>
+	<box title="baseKpi配置说明">
+	 <br/>
+	<fieldset title="示例1">
+		<text>
+		<![CDATA[
+				<p>本示例主要演示在crossReport表格中使用 baseKpi标签</p>
+				<p>当crossReport表格中没有type为kpi或kpiOther节点时，需要指定一个baseKpi标签，并定义出他的取数方式和格式化方式</p>
+			]]>
+		</text>
+		<crossReport out="html"  width="100%" rowHead="地市" export="false" >
+					<baseKpi alias="val" aggregation="sum" formatPattern="###,###" />
+					<report-cols>
+						<crossCol desc="" type="FRD" total="false"  alias="pro_no" aliasDesc="pro_name" multi="true">
+									
+					    </crossCol>
+					</report-cols>
+					<report-rows>
+						<crossRow alias="month_id" desc="账期" aliasDesc="month_id" type="FRD" multi="true" />
+					</report-rows>
+					<ds refDsource="oracdb">
+			select t.month_id, t.kpi_code, k.kpi_desc, sum(t.kpi_value) val, p.pro_no, p.pro_name
+			  from dm_kpi_w_card_pandect_m t, dmcode_kpi_lib k,  dmcode_province p 
+        where t.kpi_code = k.kpi_code and t.kpi_code = 'A0001' and p.pro_no = t.prov_id
+			 group by t.month_id, t.kpi_code, k.kpi_desc, p.pro_no, p.pro_name order by month_id
+			</ds>
+		</crossReport>
+	</fieldset>
+	
+	
+	</box>
+	
+	<dataSource>
+		<property name="id" >oracdb</property>
+		<property name="linktype" >oracle</property>
+		<property name="linkname" >demo</property>
+		<property name="linkpwd" >rbY{zk</property>
+		<property name="linkurl" >jdbc:oracle:thin:@localhost:1521:xe</property>
+	</dataSource>
+</ext-config>

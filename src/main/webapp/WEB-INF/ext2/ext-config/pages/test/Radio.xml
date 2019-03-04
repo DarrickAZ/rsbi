@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+<box title="参数标签配置说明">
+    <br />
+	<fieldset title="示例1">
+	 <text>
+    <![CDATA[
+			<div>输出一个radio输入框到页面。如下：</div>
+		]]>
+	</text>
+	<radio id="gender" desc="性别" defaultValue="1">
+		<option value="1">男</option>
+		<option value="2">女</option>
+	</radio>
+	</fieldset>
+	</box>
+</ext-config>

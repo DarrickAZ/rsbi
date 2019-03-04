@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ruisitech.bi.mapper.model.TableMetaMapper">
+    
+    <resultMap id="BaseResultMap" type="com.ruisitech.bi.entity.model.TableMeta">
+		<id column="tid" property="tid"/>
+		<result column="tname" property="tName"/>
+		<result column="tdesc" property="tDesc"/>
+		<result column="tnote" property="tNote"/>
+		<result column="type_id" property="typeId"/>
+		<result column="typeName" property="typeName"/>
+		<result column="ord" property="ord"/>
+    </resultMap>
+    
+  <!-- 有权限控制的立方体列表 -->
+	<select id="userSubject" resultMap="BaseResultMap" parameterType="com.ruisitech.bi.entity.model.TableMeta">
+		select distinct b.tid ,b.tname , b.tdesc , b.tnote, c.NAME "typeName", b.type_id
+		 from ${sysUser}.user_data_rela a, ${sysUser}.olap_table_meta b, ${sysUser}.olap_subject_type c 
+		where a.data_id = b.tid and b.type_id = c.ds_id and user_id = #{userId} 
+		<if test="key != null">
+			${key}
+		</if>
+	     <if  test="typeId != null" > 
+			  and b.type_id = ${typeId}
+		  </if>
+		union 
+		select distinct c.tid ,c.tname , c.tdesc , c.tnote , d.NAME "typeName", c.type_id
+		from ${sysUser}.role_data_rela a, ${sysUser}.role_user_rela b, ${sysUser}.olap_table_meta c, ${sysUser}.olap_subject_type d
+		 where a.role_id = b.role_id and a.data_id = c.tid and c.type_id = d.ds_id and b.user_id = #{userId}
+		<if test="key != null">
+			${key}
+		</if>
+	    	 <if  test=" typeId != null " > 
+			   c.type_id = #{typeId}
+		  </if> 
+		order by tid
+	</select>
+	
+	
+	<!-- 无权限控制立方体列表 -->
+	<select id="listSubject" resultMap="BaseResultMap" parameterType="com.ruisitech.bi.entity.model.TableMeta">
+		select a.tid,a.tname, a.tdesc, a.tnote, b.NAME "typeName", a.type_id
+		from ${sysUser}.olap_table_meta a, ${sysUser}.olap_subject_type b
+		where a.type_id = b.ds_id 
+		<if test="key != null">
+			${key}
+		</if>
+   		  <if  test=" typeId != null " > 
+			and  type_id = #{typeId}
+		  </if>
+		 order by tid
+	</select>
+	
+	<select id="tableExist" resultType="java.lang.Integer">
+		select count(1) cnt from ${sysUser}.olap_table_meta where tid = #{tid}
+	</select>
+	
+	<select id="getDefTid" resultType="java.lang.Integer">
+		select min(tid) tid from ${sysUser}.olap_table_meta
+	</select>
+	
+	<insert id="insertTable" parameterType="com.ruisitech.bi.entity.model.TableMeta">
+		insert into ${sysUser}.olap_table_meta(tid, tname, tdesc, tnote, type_id) 
+		values(#{tid}, #{tName}, #{tDesc}, #{tNote}, #{typeId})
+	</insert>
+	
+	<update id="updateTable" parameterType="com.ruisitech.bi.entity.model.TableMeta">
+		update ${sysUser}.olap_table_meta set tdesc=#{tDesc}, tnote=#{tNote}, type_id=#{typeId} where tid = #{tid}
+	</update>
+
+	<delete id="deleteTable">
+		delete from ${sysUser}.olap_table_meta where tid = #{tid}
+	</delete>
+	
+	<select id="getTable" resultMap="BaseResultMap" >
+		select a.tid , a.tname , a.tdesc, a.tnote, type_id , b.name "typeName"
+		from ${sysUser}.olap_table_meta a, ${sysUser}.olap_subject_type b 
+		where a.type_id = b.ds_id and a.tid = #{tid} 
+	</select>
+	
+	
+	<select id="listDs" resultType="java.util.HashMap">
+		select a.tid "id", a.tname "tname", a.tdesc "text", 'open' "state", 'icon-cube' "iconCls"
+		from ${sysUser}.olap_table_meta a
+         where tid in (${selectDsIds}) order by tid
+	</select>
+	
+	<select id="listDsMeta" resultType="java.util.HashMap">
+	select  a.rid as "id", a.tid as "tid", a.col_type as "col_type", a.col_id as "col_id", a.col_name as "col_name", b.dim_desc as "dim_name", 
+	b.dim_desc "text", 'open' as "state", 'icon-dim' as "iconCls", c.tdesc as "tname", alias "alias", '' as "fmt", '' as "aggre", dim_type as "dim_type", 
+	cas_parent as "iscas", b.dim_tname as "tableName", b.col_key as "tableColKey", b.col_name as "tableColName", a.ord as ord, a.alias as "ordcol", 1 as ord2, 
+	 dim_ord "dimord", 1 as "rate", '' as "unit", b.group_type as "grouptype",  d.group_name as "groupname", 0 as "calc_kpi", 0 as "ttype", 0 as "calc", 
+	 b.key_val_type "valType", b.dateformat "dateformat", b.from_col "fromCol"
+	from ${sysUser}.olap_table_col_meta a join ${sysUser}.olap_dim_list b on a.col_id = b.dim_id join ${sysUser}.olap_table_meta c on a.tid = c.tid left join ${sysUser}.olap_dim_group d on b.group_type = d.group_id
+	where a.tid = #{tid} and a.col_type = 1 
+	 UNION all 
+	select a.rid as "id",
+	 a.tid as "tid",
+	 a.col_type as "col_type",
+	 a.col_id as "col_id",
+	 a.col_name as "col_name",
+	 '' as "dim_name",
+	 c.kpi_name as "text",
+	 'open' as "state",
+	 'icon-kpi' as "iconCls",
+	 d.tdesc as "tname",
+	 alias as "alias",
+	 fmt as "fmt",
+	 aggre as "aggre",
+	 '' as "dim_type",
+	 '' as "iscas",
+	 '' as "tableName",
+	 '' as "tableColKey",
+	 '' as "tableColName",
+	 a.ord,
+	 '' as "ordcol",
+	 2 as ord2,
+	 '' as "dimord",
+	 rate as "rate",
+	 unit as "unit",
+	 e.group_id as "grouptype",
+	 e.group_name as "groupname",
+	 calc_kpi as "calc_kpi",
+	 0 as "ttype",
+	 a.calc as "calc",
+	 '' as "valType",
+	 '' as "dateformat",
+	 c.from_col "fromCol"
+	from ${sysUser}.olap_table_col_meta a join  ${sysUser}.olap_kpi_list c on a.col_id = c.rid
+	join ${sysUser}.olap_table_meta d  on a.tid = d.tid 
+	left join ${sysUser}.olap_kpi_group e on c.kpigroup = e.group_id
+	where a.tid = #{tid} and a.col_type = 2  
+	order by ord2, ord
+	</select>
+	
+	<select id="applistSubject" resultType="java.util.HashMap">
+		select ds_id "id", name "text", 'type' as "tp", 0 "pid", '' as "tname", 0 as "tid", ds_id as "ord", '' as "dsource", 0 as "ttype"
+		 from ${sysUser}.olap_subject_type a 
+		union all
+		select tid+1000 "id", tdesc "text" , 'ds' as "tp", type_id "pid", tname "tname", tid "tid", tid+100 as "ord", '' as "dsource", 0 as "ttype"
+		from ${sysUser}.olap_table_meta b 
+	</select>
+</mapper>

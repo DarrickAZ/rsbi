@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ext-config xmlns="http://www.ruisitech.com/ext2">
+<box title="ext-config.xml文件配置说明">
+    <fieldset title="示例1">
+    <text>
+	<![CDATA[
+			<div>ext-config.xml是ext2的核心配置文件，存在于WEB-INF\ext2\ext-config\ext-config.xml路径，主要包括如下配置标签：</div>
+			<div>1.constant标签</div>
+			<div>2.service标签</div>
+			<div>3.interceptor标签</div>
+			<div>4.include标签</div>
+			<hr/>
+			1.constant 用来配置常量，配置方法为&lt;constant name="key" value="value"/&gt;,配置好的常量，都可以在xml文件中通过${key}的方法获取值。已有的系统常量配置如下：
+			<table width="100%" border="1" cellspacing="0" cellpadding="0">
+  <tr>
+    <th width="16%" scope="col">变量名称</th>
+    <th width="17%" scope="col">变量值</th>
+    <th width="67%" scope="col">含义</th>
+  </tr>
+  <tr>
+    <td scope="row">devMode</td>
+    <td>true/false</td>
+    <td>是否是开发模式，开发模式和非开发模式的区别在于开发模式会在每次访问时都编译XML文件，而非开发模式则只会编译一次XML，以后直接从内存中读取。</td>
+  </tr>
+  <tr>
+    <td scope="row">xmlResource</td>
+    <td>字符串</td>
+    <td>当前xml文件存在的位置，相对路径，xml文件的ID从该路径开始计算。</td>
+  </tr>
+  <tr>
+    <td scope="row">securityClass</td>
+    <td>字符串</td>
+    <td>配置在ext中的权限配验证类，需要实现com.bonc.ext.engine.control.sys.LoginSecurityAdapter接口</td>
+  </tr>
+  <tr>
+    <td scope="row">loginUserClass</td>
+    <td>字符串</td>
+    <td><p>获取登录用户信息类，实现com.bonc.ext.engine.service.loginuser.LoginUserInfoLoader接口</p></td>
+  </tr>
+  <tr>
+    <td scope="row">fieldLoader</td>
+    <td>字符串</td>
+    <td>在crossReport中加载维度的类，实现com.bonc.ext.engine.cross.CrossFieldLoader接口</td>
+  </tr>
+  <tr>
+    <td scope="row">kpiCustomizeUrl</td>
+    <td>字符串</td>
+    <td>在crossReport中配置指标定制的保存类</td>
+  </tr>
+  <tr>
+    <td scope="row">daoName</td>
+    <td>字符串</td>
+    <td>ext2中使用的dao的名字，该名字存在于spring的数据库配置中,dao类为：com.bonc.ext.engine.dao.DaoHelperImpl,该配置主要用来解决和老dao的冲突</td>
+  </tr>
+  <tr>
+    <td scope="row">jsonHeadBR</td>
+    <td>true/false</td>
+    <td>在crossReport中，是否对表头进行换行</td>
+  </tr>
+  <tr>
+    <td scope="row">encrypt</td>
+    <td>true/false</td>
+    <td>在crossReport中，导出是否加密</td>
+  </tr>
+  <tr>
+    <td scope="row">xmlLoader</td>
+    <td>字符串</td>
+    <td>解析xml引擎读取 xml文件的方式，默认为从文件路径中读取xml,用户可以实现接口来实现自己的读取xml方式，比如从数据库中读取xml内容，接口为:com.bonc.ext.engine.init.ExtXMLLoader </td>
+  </tr>
+</table>
+2.service对象，为实现自己的业务逻辑而需要配置的类，一般情况用不上。 <br>
+3.interceptor对象，配置一个service的拦截器，一般情况用不上<br>
+4.include标签，包含其他的xml配置文件，一般情况用不上<br>
+		]]>
+	</text>
+	</fieldset>
+	</box>
+</ext-config>
