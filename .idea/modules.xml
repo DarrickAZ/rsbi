@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/rsbi.iml" filepath="$PROJECT_DIR$/rsbi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/rsbi.iml" filepath="$PROJECT_DIR$/.idea/rsbi.iml" />
     </modules>
   </component>
 </project>

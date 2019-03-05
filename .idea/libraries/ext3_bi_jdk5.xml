@@ -1,8 +1,6 @@
 <component name="libraryTable">
   <library name="ext3-bi-jdk5">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/src/main/webapp/WEB-INF/lib/ext3-bi-jdk5.jar!/" />
-    </CLASSES>
+    <CLASSES />
     <JAVADOC />
     <SOURCES />
   </library>
