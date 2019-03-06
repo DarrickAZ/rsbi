@@ -56,9 +56,11 @@ class a {
         }
     }
 
-    private static void b(ServletContext var0) throws AuthException {
+
+    public static void main(String[] args) {
+        //测试lic文件
         if (b == null || c == null) {
-            String var1 = var0.getRealPath("/WEB-INF/lic");
+            String var1 = "E:\\2018\\rsbi\\src\\main\\webapp\\WEB-INF\\lic";
             File var2 = new File(var1);
             if (!var2.exists()) {
                 var2 = new File(var1 + ".txt");
@@ -85,9 +87,48 @@ class a {
                 e = P.decode(var6[7]);
                 f = P.decode(var6[8]);
                 g = var6[9];
+                System.out.println("");
             } catch (Exception var7) {
                 var7.printStackTrace();
-                throw new AuthException("lic 文件解析错误.");
+                //throw new AuthException("lic 文件解析错误.");
+            }
+        }
+    }
+
+
+
+    private static void b(ServletContext var0) throws AuthException {
+        if (b == null || c == null) {
+            String var1 = var0.getRealPath("/WEB-INF/lic");
+            File var2 = new File(var1);
+            if (!var2.exists()) {
+                var2 = new File(var1 + ".txt");
+                if (!var2.exists()) {
+                    //throw new AuthException("lic 文件不存在.");
+                }
+            }
+
+            try {
+                FileInputStream var3 = new FileInputStream(var2);
+                String var4 = IOUtils.toString(var3, "UTF-8");
+                var3.close();
+                var4 = P.decode(var4);
+                BASE64Decoder var5 = new BASE64Decoder();
+                var4 = new String(var5.decodeBuffer(var4));
+                String[] var6 = var4.split("\n");
+                if (var6 == null || var6.length != 11) {
+                    //throw new AuthException();
+                }
+
+                b = P.decode(var6[3]);
+                c = P.decode(var6[4]);
+                d = P.decode(var6[6]);
+                e = P.decode(var6[7]);
+                f = P.decode(var6[8]);
+                g = var6[9];
+            } catch (Exception var7) {
+                var7.printStackTrace();
+                //throw new AuthException("lic 文件解析错误.");
             }
         }
 
