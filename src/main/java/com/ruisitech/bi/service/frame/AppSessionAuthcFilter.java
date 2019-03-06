@@ -21,6 +21,7 @@ public class AppSessionAuthcFilter extends AdviceFilter {
     public AppSessionAuthcFilter() {
     }
 
+    @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
         Subject us = SecurityUtils.getSubject();
         Session session = us.getSession();

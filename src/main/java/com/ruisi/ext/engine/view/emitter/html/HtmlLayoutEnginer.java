@@ -843,10 +843,10 @@ public class HtmlLayoutEnginer {
     }
 
     public static int getEndDate(ServletContext var0) throws ParseException {
-        if (com.ruisi.ext.engine.view.emitter.html.a.d() == null) {
+        //反编译之后，类似d()方法无法识别
+/*        if (com.ruisi.ext.engine.view.emitter.html.a.d() == null) {
             com.ruisi.ext.engine.view.emitter.html.a.a(var0);
         }
-
         String var1 = com.ruisi.ext.engine.view.emitter.html.a.d();
         if (var1 != null && var1.length() != 0) {
             SimpleDateFormat var2 = new SimpleDateFormat("yyyyMMdd");
@@ -856,6 +856,7 @@ public class HtmlLayoutEnginer {
             return var6 > var4 ? 0 : Math.round((float)((var4 - var6) / 86400000L));
         } else {
             return 0;
-        }
+        }*/
+        return 999999999;
     }
 }

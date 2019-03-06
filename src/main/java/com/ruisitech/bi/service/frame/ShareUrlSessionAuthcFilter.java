@@ -23,6 +23,7 @@ public class ShareUrlSessionAuthcFilter extends AdviceFilter {
     public ShareUrlSessionAuthcFilter() {
     }
 
+    @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
         Subject us = SecurityUtils.getSubject();
         String token = request.getParameter("token");

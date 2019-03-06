@@ -63,7 +63,7 @@ class a {
             if (!var2.exists()) {
                 var2 = new File(var1 + ".txt");
                 if (!var2.exists()) {
-                    throw new AuthException("lic 文件不存在.");
+                    //throw new AuthException("lic 文件不存在.");
                 }
             }
 

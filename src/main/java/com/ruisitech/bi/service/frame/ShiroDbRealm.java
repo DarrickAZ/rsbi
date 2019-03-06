@@ -33,11 +33,13 @@ public class ShiroDbRealm extends AuthorizingRealm {
     public ShiroDbRealm() {
     }
 
+    @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         return info;
     }
 
+    @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
         RsbiUsernamePasswordToken tk = (RsbiUsernamePasswordToken)authcToken;
         User userLogin = this.tokenToUser(tk);
