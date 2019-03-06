@@ -21,6 +21,7 @@ public class ExtContextLoaderListener extends ContextLoaderListener {
     public ExtContextLoaderListener() {
     }
 
+    @Override
     public void contextInitialized(ServletContextEvent var1) {
         try {
             TemplateManager.initTemplate(var1.getServletContext());
@@ -44,6 +45,7 @@ public class ExtContextLoaderListener extends ContextLoaderListener {
         super.contextInitialized(var1);
     }
 
+    @Override
     public void contextDestroyed(ServletContextEvent var1) {
         if (this.b != null) {
             this.b.contextDest(var1);

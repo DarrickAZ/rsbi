@@ -91,7 +91,7 @@ public class XmlParser {
         Properties var2 = null;
         try {
             var2 = (new PropertiesLoaderImpl()).loadResource("/com/ruisi/ext/engine/init/mv.properties", XmlParser.class);
-        } catch (IOException e1) {
+        } catch (Exception e1) {
             e1.printStackTrace();
         }
         Iterator var3 = var2.keySet().iterator();

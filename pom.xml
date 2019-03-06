@@ -444,6 +444,12 @@
 	          <exclude>log4j.properties</exclude>
 	        </excludes>
 	      </resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
 	    </resources>
         <plugins>
             <!-- compiler插件, 设定JDK版本 -->
