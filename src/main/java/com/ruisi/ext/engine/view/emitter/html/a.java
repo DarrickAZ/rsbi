@@ -144,11 +144,11 @@ class a {
             if (!var0.after(var2) && !var0.before(var3)) {
                 "y".equals(e);
             } else {
-                throw new AuthException("lic 文件已经失效.");
+                //throw new AuthException("lic 文件已经失效.");
             }
         } catch (Exception var4) {
             var4.printStackTrace();
-            throw new AuthException(var4.getMessage());
+            //throw new AuthException(var4.getMessage());
         }
     }
 
