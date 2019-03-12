@@ -146,7 +146,7 @@ $(function(){
 				</div>
 				<div class="ibox-content" style="padding:0px;">
 					<div style="padding:15px 20px 0px 20px">
-					<button class="btn btn-block btn-primary" onclick="selectdataset()"><i class="fa fa-refresh"></i> 切换数据</button>
+					<button class="btn btn-block btn-primary" onclick="selectdataset()"><i class="fa fa-refresh"></i> 切换数据模型</button>
 					<p class="text-warning">拖拽数据到表格或图表中展现</p>
 					</div>
 					<div id="datasettreediv"></div>

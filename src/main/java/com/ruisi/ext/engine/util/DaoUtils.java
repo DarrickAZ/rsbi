@@ -28,7 +28,7 @@ public class DaoUtils {
         WebApplicationContext var1 = WebApplicationContextUtils.getRequiredWebApplicationContext(var0);
         String var2 = ExtContext.getInstance().getConstant("daoName");
         if (var2 == null || var2.length() == 0) {
-            var2 = "daoHelper";
+            var2 = "daoRsbiHelper";
         }
 
         if (!var1.containsBean(var2)) {

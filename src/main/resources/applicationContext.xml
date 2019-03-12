@@ -33,4 +33,9 @@
 	&lt;!&ndash; 声明需要暴露的服务接口 &ndash;&gt;
 	<dubbo:service interface="com.ruisitech.bi.service.AreaService" ref="areaServiceImpl" timeout="300000"/>-->
 
+	<!-- 引用dubbo服务 -->
+<!--	<dubbo:application name="rsbi"/>
+	<dubbo:registry protocol="zookeeper" address="192.168.188.128:2181"/>
+	<dubbo:reference interface="com.ruisitech.bi.service.AreaService" id="areaServiceImpl" />-->
+
 </beans>

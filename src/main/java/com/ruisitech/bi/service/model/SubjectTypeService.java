@@ -18,6 +18,7 @@ public class SubjectTypeService {
     @Autowired
     private SubjectTypeMapper mapper;
     private String sysUser = RSBIUtils.getConstant("sysUser");
+    private String dubhe = RSBIUtils.getConstant("dubhe");
 
     public SubjectTypeService() {
     }

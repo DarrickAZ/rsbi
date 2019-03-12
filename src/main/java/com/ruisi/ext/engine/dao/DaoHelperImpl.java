@@ -66,6 +66,8 @@ public class DaoHelperImpl implements DaoHelper {
         return this.jdbcTemplate.queryForList(var1);
     }
 
+
+
     @Override
     public Map queryForMap(String var1) {
         if (DaoUtils.showLogs) {
