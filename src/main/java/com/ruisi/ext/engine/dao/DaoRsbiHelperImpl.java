@@ -1,5 +1,6 @@
 package com.ruisi.ext.engine.dao;
 
+import com.ruisi.ext.engine.util.DaoUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.jdbc.core.ConnectionCallback;
@@ -14,13 +15,23 @@ import java.util.Map;
  * @Date: 2019/3/12 15:41
  * @Description:
  */
-public class DaoRsbiHelper implements DaoHelper{
+public class DaoRsbiHelperImpl implements DaoHelper{
 
-    private static Log LOGGER = LogFactory.getLog(DaoRsbiHelper.class);
+    private static Log LOGGER = LogFactory.getLog(DaoRsbiHelperImpl.class);
+
+    private static ThreadLocal<String> daoRsbiThreadLocal = new ThreadLocal<>();
 
     @Override
     public List queryForList(String var1) {
-        LOGGER.info("DaoRsbiHelper queryForList ========================");
+        if (DaoUtils.showLogs) {
+            LOGGER.info("DaoRsbiHelper queryForList ========================");
+            LOGGER.info("Thread --- "+Thread.currentThread().getName());
+            String s = daoRsbiThreadLocal.get();
+            LOGGER.info("Tid >>> "+s);
+
+
+
+        }
         return new ArrayList();
     }
 
@@ -62,5 +73,13 @@ public class DaoRsbiHelper implements DaoHelper{
     @Override
     public Object execute(ConnectionCallback var1) {
         return null;
+    }
+
+    public static ThreadLocal getDaoRsbiThreadLocal() {
+        return daoRsbiThreadLocal;
+    }
+
+    public static void setDaoRsbiThreadLocal(ThreadLocal daoRsbiThreadLocal) {
+        DaoRsbiHelperImpl.daoRsbiThreadLocal = daoRsbiThreadLocal;
     }
 }

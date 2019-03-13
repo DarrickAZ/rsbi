@@ -28,7 +28,7 @@ public class DaoUtils {
         WebApplicationContext var1 = WebApplicationContextUtils.getRequiredWebApplicationContext(var0);
         String var2 = ExtContext.getInstance().getConstant("daoName");
         if (var2 == null || var2.length() == 0) {
-            var2 = "daoRsbiHelper";
+            var2 = "daoHelper";
         }
 
         if (!var1.containsBean(var2)) {
@@ -36,6 +36,22 @@ public class DaoUtils {
         } else {
             DaoHelper var3 = (DaoHelper)var1.getBean(var2);
             return var3;
+        }
+    }
+
+    /**
+     * 获取真实dao层处理
+     * @param servletContext
+     * @param daoHelperName
+     * @return
+     */
+    public static DaoHelper getCurrentDaoHelper(ServletContext servletContext,String daoHelperName) {
+        WebApplicationContext var1 = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+        if (!var1.containsBean(daoHelperName)) {
+            return null;
+        } else {
+            DaoHelper daoHelper = (DaoHelper)var1.getBean(daoHelperName);
+            return daoHelper;
         }
     }
 

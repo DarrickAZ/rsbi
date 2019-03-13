@@ -145,4 +145,8 @@ public class CompPreviewService {
     public ServletContext getContext() {
         return this.context;
     }
+
+    public void setDao(DaoHelper dao) {
+        this.dao = dao;
+    }
 }

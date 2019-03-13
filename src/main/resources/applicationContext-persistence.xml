@@ -46,7 +46,7 @@
   	</bean>
 
     <!--rsbi-->
-    <bean id="daoRsbiHelper" class="com.ruisi.ext.engine.dao.DaoRsbiHelper">
+    <bean id="daoRsbiHelper" class="com.ruisi.ext.engine.dao.DaoRsbiHelperImpl">
     </bean>
 
     <!-- MyBatis配置 -->

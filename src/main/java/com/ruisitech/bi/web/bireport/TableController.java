@@ -5,6 +5,10 @@
 
 package com.ruisitech.bi.web.bireport;
 
+import com.ruisi.ext.engine.ExtConstants;
+import com.ruisi.ext.engine.dao.DaoHelper;
+import com.ruisi.ext.engine.dao.DaoRsbiHelperImpl;
+import com.ruisi.ext.engine.util.DaoUtils;
 import com.ruisi.ext.engine.view.context.ExtContext;
 import com.ruisi.ext.engine.view.context.MVContext;
 import com.ruisitech.bi.entity.bireport.TableQueryDto;
@@ -26,7 +30,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Scope("prototype")
 @RequestMapping({"/bireport"})
 public class TableController extends BaseController {
+
     private static Logger log = Logger.getLogger(ChartController.class);
+
     @Autowired
     private OlapTableService tableService;
 
@@ -40,11 +46,17 @@ public class TableController extends BaseController {
     @ResponseBody
     public Object tableView(@RequestBody TableQueryDto tableJson, HttpServletRequest req, HttpServletResponse res) {
         try {
+            //绑定tid到线程
+            if(tableJson!=null){
+                DaoRsbiHelperImpl.getDaoRsbiThreadLocal().set(tableJson.getTid()+"");
+            }
             req.setAttribute("table", tableJson);
             req.setAttribute("compId", String.valueOf(tableJson.getId()));
             ExtContext.getInstance().removeMV("mv.tmp.table");
             MVContext mv = this.tableService.json2MV(tableJson);
             CompPreviewService ser = new CompPreviewService(req, res, req.getServletContext());
+            DaoHelper daoHelper = DaoUtils.getCurrentDaoHelper(req.getServletContext(), ExtConstants.DAO_RSBI_HELPER_NAME);
+            ser.setDao(daoHelper);
             ser.setParams(this.tableService.getMvParams());
             ser.initPreview();
             String ret = ser.buildMV(mv, req.getServletContext());

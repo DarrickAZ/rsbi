@@ -72,6 +72,8 @@ public final class ExtConstants {
     public static final String style_bigScreen = "bigscreen";
     public static final String style_def = "def";
 
+    public static final String DAO_RSBI_HELPER_NAME = "daoRsbiHelper";
+
     public ExtConstants() {
     }
 }
