@@ -5,6 +5,7 @@
 
 package com.ruisitech.bi.web.detail;
 
+import com.ruisi.ext.engine.dao.DaoRsbiHelperImpl;
 import com.ruisi.ext.engine.view.context.ExtContext;
 import com.ruisi.ext.engine.view.context.MVContext;
 import com.ruisitech.bi.entity.detail.DetailChartQueryDto;
@@ -33,6 +34,10 @@ public class ChartViewController {
     @ResponseBody
     public Object view(@RequestBody DetailChartQueryDto chart, HttpServletRequest req, HttpServletResponse res) {
         try {
+            //绑定tid到线程
+            if(chart!=null){
+                DaoRsbiHelperImpl.getDaoRsbiThreadLocal().set(chart.getTid()+"");
+            }
             ExtContext.getInstance().removeMV("detail.chart.tmp");
             MVContext mv = this.service.json2MV(chart);
             CompPreviewService ser = new CompPreviewService(req, res, req.getServletContext());

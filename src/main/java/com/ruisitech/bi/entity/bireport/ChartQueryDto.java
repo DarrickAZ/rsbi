@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ChartQueryDto extends BaseEntity {
     private String id;
-    private Integer tid;
+   //private Integer tid;
     private String tname;
     private Boolean mkpi;
     private List<KpiDto> kpiJson;
@@ -61,13 +61,13 @@ public class ChartQueryDto extends BaseEntity {
         this.mkpiJson = mkpiJson;
     }
 
-    public Integer getTid() {
+   /* public Integer getTid() {
         return this.tid;
     }
 
     public void setTid(Integer tid) {
         this.tid = tid;
-    }
+    }*/
 
     public String getId() {
         return this.id;

@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class TableInfoVO extends BaseEntity {
-    private Integer tid;
+    //private Integer tid;
     private String tname;
     private String dataControlCol;
     private String sql;
@@ -38,9 +38,9 @@ public class TableInfoVO extends BaseEntity {
         return ret;
     }
 
-    public Integer getTid() {
+   /* public Integer getTid() {
         return this.tid;
-    }
+    }*/
 
     public String getTname() {
         return this.tname;
@@ -50,9 +50,9 @@ public class TableInfoVO extends BaseEntity {
         return this.sql;
     }
 
-    public void setTid(Integer tid) {
+/*    public void setTid(Integer tid) {
         this.tid = tid;
-    }
+    }*/
 
     public void setTname(String tname) {
         this.tname = tname;

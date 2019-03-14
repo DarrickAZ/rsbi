@@ -5,8 +5,10 @@
 
 package com.ruisitech.bi.web.portal;
 
+import com.ruisi.ext.engine.dao.DaoRsbiHelperImpl;
 import com.ruisi.ext.engine.view.context.ExtContext;
 import com.ruisi.ext.engine.view.context.MVContext;
+import com.ruisitech.bi.annotation.TidCheck;
 import com.ruisitech.bi.entity.portal.PortalChartQuery;
 import com.ruisitech.bi.service.portal.PortalChartService;
 import com.ruisitech.bi.util.CompPreviewService;
@@ -37,8 +39,13 @@ public class ChartViewController {
         method = {RequestMethod.POST}
     )
     @ResponseBody
+    @TidCheck
     public Object chartView(@RequestBody PortalChartQuery chartJson, HttpServletRequest req, HttpServletResponse res) {
         try {
+            //绑定tid到线程
+            if(chartJson!=null){
+                DaoRsbiHelperImpl.getDaoRsbiThreadLocal().set(chartJson.getTid()+"");
+            }
             ExtContext.getInstance().removeMV("mv.portal.chart");
             MVContext mv = this.chartService.json2MV(chartJson);
             req.setAttribute("compId", chartJson.getId());

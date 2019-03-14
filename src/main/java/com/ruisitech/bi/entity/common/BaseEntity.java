@@ -16,6 +16,8 @@ public class BaseEntity {
     @JsonIgnore
     private Integer idType;
 
+    private Integer tid;
+
     public BaseEntity() {
     }
 
@@ -62,5 +64,13 @@ public class BaseEntity {
     }
 
     public void validate() {
+    }
+
+    public Integer getTid() {
+        return tid;
+    }
+
+    public void setTid(Integer tid) {
+        this.tid = tid;
     }
 }

@@ -4,6 +4,7 @@ import com.ruisi.ext.engine.util.DaoUtils;
 import com.ruisitech.bi.mapper.etl.EtlTableMetaMapper;
 import com.ruisitech.bi.util.RSBIUtils;
 import com.zcy.zcmorefun.dubbo.service.DubheMetaService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,9 @@ public class DaoRsbiHelperImpl implements DaoHelper{
         }
         //TODO: 查询数据仓库
         String tableId = daoRsbiThreadLocal.get();
+        if(StringUtils.isEmpty(tableId)){
+            return null;
+        }
         etlTableMetaMapper.selectTabIdByTableId(Integer.parseInt(tableId),this.sysUser);
         return dubheMetaService.analysisBySql(sql, daoRsbiThreadLocal.get());
     }

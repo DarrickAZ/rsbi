@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class TableQueryDto extends BaseEntity {
     private String id;
-    private Integer tid;
+    //private Integer tid;
     private String tname;
     private List<KpiDto> kpiJson;
     private List<DimDto> cols;
@@ -129,13 +129,13 @@ public class TableQueryDto extends BaseEntity {
         return ret;
     }
 
-    public Integer getTid() {
+/*    public Integer getTid() {
         return this.tid;
     }
 
     public void setTid(Integer tid) {
         this.tid = tid;
-    }
+    }*/
 
     public String getId() {
         return this.id;
