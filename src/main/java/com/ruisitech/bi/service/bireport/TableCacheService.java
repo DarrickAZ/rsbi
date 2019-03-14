@@ -26,6 +26,7 @@ public class TableCacheService {
     @Autowired
     private OlapMapper mapper;
     private String sysUser = RSBIUtils.getConstant("sysUser");
+    private String dubhe = RSBIUtils.getConstant("dubhe");
     private Map<Integer, TableInfoVO> tableInfos = Collections.synchronizedMap(new HashMap());
 
     public TableCacheService() {
@@ -34,7 +35,7 @@ public class TableCacheService {
     public synchronized TableInfoVO getTableInfo(Integer tid) {
         TableInfoVO ret = (TableInfoVO)this.tableInfos.get(tid);
         if (ret == null) {
-            TableInfoVO tinfo = this.mapper.getQueryTable(tid, this.sysUser);
+            TableInfoVO tinfo = this.mapper.getQueryTable(tid, this.sysUser,this.dubhe);
             if (tinfo == null) {
                 throw new ExtRuntimeException("无法找到数据表，表ID：" + tid + "。");
             }

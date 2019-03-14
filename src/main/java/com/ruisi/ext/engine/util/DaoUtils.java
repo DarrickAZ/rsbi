@@ -28,7 +28,8 @@ public class DaoUtils {
         WebApplicationContext var1 = WebApplicationContextUtils.getRequiredWebApplicationContext(var0);
         String var2 = ExtContext.getInstance().getConstant("daoName");
         if (var2 == null || var2.length() == 0) {
-            var2 = "daoHelper";
+            //var2 = "daoHelper";
+            var2 = "daoRsbiHelper";
         }
 
         if (!var1.containsBean(var2)) {
@@ -41,11 +42,9 @@ public class DaoUtils {
 
     /**
      * 获取真实dao层处理
-     * @param servletContext
-     * @param daoHelperName
      * @return
      */
-    public static DaoHelper getCurrentDaoHelper(ServletContext servletContext,String daoHelperName) {
+/*    public static DaoHelper getCurrentDaoHelper(ServletContext servletContext,String daoHelperName) {
         WebApplicationContext var1 = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
         if (!var1.containsBean(daoHelperName)) {
             return null;
@@ -53,7 +52,7 @@ public class DaoUtils {
             DaoHelper daoHelper = (DaoHelper)var1.getBean(daoHelperName);
             return daoHelper;
         }
-    }
+    }*/
 
     public static List calPage(String var0, PageInfo var1, DaoHelper var2) throws ExtConfigException {
         String var3 = ExtContext.getInstance().getConstant("dbName");

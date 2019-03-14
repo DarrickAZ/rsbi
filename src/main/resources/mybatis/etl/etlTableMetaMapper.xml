@@ -4,6 +4,7 @@
     
     <resultMap id="BaseResultMap" type="com.ruisitech.bi.entity.etl.EtlTableMeta">
 		<id column="table_id" property="tableId"/>
+		<id column="tb_id" property="tbId"/>
 		<result column="table_name" property="tableName"/>
 		<result column="table_note" property="tableNote"/>
 		<result column="crtuser" property="crtUser"/>
@@ -143,6 +144,34 @@
 		from ${sysUser}.etl_src_meta a
 		 where income in ('etl', 'dw', 'custom')
 		 order by table_id
+	</select>
+
+
+	<select id="selectTableIdByTabId" resultType="Integer">
+		select table_id
+		from ${sysUser}.table_id_mapping
+		where tb_id=#{tbId}
+	</select>
+
+	<select id="selectTabIdByTableId" resultType="String">
+		select tb_id
+		from ${sysUser}.table_id_mapping
+		where table_id=#{tableId}
+	</select>
+
+	<insert id="insertTableIdMapping">
+		insert into ${sysUser}.table_id_mapping (tb_id,create_date) values (#{tbId},now())
+	</insert>
+
+	<select id="selectTablesFromDubhe" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select detail.id as tb_id , detail.tb_name as table_name , detail.create_time as crtdate ,detail.creator as crtUserName,detail.description as table_desc,
+		case
+			when ds.name is not null then ds.name
+			else detail.tb_name
+    	end
+		as table_note
+		from ${dubhe}.dubhe_data_set_detail detail,${dubhe}.dubhe_data_set ds
+		where ds.id = detail.ds_id and ds.`status`='Y'
 	</select>
 	
 </mapper>

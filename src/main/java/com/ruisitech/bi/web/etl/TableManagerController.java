@@ -10,12 +10,15 @@ import com.github.pagehelper.PageInfo;
 import com.ruisitech.bi.entity.common.PageParam;
 import com.ruisitech.bi.entity.etl.DataSource;
 import com.ruisitech.bi.entity.etl.EtlTableMeta;
+import com.ruisitech.bi.mapper.etl.EtlTableMetaMapper;
 import com.ruisitech.bi.service.etl.DataSetService;
 import com.ruisitech.bi.service.etl.EtlTableMetaService;
 import com.ruisitech.bi.util.BaseController;
 import com.ruisitech.bi.util.RSBIUtils;
-import java.util.Arrays;
-import java.util.List;
+
+import java.util.*;
+
+import com.zcy.zcmorefun.dubbo.service.DubheMetaService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,10 +32,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping({"/etl"})
 public class TableManagerController extends BaseController {
     private static Logger log = Logger.getLogger(TableManagerController.class);
+    private String sysUser = RSBIUtils.getConstant("sysUser");
     @Autowired
     private EtlTableMetaService service;
+
+    @Autowired(required = false)
+    private DubheMetaService dubheMetaService ;
+
     @Autowired
-    private DataSetService dsService;
+    EtlTableMetaMapper etlTableMetaMapper;
 
     public TableManagerController() {
     }
@@ -120,7 +128,8 @@ public class TableManagerController extends BaseController {
 
     @RequestMapping({"/queryTableData.action"})
     public Object queryTableData(Integer tableId, ModelMap model) {
-        EtlTableMeta t = this.service.getTableOnly(tableId);
+
+       /* EtlTableMeta t = this.service.getTableOnly(tableId);
         String sql = "select * from ";
         if (t.getTableSql() != null && t.getTableSql().length() > 0) {
             sql = sql + "(" + t.getTableSql() + ") cc ";
@@ -136,6 +145,21 @@ public class TableManagerController extends BaseController {
             model.addAttribute("msg", var6.getMessage());
             var6.printStackTrace();
             return "control/SpringmvcError";
-        }
+        }*/
+
+        try {
+            String tabId =  etlTableMetaMapper.selectTabIdByTableId(tableId, this.sysUser);
+            List<Object> ls = new ArrayList<>();
+            try {
+                ls = dubheMetaService.queryTableDataByTableId(tabId, 20);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            model.put("ls", ls);
+            return "etl/TableManager-queryData";
+    } catch (Exception e) {
+        e.printStackTrace();
+        return "control/SpringmvcError";
+    }
     }
 }

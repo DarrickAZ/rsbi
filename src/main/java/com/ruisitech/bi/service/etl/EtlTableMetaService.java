@@ -32,6 +32,7 @@ public class EtlTableMetaService extends EtlBaseService {
     @Autowired
     private TableCacheService cacheService;
     private String sysUser = RSBIUtils.getConstant("sysUser");
+    private String dubhe = RSBIUtils.getConstant("dubhe");
 
     public EtlTableMetaService() {
     }
@@ -78,9 +79,27 @@ public class EtlTableMetaService extends EtlBaseService {
     }
 
     public List<EtlTableMeta> selectTables(String income) {
-        List<EtlTableMeta> ret = this.mapper.selectTables(income, this.sysUser);
-        return ret;
+        List<EtlTableMeta> list = null;
+        try {
+            list = this.mapper.selectTablesFromDubhe(this.dubhe);
+
+            for(EtlTableMeta meta: list){
+                if(meta.getTableId()==null && meta.getTbId()!=null){
+                    // 查询tableId-tbId 映射表 ，获取table id
+                    Integer tableId = mapper.selectTableIdByTabId(meta.getTbId(),this.sysUser);
+                    if(tableId==null){
+                        mapper.insertTableIdMapping(meta.getTbId(),this.sysUser);
+                        tableId = mapper.selectTableIdByTabId(meta.getTbId(),this.sysUser);
+                    }
+                    meta.setTableId(tableId);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return list;
     }
+
 
     public List<EtlTableMeta> selectByIncomes(List<String> incomes, PageParam p) {
         List<EtlTableMeta> ret = this.mapper.selectByIncomes(incomes, this.sysUser);
@@ -93,7 +112,14 @@ public class EtlTableMetaService extends EtlBaseService {
     }
 
     public List<EtlTableMetaCol> queryTableColumns(Integer tableId, boolean hasExpress) {
-        return hasExpress ? this.colMapper.queryTableColumns(tableId, (Integer)null, this.sysUser) : this.colMapper.queryTableColumnsNotExpress(tableId, this.sysUser);
+        try {
+            return this.colMapper.queryTableColumnsFromDubhe(tableId, this.dubhe, this.sysUser);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+
+       // return hasExpress ? this.colMapper.queryTableColumns(tableId, (Integer)null, this.sysUser) : this.colMapper.queryTableColumnsNotExpress(tableId, this.sysUser);
     }
 
     @Transactional(

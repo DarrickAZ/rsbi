@@ -18,6 +18,8 @@ public class EtlTableMeta extends BaseEntity {
     private String tableNote;
     private Integer crtUser;
     private String crtUserName;
+
+    private String tbId;
     @JsonFormat(
         pattern = "yyyy-MM-dd"
     )
@@ -33,6 +35,14 @@ public class EtlTableMeta extends BaseEntity {
     private List<EtlTableMetaCol> metaCols;
 
     public EtlTableMeta() {
+    }
+
+    public String getTbId() {
+        return tbId;
+    }
+
+    public void setTbId(String tbId) {
+        this.tbId = tbId;
     }
 
     public Integer getTableId() {

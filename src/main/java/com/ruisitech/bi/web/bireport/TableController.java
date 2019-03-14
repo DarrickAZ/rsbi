@@ -55,8 +55,8 @@ public class TableController extends BaseController {
             ExtContext.getInstance().removeMV("mv.tmp.table");
             MVContext mv = this.tableService.json2MV(tableJson);
             CompPreviewService ser = new CompPreviewService(req, res, req.getServletContext());
-            DaoHelper daoHelper = DaoUtils.getCurrentDaoHelper(req.getServletContext(), ExtConstants.DAO_RSBI_HELPER_NAME);
-            ser.setDao(daoHelper);
+            //DaoHelper daoHelper = DaoUtils.getCurrentDaoHelper(req.getServletContext(), ExtConstants.DAO_RSBI_HELPER_NAME);
+            //ser.setDao(daoHelper);
             ser.setParams(this.tableService.getMvParams());
             ser.initPreview();
             String ret = ser.buildMV(mv, req.getServletContext());

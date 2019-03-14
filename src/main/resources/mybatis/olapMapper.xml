@@ -88,9 +88,9 @@
 	</select>
 	
 	<select id="getQueryTable" resultType="com.ruisitech.bi.entity.bireport.TableInfoVO">
-	   select c.table_id as "tid", c.table_name "tname", c.table_sql "sql", use_es "useEs" , es_enable "esEnable", data_control_col as "dataControlCol"
-	   from ${sysUser}.etl_src_meta c 
-	   where table_id = #{tid}
+	   select mapping.table_id as "tid", c.tb_name "tname"
+	   from ${dubhe}.dubhe_data_set_detail c ,${sysUser}.table_id_mapping mapping
+	   where mapping.table_id = #{tid} and mapping.tb_id=c.id
 	</select>
 	
 	<!-- 查询所有列 -->

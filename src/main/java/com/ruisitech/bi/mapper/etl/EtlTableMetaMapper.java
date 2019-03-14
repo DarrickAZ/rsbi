@@ -35,4 +35,12 @@ public interface EtlTableMetaMapper {
     int updateUseEs(EtlTableMeta var1);
 
     List<EtlTableMeta> dwselectTables(@Param("sysUser") String var1);
+
+    Integer selectTableIdByTabId(@Param("tbId")String tbId, @Param("sysUser")String sysUser);
+
+    void insertTableIdMapping(@Param("tbId")String tbId, @Param("sysUser")String sysUser);
+
+    List<EtlTableMeta> selectTablesFromDubhe(@Param("dubhe") String dubhe);
+
+    String selectTabIdByTableId(@Param("tableId")Integer tbId, @Param("sysUser")String sysUser);
 }

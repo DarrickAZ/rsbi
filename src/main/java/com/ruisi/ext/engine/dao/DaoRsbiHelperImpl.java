@@ -1,8 +1,12 @@
 package com.ruisi.ext.engine.dao;
 
 import com.ruisi.ext.engine.util.DaoUtils;
+import com.ruisitech.bi.mapper.etl.EtlTableMetaMapper;
+import com.ruisitech.bi.util.RSBIUtils;
+import com.zcy.zcmorefun.dubbo.service.DubheMetaService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 
@@ -19,20 +23,26 @@ public class DaoRsbiHelperImpl implements DaoHelper{
 
     private static Log LOGGER = LogFactory.getLog(DaoRsbiHelperImpl.class);
 
+    private String sysUser = RSBIUtils.getConstant("sysUser");
+
     private static ThreadLocal<String> daoRsbiThreadLocal = new ThreadLocal<>();
 
+    @Autowired(required = false)
+    DubheMetaService dubheMetaService;
+
+    @Autowired
+    EtlTableMetaMapper etlTableMetaMapper;
+
     @Override
-    public List queryForList(String var1) {
+    public List queryForList(String sql) {
         if (DaoUtils.showLogs) {
-            LOGGER.info("DaoRsbiHelper queryForList ========================");
-            LOGGER.info("Thread --- "+Thread.currentThread().getName());
-            String s = daoRsbiThreadLocal.get();
-            LOGGER.info("Tid >>> "+s);
-
-
-
+            LOGGER.info("SQL >>> "+sql);
+            LOGGER.info(Thread.currentThread().getName()+"Tid >>> "+daoRsbiThreadLocal.get());
         }
-        return new ArrayList();
+        //TODO: 查询数据仓库
+        String tableId = daoRsbiThreadLocal.get();
+        etlTableMetaMapper.selectTabIdByTableId(Integer.parseInt(tableId),this.sysUser);
+        return dubheMetaService.analysisBySql(sql, daoRsbiThreadLocal.get());
     }
 
     @Override

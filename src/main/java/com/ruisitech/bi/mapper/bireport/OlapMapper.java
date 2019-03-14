@@ -31,7 +31,7 @@ public interface OlapMapper {
 
     List<Map<String, Object>> listKpiDesc(@Param("cubeId") Integer var1, @Param("sysUser") String var2);
 
-    TableInfoVO getQueryTable(@Param("tid") Integer var1, @Param("sysUser") String var2);
+    TableInfoVO getQueryTable(@Param("tid") Integer var1, @Param("sysUser") String sysUser,@Param("dubhe") String dubhe);
 
     List<EtlTableMetaCol> getQueryTableCols(@Param("tid") Integer var1, @Param("sysUser") String var2);
 }

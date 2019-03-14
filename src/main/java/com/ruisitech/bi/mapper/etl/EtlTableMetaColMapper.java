@@ -35,4 +35,7 @@ public interface EtlTableMetaColMapper {
     int updDimExpressByFromCol(EtlTableMetaCol var1);
 
     int updKpiExpressByFromCol(EtlTableMetaCol var1);
+
+    List<EtlTableMetaCol> queryTableColumnsFromDubhe(@Param("tableId")Integer tableId,
+                                                     @Param("dubhe")String dubhe,@Param("sysUser")String sysUser);
 }

@@ -307,4 +307,12 @@
 			) cc
 		)
 	</update>
+
+
+	<select id="queryTableColumnsFromDubhe" resultMap="BaseResultMap">
+		select prop.id as column_id, prop.col_name as col_name,prop.type as col_type, prop.`length` as col_length,
+		 prop.col_alias as col_note  ,mapping.table_id as table_id, prop.description as col_desc, prop.col_name as from_col
+		from dubhe.dubhe_data_meta_data_properties prop ,${sysUser}.table_id_mapping  mapping
+		where mapping.table_id = #{tableId} and prop.table_id=mapping.tb_id
+	</select>
 </mapper>

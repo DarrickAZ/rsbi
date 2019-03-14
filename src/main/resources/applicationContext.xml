@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xmlns:context="http://www.springframework.org/schema/context"
-	   xmlns:dubbo="http://www.springframework.org/schema/c"
+	   xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd"
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	   http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
 	   default-lazy-init="true">
 
 	<description>Spring公共配置 </description>
@@ -34,8 +36,9 @@
 	<dubbo:service interface="com.ruisitech.bi.service.AreaService" ref="areaServiceImpl" timeout="300000"/>-->
 
 	<!-- 引用dubbo服务 -->
-<!--	<dubbo:application name="rsbi"/>
-	<dubbo:registry protocol="zookeeper" address="192.168.188.128:2181"/>
-	<dubbo:reference interface="com.ruisitech.bi.service.AreaService" id="areaServiceImpl" />-->
+	<dubbo:application name="dubbo"/>
+	<dubbo:registry protocol="zookeeper" address="172.16.5.113:2181"/>
+	<dubbo:reference interface="com.zcy.zcmorefun.dubbo.service.DubheMetaService" check="false"
+					 protocol="dubbo" id="dubheMetaService" />
 
 </beans>
